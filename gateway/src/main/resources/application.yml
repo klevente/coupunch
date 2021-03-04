@@ -13,12 +13,16 @@ spring:
           query-passing: true
     gateway:
       routes:
+        - id: usermanager
+          uri: lb://usermanager/
+          predicates:
+            - Path=/register,/api/users/**,/login
         - id: couponmanager
           uri: lb://couponmanager/
           predicates:
             - Path=/coupons/**
-          filters:
-            - SaveSession
+          # filters:
+          #   - SaveSession
       #globalcors:
       #  cors-configurations:
       #    '[/**]':

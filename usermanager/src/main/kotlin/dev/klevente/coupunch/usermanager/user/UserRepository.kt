@@ -4,5 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface UserRepository : JpaRepository<User, Long> {
 
-    fun findFirstByUsername(username: String): User?
+    fun findFirstByUsernameOrEmail(username: String, email: String): User?
+
+    fun existsByEmail(email: String): Boolean
+
+    fun existsByUsername(username: String): Boolean
 }

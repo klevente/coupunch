@@ -1,4 +1,4 @@
-package dev.klevente.coupunch.usermanager.user
+package dev.klevente.coupunch.usermanager.security.authorization
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import javax.persistence.*

@@ -1,5 +1,6 @@
 package dev.klevente.coupunch.usermanager.user
 
+import dev.klevente.coupunch.usermanager.security.authorization.Role
 import javax.persistence.*
 
 @Entity

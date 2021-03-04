@@ -26,7 +26,7 @@ class SecurityConfig(
 ) : WebSecurityConfigurerAdapter() {
 
 
-    private val redirectUrl: String = "/"
+    private val redirectUrl: String = "http://localhost:8000/coupons/34"
 
     override fun configure(http: HttpSecurity) {
         http {
