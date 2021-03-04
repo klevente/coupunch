@@ -1,8 +1,6 @@
 package dev.klevente.coupunch.couponmanager.security
 
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
@@ -31,11 +29,6 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
             }
         }
     }
-
-    @Autowired
-    fun configureGlobal1(auth: AuthenticationManagerBuilder) {
-        // auth.inMemoryAuthentication()
-    }
 }
 
 @Configuration
@@ -43,7 +36,6 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
 class SessionConfig(
     private val defaultCookieSerializer: DefaultCookieSerializer
 ) : AbstractHttpSessionApplicationInitializer() {
-
     /*
      * This is needed because MVC encodes session IDs in base64, while Webflux does not
      */

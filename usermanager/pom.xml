@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>dev.klevente.coupunch</groupId>
-	<artifactId>couponmanager</artifactId>
+	<artifactId>usermanager</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Coupon Manager</name>
-	<description>Coupon Manager Service</description>
+	<name>User Manager</name>
+	<description>User Manager Service</description>
 	<properties>
 		<java.version>1.8</java.version>
 		<kotlin.version>1.4.30</kotlin.version>
@@ -91,6 +91,11 @@
 		<dependency>
 			<groupId>org.springframework.amqp</groupId>
 			<artifactId>spring-rabbit-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

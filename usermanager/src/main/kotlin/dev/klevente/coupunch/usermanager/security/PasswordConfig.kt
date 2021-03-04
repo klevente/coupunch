@@ -1,4 +1,4 @@
-package dev.klevente.coupunch.couponmanager.security
+package dev.klevente.coupunch.usermanager.security
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
