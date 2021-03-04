@@ -1,27 +1,24 @@
-package dev.klevente.coupunch.couponmanager
+package dev.klevente.coupunch.gateway
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.ok
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @SpringBootApplication
-class CouponManagerApplication
+class GatewayApplication
 
 fun main(args: Array<String>) {
-	runApplication<CouponManagerApplication>(*args)
+	runApplication<GatewayApplication>(*args)
 }
 
 @RestController
-@RequestMapping("/coupons")
+@RequestMapping("/test")
 class TestController {
 
 	@GetMapping
-	fun getCoupons() = ok("Coupon 1: 1, Coupon 2: 2")
-
-	@GetMapping("{id}")
-	fun getCoupon(@PathVariable id: String) = ok("Coupon $id: $id")
+	fun test() = ok("Testing")
 }

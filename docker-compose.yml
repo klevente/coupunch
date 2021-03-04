@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  redis-dev:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - 6379:6379
+    environment:
+      - REDIS_PASSWORD=redis_pass
+    volumes:
+      - './.docker/redis/:/bitnami'
+  rabbitmq-dev:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    # volumes:
+    #  - ./.docker/rabbitmq/etc/:/etc/rabbitmq/
+    #  - ./.docker/rabbitmq/data/:/var/lib/rabbitmq/
+    #  - ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
+    # environment:
+    #  RABBITMQ_ERLANG_COOKIE: ${RABBITMQ_ERLANG_COOKIE}
+    #  RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+    #  RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - coupunch-network
+  consul-dev:
+    image: consul
+    container_name: consul
+    # volumes:
+    #  - ./.docker/consul/bitnami:/bitnami
+    #  - ./.docker/consul/data:/consul/data
+    ports:
+      - '8500:8500'
+      - '8600:8600/udp'
+    command: 'agent -node=coupunch -dev -client 0.0.0.0'
+    networks:
+      - coupunch-network
+networks:
+  coupunch-network:
+    driver: bridge
