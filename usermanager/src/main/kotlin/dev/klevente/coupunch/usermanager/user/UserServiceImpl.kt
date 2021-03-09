@@ -1,6 +1,6 @@
 package dev.klevente.coupunch.usermanager.user
 
-import dev.klevente.coupunch.usermanager.security.AuthenticationFacade
+import dev.klevente.coupunch.library.security.AuthenticationFacade
 import dev.klevente.coupunch.usermanager.security.authorization.RoleService
 import dev.klevente.coupunch.usermanager.user.dto.NewUserRequest
 import org.slf4j.Logger

@@ -1,6 +1,6 @@
 package dev.klevente.coupunch.couponmanager
 
-import dev.klevente.coupunch.couponmanager.security.AuthenticationFacade
+import dev.klevente.coupunch.library.security.AuthenticationFacade
 import org.slf4j.Logger
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = ["dev.klevente.coupunch"])
 class CouponManagerApplication
 
 fun main(args: Array<String>) {
@@ -27,7 +27,6 @@ class TestController(
 
     @GetMapping
     fun getCoupons(): ResponseEntity<Coupons> {
-        logger.info(authenticationFacade.authInfo)
         return ok(Coupons(arrayOf(Coupon(1, "Coupon 1"), Coupon(2, "Coupon 2"))))
     }
 

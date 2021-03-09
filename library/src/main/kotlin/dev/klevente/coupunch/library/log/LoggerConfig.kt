@@ -1,4 +1,4 @@
-package dev.klevente.coupunch.usermanager.util
+package dev.klevente.coupunch.library.log
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

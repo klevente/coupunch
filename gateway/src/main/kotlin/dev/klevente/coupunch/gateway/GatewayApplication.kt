@@ -2,13 +2,12 @@ package dev.klevente.coupunch.gateway
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.ok
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = ["dev.klevente.coupunch"])
 class GatewayApplication
 
 fun main(args: Array<String>) {
