@@ -11,11 +11,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.web.servlet.invoke
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.session.HttpSessionEventPublisher
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession
 import org.springframework.session.web.context.AbstractHttpSessionApplicationInitializer
 import org.springframework.session.web.http.DefaultCookieSerializer
 import javax.annotation.PostConstruct
+import javax.servlet.http.HttpServletResponse
 
 @Configuration
 @EnableWebSecurity
@@ -30,9 +32,6 @@ class SecurityConfig(
 
     override fun configure(http: HttpSecurity) {
         http {
-            httpBasic {
-                disable()
-            }
             csrf {
                 disable()
             }
@@ -54,6 +53,17 @@ class SecurityConfig(
                 invalidateHttpSession = true
                 deleteCookies("SESSION", "XSRF-TOKEN")
                 logoutSuccessUrl = "/login"
+            }
+            exceptionHandling {
+                authenticationEntryPoint = AuthenticationEntryPoint { httpServletRequest, httpServletResponse, authenticationException ->
+                    authenticationException?.let {
+                        logger.info("Invalid authentication request for ${httpServletRequest.getParameter("username")} from ${httpServletRequest.remoteAddr}")
+                        httpServletResponse.status = HttpServletResponse.SC_UNAUTHORIZED
+                    }
+                }
+            }
+            httpBasic {
+                disable()
             }
         }
     }

@@ -1,4 +1,4 @@
-package dev.klevente.coupunch.usermanager.security.authentication
+package dev.klevente.coupunch.library.security
 
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -9,6 +9,9 @@ class AuthUser(
     private val password: String,
     private val authorities: Set<GrantedAuthority>
 ) : UserDetails {
+
+    // placeholder for creating static extension functions for this class
+    companion object
 
     fun getId(): Long = id
 

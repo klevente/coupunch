@@ -1,6 +1,6 @@
 package dev.klevente.coupunch.usermanager.security
 
-import dev.klevente.coupunch.usermanager.security.authentication.AuthUser
+import dev.klevente.coupunch.library.security.AuthUser
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
