@@ -1,5 +1,6 @@
 package dev.klevente.coupunch.usermanager.security.authentication
 
+import dev.klevente.coupunch.library.exception.EntityNotFoundException
 import dev.klevente.coupunch.library.security.AuthUser
 import dev.klevente.coupunch.usermanager.security.authorization.Role
 import dev.klevente.coupunch.usermanager.user.User
@@ -13,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserAuthenticationService(
-    private val logger: Logger,
+    private val log: Logger,
     private val userRepository: UserRepository,
 ) : UserDetailsService {
 
@@ -21,8 +22,8 @@ class UserAuthenticationService(
     override fun loadUserByUsername(usernameOrEmail: String): UserDetails {
         val usernameOrEmailLowercase = usernameOrEmail.toLowerCase()
         val user = userRepository.findFirstByUsernameOrEmail(usernameOrEmailLowercase) ?: throw
-        IllegalArgumentException("User not found!")
-        logger.info("Login request for $usernameOrEmailLowercase")
+        EntityNotFoundException(User::class, usernameOrEmail)
+        log.info("Login request for $usernameOrEmailLowercase")
 
         return AuthUser.fromUser(user)
     }

@@ -1,5 +1,6 @@
 package dev.klevente.coupunch.gateway.security
 
+import org.slf4j.Logger
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
@@ -12,7 +13,9 @@ import reactor.core.publisher.Mono
 
 @Configuration
 @EnableWebFluxSecurity
-class SecurityConfig {
+class SecurityConfig(
+    private val log: Logger
+) {
 
     @Bean
     fun securityWebFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain =

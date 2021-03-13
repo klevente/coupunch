@@ -22,6 +22,9 @@ data class User(
     @ManyToMany
     @JoinTable(name = "app_user_role")
     var roles: MutableSet<Role> = hashSetOf(),
+
+    @Lob
+    var qr: ByteArray = ByteArray(0),
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

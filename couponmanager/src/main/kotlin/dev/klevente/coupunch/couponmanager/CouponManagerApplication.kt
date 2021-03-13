@@ -22,7 +22,7 @@ fun main(args: Array<String>) {
 @RequestMapping("/coupons")
 class TestController(
     private val authenticationFacade: AuthenticationFacade,
-    private val logger: Logger
+    private val log: Logger
 ) {
 
     @GetMapping
@@ -32,7 +32,7 @@ class TestController(
 
     @GetMapping("{id}")
     fun getCoupon(@PathVariable id: String): ResponseEntity<Coupon> {
-        logger.info(authenticationFacade.authInfo)
+        log.info(authenticationFacade.authInfo)
         return ok(Coupon(id.toInt(), "Coupon $id"))
     }
 }

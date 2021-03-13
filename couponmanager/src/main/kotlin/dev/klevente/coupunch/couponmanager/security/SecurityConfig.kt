@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
-    private val logger: Logger
+    private val log: Logger
 ) : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
@@ -35,7 +35,7 @@ class SecurityConfig(
             exceptionHandling {
                 authenticationEntryPoint = AuthenticationEntryPoint { httpServletRequest, httpServletResponse, authenticationException ->
                     authenticationException?.let {
-                        logger.info("Invalid authentication request for ${httpServletRequest.getParameter("username")} from ${httpServletRequest.remoteAddr}")
+                        log.info("Invalid authentication request for ${httpServletRequest.getParameter("username")} from ${httpServletRequest.remoteAddr}")
                         httpServletResponse.status = HttpServletResponse.SC_UNAUTHORIZED
                     }
                 }
