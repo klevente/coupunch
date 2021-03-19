@@ -1,11 +1,31 @@
 package dev.klevente.coupunch.library.exception
 
+import org.springframework.http.HttpStatus
 import kotlin.reflect.KClass
 
-class EntityNotFoundException(message: String) : RuntimeException(message) {
-    constructor(clazz: KClass<*>, id: Long) : this("${clazz.simpleName!!} not found (id=$id)")
-
-    constructor(clazz: KClass<*>, name: String) : this("${clazz.simpleName!!} not found (name=$name)")
+abstract class RestException(message: String): RuntimeException(message) {
+    abstract fun toApiError(): ApiError
 }
 
-class BadRequestException(message: String) : RuntimeException(message)
+class EntityNotFoundException(message: String) : RestException(message) {
+    constructor(clazz: KClass<*>, propertyName: String, propertyValue: Any) : this("${clazz.simpleName!!} not found " +
+            "($propertyName=$propertyValue)")
+
+    override fun toApiError() = ApiError(
+        status = HttpStatus.NOT_FOUND.value(),
+        error = "NOT_FOUND",
+        message = localizedMessage
+    )
+
+    companion object {
+        fun byId(clazz: KClass<*>, id: Long) = EntityNotFoundException(clazz, "id", id)
+    }
+}
+
+class BadRequestException(message: String) : RestException(message) {
+    override fun toApiError() = ApiError(
+        status = HttpStatus.BAD_REQUEST.value(),
+        error = "BAD_REQUEST",
+        message = localizedMessage
+    )
+}

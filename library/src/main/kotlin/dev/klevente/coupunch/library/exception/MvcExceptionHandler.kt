@@ -11,25 +11,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 @ConditionalOnClass(ResponseEntityExceptionHandler::class)
-class RestExceptionHandler : ResponseEntityExceptionHandler() {
+class MvcExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(EntityNotFoundException::class)
     protected fun handleEntityNotFound(ex: EntityNotFoundException, request: WebRequest): ResponseEntity<Any> {
-        val body = ApiError(
-            status = HttpStatus.NOT_FOUND.value(),
-            error = "Entity not found",
-            message = ex.localizedMessage
-        )
-        return handleExceptionInternal(ex, body, HttpHeaders.EMPTY, HttpStatus.NOT_FOUND, request)
+        return handleExceptionInternal(ex, ex.toApiError(), HttpHeaders.EMPTY, HttpStatus.NOT_FOUND, request)
     }
 
     @ExceptionHandler(BadRequestException::class)
     protected fun handleBadRequest(ex: BadRequestException, request: WebRequest): ResponseEntity<Any> {
-        val body = ApiError(
-            status = HttpStatus.BAD_REQUEST.value(),
-            error = "Bad request",
-            message = ex.localizedMessage
-        )
-        return handleExceptionInternal(ex, body, HttpHeaders.EMPTY, HttpStatus.BAD_REQUEST, request)
+        return handleExceptionInternal(ex, ex.toApiError(), HttpHeaders.EMPTY, HttpStatus.BAD_REQUEST, request)
     }
 }

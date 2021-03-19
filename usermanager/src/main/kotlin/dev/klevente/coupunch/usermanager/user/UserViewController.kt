@@ -1,6 +1,6 @@
 package dev.klevente.coupunch.usermanager.user
 
-import dev.klevente.coupunch.usermanager.user.dto.NewUserRequest
+import dev.klevente.coupunch.usermanager.user.dto.UserCreateRequest
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
@@ -21,20 +21,20 @@ class UserViewController(
 
     @RequestMapping("/register")
     fun register(request: WebRequest, model: Model): String {
-        model.addAttribute("user", NewUserRequest())
+        model.addAttribute("user", UserCreateRequest())
         return "register"
     }
 
     @PostMapping("/register")
     fun register(
-        @ModelAttribute("user") @Valid newUserRequest: NewUserRequest,
+        @ModelAttribute("user") @Valid request: UserCreateRequest,
         result: BindingResult
     ): ModelAndView {
         if (result.hasErrors()) {
             return ModelAndView("register")
         }
         try {
-            userService.register(newUserRequest)
+            userService.register(request)
         } catch (e: IllegalArgumentException) {
             return ModelAndView("register").apply {
                 addObject("accountExists", "An account for that email already exists!")

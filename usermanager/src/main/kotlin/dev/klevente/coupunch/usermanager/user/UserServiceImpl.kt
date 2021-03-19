@@ -4,7 +4,7 @@ import dev.klevente.coupunch.library.exception.BadRequestException
 import dev.klevente.coupunch.library.exception.EntityNotFoundException
 import dev.klevente.coupunch.library.security.AuthenticationFacade
 import dev.klevente.coupunch.usermanager.security.authorization.RoleService
-import dev.klevente.coupunch.usermanager.user.dto.NewUserRequest
+import dev.klevente.coupunch.usermanager.user.dto.UserCreateRequest
 import dev.klevente.coupunch.usermanager.user.dto.UserUpdateRequest
 import dev.klevente.coupunch.usermanager.user.dto.toResponse
 import org.slf4j.Logger
@@ -24,10 +24,10 @@ class UserServiceImpl(
 ) : UserService {
 
     override fun getUser(id: Long) =
-        userRepository.findByIdOrNull(id) ?: throw EntityNotFoundException(User::class, id)
+        userRepository.findByIdOrNull(id) ?: throw EntityNotFoundException.byId(User::class, id)
 
     @Transactional
-    override fun register(request: NewUserRequest): Long {
+    override fun register(request: UserCreateRequest): User {
         log.info("Registering ${request.username}: ${request.email} (${authenticationFacade
             .remoteAddress})")
 
@@ -48,7 +48,7 @@ class UserServiceImpl(
 
         log.info("Registration successful for $usernameLowercase")
 
-        return user.id
+        return user
     }
 
     override fun getUserResponse(id: Long) = getUser(id).toResponse()

@@ -37,6 +37,7 @@ class SecurityConfig(
             }
             authorizeRequests {
                 authorize("/register", permitAll)
+                authorize("/api/users/register", permitAll)
                 authorize("/actuator/health", permitAll)
                 authorize(anyRequest, authenticated)
             }

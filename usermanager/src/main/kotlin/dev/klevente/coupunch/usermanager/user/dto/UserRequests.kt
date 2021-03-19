@@ -26,7 +26,7 @@ class NewUserRequest(
     val password  get() = _password!!
 }*/
 
-class NewUserRequest(
+class UserCreateRequest(
     @field:NotBlank
     @field:Email
     val email: String = "",

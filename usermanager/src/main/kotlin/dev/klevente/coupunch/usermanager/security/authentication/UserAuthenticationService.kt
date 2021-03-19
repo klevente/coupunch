@@ -22,7 +22,7 @@ class UserAuthenticationService(
     override fun loadUserByUsername(usernameOrEmail: String): UserDetails {
         val usernameOrEmailLowercase = usernameOrEmail.toLowerCase()
         val user = userRepository.findFirstByUsernameOrEmail(usernameOrEmailLowercase) ?: throw
-        EntityNotFoundException(User::class, usernameOrEmail)
+        EntityNotFoundException(User::class, "usernameOrEmail", usernameOrEmail)
         log.info("Login request for $usernameOrEmailLowercase")
 
         return AuthUser.fromUser(user)
