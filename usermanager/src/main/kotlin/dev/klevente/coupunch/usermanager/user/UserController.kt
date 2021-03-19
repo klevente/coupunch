@@ -1,6 +1,6 @@
 package dev.klevente.coupunch.usermanager.user
 
-import dev.klevente.coupunch.usermanager.user.dto.UserCreateRequest
+import dev.klevente.coupunch.usermanager.user.dto.UserAddRequest
 import dev.klevente.coupunch.usermanager.user.dto.UserUpdateRequest
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -14,7 +14,7 @@ class UserController(
     private val qrCodeService: QrCodeService
 ) {
     @PostMapping
-    fun register(@RequestBody request: UserCreateRequest): ResponseEntity<Any> {
+    fun register(@RequestBody request: UserAddRequest): ResponseEntity<Any> {
         userService.register(request)
         return noContent().build()
     }

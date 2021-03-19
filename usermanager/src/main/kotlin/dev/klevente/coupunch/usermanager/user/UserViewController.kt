@@ -1,6 +1,6 @@
 package dev.klevente.coupunch.usermanager.user
 
-import dev.klevente.coupunch.usermanager.user.dto.UserCreateRequest
+import dev.klevente.coupunch.usermanager.user.dto.UserAddRequest
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
@@ -21,13 +21,13 @@ class UserViewController(
 
     @RequestMapping("/register")
     fun register(request: WebRequest, model: Model): String {
-        model.addAttribute("user", UserCreateRequest())
+        model.addAttribute("user", UserAddRequest())
         return "register"
     }
 
     @PostMapping("/register")
     fun register(
-        @ModelAttribute("user") @Valid request: UserCreateRequest,
+        @ModelAttribute("user") @Valid request: UserAddRequest,
         result: BindingResult
     ): ModelAndView {
         if (result.hasErrors()) {

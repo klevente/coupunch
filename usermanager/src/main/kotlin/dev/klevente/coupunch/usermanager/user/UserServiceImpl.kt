@@ -4,7 +4,8 @@ import dev.klevente.coupunch.library.exception.BadRequestException
 import dev.klevente.coupunch.library.exception.EntityNotFoundException
 import dev.klevente.coupunch.library.security.AuthenticationFacade
 import dev.klevente.coupunch.usermanager.security.authorization.RoleService
-import dev.klevente.coupunch.usermanager.user.dto.UserCreateRequest
+import dev.klevente.coupunch.usermanager.user.dto.UserAddRequest
+import dev.klevente.coupunch.usermanager.user.dto.UserPasswordUpdateRequest
 import dev.klevente.coupunch.usermanager.user.dto.UserUpdateRequest
 import dev.klevente.coupunch.usermanager.user.dto.toResponse
 import org.slf4j.Logger
@@ -27,15 +28,16 @@ class UserServiceImpl(
         userRepository.findByIdOrNull(id) ?: throw EntityNotFoundException.byId(User::class, id)
 
     @Transactional
-    override fun register(request: UserCreateRequest): User {
+    override fun register(request: UserAddRequest): User {
         log.info("Registering ${request.username}: ${request.email} (${authenticationFacade
             .remoteAddress})")
 
         val emailLowercase = request.email.toLowerCase()
         val usernameLowercase = request.username.toLowerCase()
-        val passwordHashed = passwordEncoder.encode(request.password)
 
         checkUserExistsAndThrow(emailLowercase, usernameLowercase)
+
+        val passwordHashed = passwordEncoder.encode(request.password)
 
         val user = userRepository.save(
             User(
@@ -54,30 +56,34 @@ class UserServiceImpl(
     override fun getUserResponse(id: Long) = getUser(id).toResponse()
 
     @Transactional
-    override fun updateUser(id: Long, request: UserUpdateRequest) {
+    override fun updateUser(id: Long, request: UserUpdateRequest): User {
         log.info("Updating User #$id (${authenticationFacade.authInfo})")
 
         val user = getUser(id)
 
         val emailLowercase = request.email.toLowerCase()
         val usernameLowercase = request.username.toLowerCase()
-        val passwordHashed = passwordEncoder.encode(request.password)
 
-        checkUserExistsAndThrow(emailLowercase, usernameLowercase)
+        checkUserExistsAndThrow(emailLowercase, usernameLowercase, user)
 
         user.apply {
             email = emailLowercase
             username = usernameLowercase
-            password = passwordHashed
         }
+
+        return user
     }
 
-    private fun checkUserExistsAndThrow(email: String, username: String) {
+    override fun updatePassword(id: Long, request: UserPasswordUpdateRequest) {
+        TODO("Not yet implemented")
+    }
+
+    private fun checkUserExistsAndThrow(email: String, username: String, user: User? = null) {
         when {
-            userRepository.existsByEmail(email) -> {
+            user?.email != email && userRepository.existsByEmail(email) -> {
                 throw BadRequestException("This email is already taken!")
             }
-            userRepository.existsByUsername(username) -> {
+            user?.username != username && userRepository.existsByUsername(username) -> {
                 throw BadRequestException("This username is already taken!")
             }
         }
