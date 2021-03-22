@@ -18,7 +18,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
 import org.slf4j.Logger
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.crypto.password.PasswordEncoder
 import java.util.*
 
@@ -46,7 +45,8 @@ class UserServiceTest {
 
     @BeforeEach
     fun setup() {
-        userService = UserServiceImpl(log, userRepository, passwordEncoder, roleService, authenticationFacade)
+        userService = UserServiceImpl(log, userRepository, passwordEncoder, roleService,
+            authenticationFacade)
     }
 
     @Test
@@ -125,8 +125,7 @@ class UserServiceTest {
             id = id,
             username = username.toLowerCase(),
             email = faker.email().toLowerCase(),
-            password =
-            faker.password()
+            password = faker.password()
         )
         given { userRepository.findById(any()) } willReturn { Optional.of(userInDb) }
         given { userRepository.existsByEmail(any()) } willReturn { false }

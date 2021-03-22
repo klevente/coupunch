@@ -24,7 +24,7 @@ data class User(
     var roles: MutableSet<Role> = hashSetOf(),
 
     @Lob
-    var qr: ByteArray = ByteArray(0),
+    var qr: ByteArray? = null,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
