@@ -1,5 +1,15 @@
+<script context="module">
+	export async function preload(page, session) {
+		if (session.user.authenticated) {
+			this.redirect(302, 'home');
+		}
+	}
+</script>
+
 <script>
 	import successkid from 'images/successkid.jpg';
+
+
 </script>
 
 <style>
@@ -37,7 +47,7 @@
 </style>
 
 <svelte:head>
-	<title>Sapper project template</title>
+	<title>Home Without Login</title>
 </svelte:head>
 
 <h1>Great success!</h1>

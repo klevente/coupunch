@@ -22,6 +22,9 @@ class UserController(
     @GetMapping("{id}")
     fun get(@PathVariable id: Long) = ok(userService.getUserResponse(id))
 
+    @GetMapping("current")
+    fun getCurrentUser() = ok(userService.getCurrentUserResponse())
+
     @PutMapping("{id}")
     fun updateUser(@PathVariable id: Long, request: UserUpdateRequest): ResponseEntity<Any> {
         userService.updateUser(id, request)

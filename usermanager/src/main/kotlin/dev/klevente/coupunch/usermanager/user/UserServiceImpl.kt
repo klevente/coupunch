@@ -4,10 +4,7 @@ import dev.klevente.coupunch.library.exception.BadRequestException
 import dev.klevente.coupunch.library.exception.EntityNotFoundException
 import dev.klevente.coupunch.library.security.AuthenticationFacade
 import dev.klevente.coupunch.usermanager.security.authorization.RoleService
-import dev.klevente.coupunch.usermanager.user.dto.UserAddRequest
-import dev.klevente.coupunch.usermanager.user.dto.UserPasswordUpdateRequest
-import dev.klevente.coupunch.usermanager.user.dto.UserUpdateRequest
-import dev.klevente.coupunch.usermanager.user.dto.toResponse
+import dev.klevente.coupunch.usermanager.user.dto.*
 import org.slf4j.Logger
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -26,6 +23,10 @@ class UserServiceImpl(
 
     override fun getUser(id: Long) =
         userRepository.findByIdOrNull(id) ?: throw EntityNotFoundException.byId(User::class, id)
+
+    override fun getCurrentUser(): User {
+        return getUser(authenticationFacade.userId)
+    }
 
     @Transactional
     override fun register(request: UserAddRequest): User {
@@ -54,6 +55,8 @@ class UserServiceImpl(
     }
 
     override fun getUserResponse(id: Long) = getUser(id).toResponse()
+
+    override fun getCurrentUserResponse() = getCurrentUser().toResponse()
 
     @Transactional
     override fun updateUser(id: Long, request: UserUpdateRequest): User {

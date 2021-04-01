@@ -16,7 +16,7 @@ spring:
         - id: usermanager
           uri: lb://usermanager/
           predicates:
-            - Path=/register,/api/users/**,/login
+            - Path=/api/users/** #,/register,/login
         - id: couponmanager
           uri: lb://couponmanager/
           predicates:

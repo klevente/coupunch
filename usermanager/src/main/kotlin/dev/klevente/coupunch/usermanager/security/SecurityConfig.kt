@@ -1,9 +1,18 @@
 package dev.klevente.coupunch.usermanager.security
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import dev.klevente.coupunch.library.security.AuthUser
 import dev.klevente.coupunch.usermanager.security.authentication.UserAuthenticationService
+import dev.klevente.coupunch.usermanager.user.UserRepository
+import dev.klevente.coupunch.usermanager.user.dto.toResponse
 import org.slf4j.Logger
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.data.repository.findByIdOrNull
+import org.springframework.http.HttpMethod.POST
+import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.*
+import org.springframework.http.MediaType.*
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -12,6 +21,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.web.servlet.invoke
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.AuthenticationEntryPoint
+import org.springframework.security.web.authentication.AuthenticationFailureHandler
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler
 import org.springframework.security.web.session.HttpSessionEventPublisher
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession
 import org.springframework.session.web.context.AbstractHttpSessionApplicationInitializer
@@ -25,10 +37,10 @@ class SecurityConfig(
     private val log: Logger,
     private val passwordEncoder: PasswordEncoder,
     private val userAuthenticationService: UserAuthenticationService,
+    private val userRepository: UserRepository,
 ) : WebSecurityConfigurerAdapter() {
 
-
-    private val redirectUrl: String = "http://localhost:8000/coupons/34"
+    private val objectMapper = ObjectMapper()
 
     override fun configure(http: HttpSecurity) {
         http {
@@ -37,29 +49,39 @@ class SecurityConfig(
             }
             authorizeRequests {
                 authorize("/register", permitAll)
-                authorize("/api/users/register", permitAll)
+                authorize(POST, "/api/users", permitAll)
                 authorize("/actuator/health", permitAll)
                 authorize(anyRequest, authenticated)
             }
             formLogin {
                 loginPage = "/login"
                 loginProcessingUrl = "/api/users/login"
-                defaultSuccessUrl(redirectUrl, true)
+                // defaultSuccessUrl(redirectUrl, true)
+                authenticationSuccessHandler = AuthenticationSuccessHandler { httpServletRequest, httpServletResponse, authentication ->
+                    val authUser = authentication.principal as AuthUser
+                    val user = userRepository.findByIdOrNull(authUser.getId())!!
+                    httpServletResponse.writeJson(OK, objectMapper.writeValueAsString(user.toResponse()))
+                }
+                authenticationFailureHandler = AuthenticationFailureHandler { httpServletRequest, httpServletResponse, authenticationException ->
+                    httpServletResponse.writeJson(FORBIDDEN, "{ \"status\": \"Login failed!\" }")
+                }
                 permitAll()
-
             }
             logout {
                 logoutUrl = "/api/users/logout"
                 clearAuthentication = true
                 invalidateHttpSession = true
                 deleteCookies("SESSION", "XSRF-TOKEN")
-                logoutSuccessUrl = "/login"
+                // logoutSuccessUrl = "/login"
+                logoutSuccessHandler = LogoutSuccessHandler { httpServletRequest, httpServletResponse, authentication ->
+                    httpServletResponse.writeJson(OK, "{ \"status\": \"Logout successful!\" }")
+                }
             }
             exceptionHandling {
                 authenticationEntryPoint = AuthenticationEntryPoint { httpServletRequest, httpServletResponse, authenticationException ->
                     authenticationException?.let {
                         log.info("Invalid authentication request for ${httpServletRequest.getParameter("username")} from ${httpServletRequest.remoteAddr}")
-                        httpServletResponse.status = HttpServletResponse.SC_UNAUTHORIZED
+                        httpServletResponse.writeJson(UNAUTHORIZED, "{ \"status\": \"Unauthorized!\" }")
                     }
                 }
             }
@@ -83,6 +105,15 @@ class SecurityConfig(
 
     @Bean
     fun httpSessionEventPublisher() = HttpSessionEventPublisher()
+
+    private fun HttpServletResponse.writeJson(httpStatus: HttpStatus, jsonString: String): HttpServletResponse {
+        return this.apply {
+            status = httpStatus.value()
+            contentType = APPLICATION_JSON_VALUE
+            characterEncoding = "utf-8"
+            writer.print(jsonString)
+        }
+    }
 }
 
 @Configuration
