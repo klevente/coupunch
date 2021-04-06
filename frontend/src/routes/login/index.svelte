@@ -3,7 +3,9 @@
     import { createForm } from 'felte';
     import reporter from '@felte/reporter-tippy';
     import { validator } from '@felte/validator-yup';
+    import { create } from '@beyonk/sapper-httpclient';
     import * as yup from 'yup';
+    import { dataTypes } from "../../util/data-types";
 
     const { session } = stores();
 
@@ -22,31 +24,27 @@
         onError: errors => console.error(errors),
     });
 
-    async function login({ username, password }) {
-        const response = await fetch('/api/users/login', {
-           method: 'post',
-           headers: {
-               'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-           } ,
-            body: new URLSearchParams([
-                ['username', username],
-                ['password', password],
-            ])
-        });
+    async function login(request) {
+        const api = create();
 
-        if (response.ok) {
-            const currentUser = await response.json();
-            $session.user = {
-                authenticated: true,
-                scope: ['user'],
-                ...currentUser
-            };
-            goto('home');
-        } else if (response.status === 403) {
-            throw new Error("Password is incorrect");
-        } else {
-            throw new Error(response.statusText);
-        }
+        const currentUser = await api
+            .endpoint('users/login')
+            .contentType(dataTypes.form)
+            .payload(request)
+            .forbidden((e) => {
+                throw new Error("Password is incorrect");
+            })
+            .default(e => {
+                throw new Error(e);
+            })
+            .post();
+
+        $session.user = {
+            authenticated: true,
+            scope: ['user'],
+            ...currentUser
+        };
+        goto('home');
     }
 </script>
 
