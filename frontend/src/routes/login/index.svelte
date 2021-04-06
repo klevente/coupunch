@@ -29,7 +29,7 @@
 
         const currentUser = await api
             .endpoint('users/login')
-            .contentType(dataTypes.form)
+            .formEncoded()
             .payload(request)
             .forbidden((e) => {
                 throw new Error("Password is incorrect");
