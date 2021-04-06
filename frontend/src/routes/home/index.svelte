@@ -11,6 +11,7 @@
     <title>Home With Login</title>
 </svelte:head>
 
+<h1>Coupunch logged in home page</h1>
 <div>
     You are logged in!
 </div>

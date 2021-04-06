@@ -2,6 +2,7 @@ package dev.klevente.coupunch.usermanager.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import dev.klevente.coupunch.library.security.AuthUser
+import dev.klevente.coupunch.library.util.Status
 import dev.klevente.coupunch.usermanager.security.authentication.UserAuthenticationService
 import dev.klevente.coupunch.usermanager.user.UserRepository
 import dev.klevente.coupunch.usermanager.user.dto.toResponse
@@ -60,10 +61,10 @@ class SecurityConfig(
                 authenticationSuccessHandler = AuthenticationSuccessHandler { httpServletRequest, httpServletResponse, authentication ->
                     val authUser = authentication.principal as AuthUser
                     val user = userRepository.findByIdOrNull(authUser.getId())!!
-                    httpServletResponse.writeJson(OK, objectMapper.writeValueAsString(user.toResponse()))
+                    httpServletResponse.writeJson(OK, user.toResponse())
                 }
                 authenticationFailureHandler = AuthenticationFailureHandler { httpServletRequest, httpServletResponse, authenticationException ->
-                    httpServletResponse.writeJson(FORBIDDEN, "{ \"status\": \"Login failed!\" }")
+                    httpServletResponse.writeJson(FORBIDDEN, Status("Login failed!"))
                 }
                 permitAll()
             }
@@ -74,14 +75,14 @@ class SecurityConfig(
                 deleteCookies("SESSION", "XSRF-TOKEN")
                 // logoutSuccessUrl = "/login"
                 logoutSuccessHandler = LogoutSuccessHandler { httpServletRequest, httpServletResponse, authentication ->
-                    httpServletResponse.writeJson(OK, "{ \"status\": \"Logout successful!\" }")
+                    httpServletResponse.writeJson(OK, Status("Logout successful!"))
                 }
             }
             exceptionHandling {
                 authenticationEntryPoint = AuthenticationEntryPoint { httpServletRequest, httpServletResponse, authenticationException ->
                     authenticationException?.let {
                         log.info("Invalid authentication request for ${httpServletRequest.getParameter("username")} from ${httpServletRequest.remoteAddr}")
-                        httpServletResponse.writeJson(UNAUTHORIZED, "{ \"status\": \"Unauthorized!\" }")
+                        httpServletResponse.writeJson(UNAUTHORIZED, Status("Unauthorized!"))
                     }
                 }
             }
@@ -106,14 +107,16 @@ class SecurityConfig(
     @Bean
     fun httpSessionEventPublisher() = HttpSessionEventPublisher()
 
-    private fun HttpServletResponse.writeJson(httpStatus: HttpStatus, jsonString: String): HttpServletResponse {
-        return this.apply {
+    private fun HttpServletResponse.writeJson(httpStatus: HttpStatus, response: Any): HttpServletResponse {
+        return apply {
             status = httpStatus.value()
             contentType = APPLICATION_JSON_VALUE
             characterEncoding = "utf-8"
-            writer.print(jsonString)
+            writer.print(response.toJson())
         }
     }
+
+    private fun Any.toJson(): String = objectMapper.writeValueAsString(this)
 }
 
 @Configuration
