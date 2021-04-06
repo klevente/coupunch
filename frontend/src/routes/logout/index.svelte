@@ -10,8 +10,15 @@
 </script>
 
 <script>
-    import { logout } from '../../util/logout'
+    import { goto, stores } from '@sapper/app';
 
-    logout('/');
+    const { session } = stores();
+    session.set({
+        user: {
+            authenticated: false,
+            scope: [],
+        }
+    });
+    goto('/');
 
 </script>

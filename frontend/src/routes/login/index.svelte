@@ -25,7 +25,6 @@
 
     async function login(request) {
         const api = create();
-
         const currentUser = await api
             .endpoint('users/login')
             .formEncoded()

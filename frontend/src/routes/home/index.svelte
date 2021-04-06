@@ -1,10 +1,23 @@
 <script>
-    import { stores } from '@sapper/app';
+    import { goto, stores } from '@sapper/app';
+    import { create } from '@beyonk/sapper-httpclient';
 
     const { session } = stores();
 
     $: userData = JSON.stringify($session.user);
     $: console.log(userData);
+
+    async function click() {
+        const api = create();
+        const res = await api
+            .endpoint('users/current')
+            .accessDenied(e => {
+                goto('/logout');
+            })
+            .get();
+
+        console.log(res);
+    }
 </script>
 
 <svelte:head>
@@ -18,3 +31,5 @@
 <div>
     {userData}
 </div>
+
+<button on:click={click}>Get</button>

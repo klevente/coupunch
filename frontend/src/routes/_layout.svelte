@@ -2,12 +2,18 @@
 	import { create } from '@beyonk/sapper-httpclient';
 
 	export async function preload(page, session) {
+		if (page.path === '/logout') {
+			return;
+		}
 		if (session.user.authenticated && !session.user.id) {
 			try {
 				const api = create();
 				const currentUser = await api
 						.transport(this.fetch)
 						.endpoint('users/current')
+						.accessDenied(e => {
+							this.redirect(302, '/logout');
+						})
 						.get();
 
 				return { currentUser };
@@ -16,6 +22,10 @@
 				this.redirect(302, '/logout');
 			}
 		}
+
+		return {
+			currentUser: {}
+		};
 	}
 </script>
 
