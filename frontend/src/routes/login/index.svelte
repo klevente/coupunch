@@ -5,7 +5,6 @@
     import { validator } from '@felte/validator-yup';
     import { create } from '@beyonk/sapper-httpclient';
     import * as yup from 'yup';
-    import { dataTypes } from "../../util/data-types";
 
     const { session } = stores();
 
