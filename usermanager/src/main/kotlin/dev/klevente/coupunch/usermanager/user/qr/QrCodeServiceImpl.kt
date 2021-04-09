@@ -1,8 +1,9 @@
-package dev.klevente.coupunch.usermanager.user
+package dev.klevente.coupunch.usermanager.user.qr
 
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.j2se.MatrixToImageWriter
 import com.google.zxing.qrcode.QRCodeWriter
+import dev.klevente.coupunch.usermanager.user.UserService
 import dev.klevente.coupunch.usermanager.util.toBufferedImage
 import dev.klevente.coupunch.usermanager.util.toByteArray
 import org.slf4j.Logger

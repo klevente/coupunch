@@ -20,7 +20,8 @@ spring:
         - id: couponmanager
           uri: lb://couponmanager/
           predicates:
-            - Path=/coupons/**,/products,/product-groups
+            # - Path=/coupons/**,/products,/product-groups
+            - Path=/api/couponmanager/**
           # filters:
           #   - SaveSession
       #globalcors:

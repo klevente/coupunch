@@ -1,5 +1,6 @@
 package dev.klevente.coupunch.usermanager.user
 
+import dev.klevente.coupunch.usermanager.user.qr.QrCodeService
 import dev.klevente.coupunch.usermanager.user.dto.UserAddRequest
 import dev.klevente.coupunch.usermanager.user.dto.UserUpdateRequest
 import org.springframework.http.MediaType

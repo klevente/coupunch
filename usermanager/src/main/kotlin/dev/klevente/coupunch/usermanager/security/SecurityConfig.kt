@@ -5,6 +5,7 @@ import dev.klevente.coupunch.library.security.AuthUser
 import dev.klevente.coupunch.library.util.Status
 import dev.klevente.coupunch.usermanager.security.authentication.UserAuthenticationService
 import dev.klevente.coupunch.usermanager.user.UserRepository
+import dev.klevente.coupunch.usermanager.user.UserService
 import dev.klevente.coupunch.usermanager.user.dto.toResponse
 import org.slf4j.Logger
 import org.springframework.context.annotation.Bean
@@ -38,7 +39,7 @@ class SecurityConfig(
     private val log: Logger,
     private val passwordEncoder: PasswordEncoder,
     private val userAuthenticationService: UserAuthenticationService,
-    private val userRepository: UserRepository,
+    private val userService: UserService
 ) : WebSecurityConfigurerAdapter() {
 
     private val objectMapper = ObjectMapper()
@@ -60,8 +61,8 @@ class SecurityConfig(
                 // defaultSuccessUrl(redirectUrl, true)
                 authenticationSuccessHandler = AuthenticationSuccessHandler { httpServletRequest, httpServletResponse, authentication ->
                     val authUser = authentication.principal as AuthUser
-                    val user = userRepository.findByIdOrNull(authUser.getId())!!
-                    httpServletResponse.writeJson(OK, user.toResponse())
+                    val user = userService.getUserResponse(authUser.getId())
+                    httpServletResponse.writeJson(OK, user)
                 }
                 authenticationFailureHandler = AuthenticationFailureHandler { httpServletRequest, httpServletResponse, authenticationException ->
                     httpServletResponse.writeJson(FORBIDDEN, Status("Login failed!"))

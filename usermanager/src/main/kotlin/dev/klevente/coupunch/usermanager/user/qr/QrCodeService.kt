@@ -1,4 +1,4 @@
-package dev.klevente.coupunch.usermanager.user
+package dev.klevente.coupunch.usermanager.user.qr
 
 import java.awt.image.BufferedImage
 
