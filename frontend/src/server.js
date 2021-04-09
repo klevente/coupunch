@@ -2,7 +2,7 @@ import sirv from 'sirv';
 import polka from 'polka';
 import compression from 'compression';
 import * as sapper from '@sapper/server';
-import { createProxyMiddleware } from "http-proxy-middleware";
+import { createProxyMiddleware, Filter, Options, RequestHandler } from 'http-proxy-middleware';
 import cookieParser from 'cookie-parser';
 import Api from '@beyonk/sapper-httpclient'
 import routes from './routes';

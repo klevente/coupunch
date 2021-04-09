@@ -1,0 +1,61 @@
+diff --git a/node_modules/@beyonk/sapper-httpclient/lib/api/api.js b/node_modules/@beyonk/sapper-httpclient/lib/api/api.js
+index 886091f..ede436b 100644
+--- a/node_modules/@beyonk/sapper-httpclient/lib/api/api.js
++++ b/node_modules/@beyonk/sapper-httpclient/lib/api/api.js
+@@ -20,6 +20,7 @@ class ApiBase {
+     this.config = {
+       endpoint: null,
+       method: 'get',
++      contentType: 'application/json',
+       payload: null,
+       query: null,
+       headers: {},
+@@ -54,11 +55,11 @@ class ApiBase {
+         credentials: 'include',
+         headers: Object.assign(
+           { Accept: 'application/json' },
+-          hasPayload ? { 'Content-Type': 'application/json' } : {},
++          hasPayload ? { 'Content-Type': this.config.contentType } : {},
+           this.config.headers
+         )
+       },
+-      hasPayload ? { body: JSON.stringify(this.config.payload) } : {},
++      hasPayload ? { body: this._formatPayload() } : {},
+       this.config.overrides
+     )
+ 
+@@ -125,6 +126,17 @@ class ApiBase {
+     }
+   }
+ 
++  _formatPayload() {
++    switch (this.config.contentType) {
++      case 'application/json':
++        return JSON.stringify(this.config.payload)
++      case 'application/x-www-form-urlencoded':
++        return new URLSearchParams(Object.entries(this.config.payload))
++      default:
++        throw new HttpError("Supplied content type not recognized!", this.config.contentType)
++    }
++  }
++
+   transport (client) {
+     this.client = client
+     return this
+@@ -140,6 +152,16 @@ class ApiBase {
+     return this
+   }
+ 
++  contentType (contentType) {
++    this.config.contentType = contentType
++    return this
++  }
++
++  formEncoded () {
++    this.config.contentType = 'application/x-www-form-urlencoded'
++    return this
++  }
++
+   async get (fn) {
+     this.config.method = 'get'
+     return this.send(fn)
