@@ -28,7 +28,7 @@
         const { company } = request;
         const api = create();
         const currentUser = await api
-            .endpoint(`${company}/login`)
+            .endpoint(`${company}/users/login`)
             .formEncoded()
             .payload(request)
             .forbidden((e) => {
@@ -41,10 +41,11 @@
 
         $session.user = {
             authenticated: true,
-            scope: ['user'],
+            scope: ['company'],
             ...currentUser
         };
-        goto('home');
+        // goto('home');
+        window.location.href = 'home';
     }
 </script>
 

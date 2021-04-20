@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus.*
 import org.springframework.http.MediaType.*
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
@@ -50,40 +51,39 @@ class SecurityConfig(
                 disable()
             }
             authorizeRequests {
-                authorize("/register", permitAll)
-                authorize(POST, "/api/users", permitAll)
+                // authorize("/register", permitAll)
+                authorize(POST, "users", permitAll)
                 authorize("/actuator/health", permitAll)
                 authorize(anyRequest, authenticated)
             }
             formLogin {
-                loginPage = "/login"
-                loginProcessingUrl = "/api/users/login"
+                loginProcessingUrl = "/users/login"
                 // defaultSuccessUrl(redirectUrl, true)
-                authenticationSuccessHandler = AuthenticationSuccessHandler { httpServletRequest, httpServletResponse, authentication ->
+                authenticationSuccessHandler = AuthenticationSuccessHandler { request, response, authentication ->
                     val authUser = authentication.principal as AuthUser
                     val user = userService.getUserResponse(authUser.getId())
-                    httpServletResponse.writeJson(OK, user)
+                    response.writeJson(OK, user)
                 }
-                authenticationFailureHandler = AuthenticationFailureHandler { httpServletRequest, httpServletResponse, authenticationException ->
-                    httpServletResponse.writeJson(FORBIDDEN, Status("Login failed!"))
+                authenticationFailureHandler = AuthenticationFailureHandler { request, response, exception ->
+                    response.writeJson(FORBIDDEN, Status("Login failed!"))
                 }
                 permitAll()
             }
             logout {
-                logoutUrl = "/api/users/logout"
+                logoutUrl = "/users/logout"
                 clearAuthentication = true
                 invalidateHttpSession = true
                 deleteCookies("SESSION", "XSRF-TOKEN")
                 // logoutSuccessUrl = "/login"
-                logoutSuccessHandler = LogoutSuccessHandler { httpServletRequest, httpServletResponse, authentication ->
-                    httpServletResponse.writeJson(OK, Status("Logout successful!"))
+                logoutSuccessHandler = LogoutSuccessHandler { request, response, authentication ->
+                    response.writeJson(OK, Status("Logout successful!"))
                 }
             }
             exceptionHandling {
-                authenticationEntryPoint = AuthenticationEntryPoint { httpServletRequest, httpServletResponse, authenticationException ->
-                    authenticationException?.let {
-                        log.info("Invalid authentication request for ${httpServletRequest.getParameter("username")} from ${httpServletRequest.remoteAddr}")
-                        httpServletResponse.writeJson(UNAUTHORIZED, Status("Unauthorized!"))
+                authenticationEntryPoint = AuthenticationEntryPoint { request, response, exception ->
+                    exception?.let {
+                        log.info("Invalid authentication request for ${request.getParameter("username")} from ${request.remoteAddr}")
+                        response.writeJson(UNAUTHORIZED, Status("Unauthorized!"))
                     }
                 }
             }
@@ -133,3 +133,8 @@ class SessionConfig(
         defaultCookieSerializer.setUseBase64Encoding(false)
     }
 }
+
+@Configuration
+// @Conditional(SecurityEnabledCondition::class)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+class MethodSecurityConfig

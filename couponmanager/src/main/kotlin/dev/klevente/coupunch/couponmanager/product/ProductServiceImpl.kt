@@ -2,6 +2,7 @@ package dev.klevente.coupunch.couponmanager.product
 
 import dev.klevente.coupunch.couponmanager.product.dto.ProductCreateRequest
 import dev.klevente.coupunch.couponmanager.product.dto.ProductUpdateRequest
+import dev.klevente.coupunch.couponmanager.product.dto.toResponse
 import dev.klevente.coupunch.library.exception.EntityNotFoundException
 import org.slf4j.Logger
 import org.springframework.data.repository.findByIdOrNull
@@ -18,9 +19,12 @@ class ProductServiceImpl(
     override fun getProduct(id: Long) =
         productRepository.findByIdOrNull(id) ?: throw EntityNotFoundException.byId(Product::class, id)
 
+    @Transactional
     override fun addProduct(request: ProductCreateRequest): Product {
 
-        val groups = productGroupService.getProductsByIds(request.groups.toList())
+        val groups =
+            productGroupService
+                .getGroupsByIds(request.groups.toList()) + productGroupService.getDefaultGroup()
 
         val product = productRepository.save(
             Product(
@@ -30,18 +34,44 @@ class ProductServiceImpl(
             )
         )
 
+        groups.forEach { it.products.add(product) }
+
         return product
     }
 
-    override fun getProductResponse(id: Long) {
-        TODO("Not yet implemented")
-    }
+    override fun getProductResponse(id: Long) = getProduct(id).toResponse()
 
+    @Transactional
     override fun updateProduct(id: Long, request: ProductUpdateRequest) {
-        TODO("Not yet implemented")
+        val product = getProduct(id)
+        val defaultGroup = productGroupService.getDefaultGroup()
+        val newGroups = productGroupService
+            .getGroupsByIds(request.groups.toList())
+            .let {
+                if (!it.contains(defaultGroup)) {
+                    it + defaultGroup
+                } else {
+                    it
+                }
+            }
+
+        product.apply {
+            name = request.name
+            price = request.price
+            groups = newGroups.toMutableSet()
+        }
+
+        newGroups.forEach { it.products.add(product) }
     }
 
+    @Transactional
     override fun deleteProduct(id: Long) {
-        TODO("Not yet implemented")
+        val product = getProduct(id)
+
+        product.groups.forEach {
+            it.products.remove(product)
+        }
+
+        productRepository.delete(product)
     }
 }

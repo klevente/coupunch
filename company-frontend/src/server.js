@@ -25,7 +25,7 @@ polka() // You can also use Express
 			const authenticated = !!sessionCookie;
 			const user = {
 				authenticated,
-				scope: authenticated ? ['user'] : [],
+				scope: authenticated ? ['COMPANY_USER'] : [],
 				id: undefined,
 				username: undefined,
 				email: undefined,

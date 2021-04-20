@@ -6,10 +6,11 @@ import dev.klevente.coupunch.usermanager.user.dto.UserUpdateRequest
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.*
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("users")
 class UserController(
     private val userService: UserService,
     private val qrCodeService: QrCodeService
@@ -24,6 +25,7 @@ class UserController(
     fun get(@PathVariable id: Long) = ok(userService.getUserResponse(id))
 
     @GetMapping("current")
+    @PreAuthorize("hasRole('USER')")
     fun getCurrentUser() = ok(userService.getCurrentUserResponse())
 
     @PutMapping("{id}")

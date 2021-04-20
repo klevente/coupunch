@@ -14,6 +14,8 @@ class ProductGroupServiceImpl(
         TODO("Not yet implemented")
     }
 
+    override fun getDefaultGroup() = productGroupRepository.findByName("default")!!
+
     override fun addProductGroup() {
         TODO("Not yet implemented")
     }
@@ -26,5 +28,5 @@ class ProductGroupServiceImpl(
         TODO("Not yet implemented")
     }
 
-    override fun getProductsByIds(ids: Collection<Long>) = productGroupRepository.findByIdIn(ids)
+    override fun getGroupsByIds(ids: Collection<Long>) = productGroupRepository.findByIdIn(ids)
 }

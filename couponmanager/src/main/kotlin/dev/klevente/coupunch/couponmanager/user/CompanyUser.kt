@@ -1,5 +1,6 @@
 package dev.klevente.coupunch.couponmanager.user
 
+import dev.klevente.coupunch.couponmanager.security.authorization.Role
 import javax.persistence.*
 
 @Entity
@@ -14,6 +15,11 @@ data class CompanyUser(
 
     @Column(nullable = false)
     var password: String = "",
+
+    @ElementCollection(targetClass = Role::class)
+    @CollectionTable
+    @Enumerated(EnumType.STRING)
+    var roles: MutableSet<Role> = mutableSetOf(Role.COMPANY_USER)
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

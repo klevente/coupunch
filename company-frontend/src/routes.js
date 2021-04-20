@@ -1,6 +1,6 @@
 import { Router } from '@beyonk/sapper-rbac';
 
 export default new Router()
-    .restrict('/home', ['company'])
+    .restrict('/home', ['COMPANY_USER'])
     .unrestrict('/.*')
     .build();

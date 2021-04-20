@@ -1,0 +1,12 @@
+@use 'global';
+@use 'theme' as vars;
+
+
+main {
+  position: relative;
+  max-width: 56em;
+  background-color: vars.$background;
+  padding: 2em;
+  margin: 0 auto;
+  box-sizing: border-box;
+}

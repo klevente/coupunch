@@ -42,7 +42,8 @@
             scope: ['user'],
             ...currentUser
         };
-        goto('home');
+        // goto('home');
+        window.location.href = 'home';
     }
 </script>
 

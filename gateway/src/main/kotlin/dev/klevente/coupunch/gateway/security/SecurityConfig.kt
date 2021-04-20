@@ -20,8 +20,8 @@ class SecurityConfig(
     @Bean
     fun securityWebFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain =
         http
-            .httpBasic().authenticationEntryPoint { serverWebExchange, authenticationException ->
-                Mono.fromRunnable { serverWebExchange.response.statusCode = HttpStatus.UNAUTHORIZED }
+            .httpBasic().authenticationEntryPoint { exchange, exe ->
+                Mono.fromRunnable { exchange.response.statusCode = HttpStatus.UNAUTHORIZED }
             }
             .and()
             .csrf().disable()

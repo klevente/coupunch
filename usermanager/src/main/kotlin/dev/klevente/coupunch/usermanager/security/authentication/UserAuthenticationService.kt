@@ -7,6 +7,7 @@ import dev.klevente.coupunch.usermanager.user.User
 import dev.klevente.coupunch.usermanager.user.UserRepository
 import dev.klevente.coupunch.usermanager.user.findFirstByUsernameOrEmail
 import org.slf4j.Logger
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service

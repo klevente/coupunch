@@ -7,7 +7,7 @@
     $: userData = JSON.stringify($session.user);
     $: console.log(userData);
 
-    async function click() {
+    async function clickForUserData() {
         const api = create();
         const res = await api
             .endpoint('users/current')
@@ -17,6 +17,19 @@
             .get();
 
         console.log(res);
+    }
+
+    let couponData = undefined;
+
+    async function clickForCouponData() {
+        const api = create();
+        const res = await api
+            .endpoint('couponmanager/coupons/1')
+            .accessDenied(e => {
+                goto('/logout');
+            })
+            .get();
+        couponData = JSON.stringify(res);
     }
 </script>
 
@@ -32,4 +45,9 @@
     {userData}
 </div>
 
-<button on:click={click}>Get</button>
+<button on:click={clickForUserData}>Get User Data</button>
+
+<div>
+    <div>{couponData}</div>
+    <button on:click={clickForCouponData}>Get Test Coupon</button>
+</div>

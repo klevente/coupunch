@@ -1,8 +1,8 @@
 package dev.klevente.coupunch.couponmanager.product.dto
 
-class ProductResponse(
+class ProductGroupResponse
+
+class ProductGroupSimpleResponse(
     val id: Long,
     val name: String,
-    val price: Double,
-    val groups: Array<ProductGroupSimpleResponse>
 )
