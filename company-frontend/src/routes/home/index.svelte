@@ -1,7 +1,9 @@
 <script>
     import { goto, stores } from '@sapper/app';
     import { create } from '@beyonk/sapper-httpclient';
-    import { Button, H1 } from 'attractions';
+    import { Button, H1, Card } from 'attractions';
+    import MenuCard from '../../components/menu-card.svelte';
+    import { AwardIcon, GiftIcon, CreditCardIcon, BarChartIcon } from 'svelte-feather-icons';
 
     const { session } = stores();
 
@@ -33,6 +35,33 @@
     {userData}
 </div>
 
-<button on:click={click}>Get</button>
+<Button filled on:click={click}>Get</Button>
 
-<Button filled>hello</Button>
+<div class="main-menu">
+    <MenuCard
+            icon={AwardIcon}
+            title="Redeem"
+            subtitle="Redeem coupons here"
+            href="./redeem"
+    />
+    <MenuCard
+            icon={GiftIcon}
+            title="Coupons"
+            subtitle="Edit coupons"
+            href="./coupons"
+    />
+    <MenuCard
+            icon={CreditCardIcon}
+            title="Products"
+            subtitle="Edit products"
+            href="./products"
+    />
+    <MenuCard
+            icon={BarChartIcon}
+            title="Reports"
+            subtitle="View reports"
+            href="./reports"
+    />
+</div>
+
+<style src="../../../static/css/routes/home.scss"></style>

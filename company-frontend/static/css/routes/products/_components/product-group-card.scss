@@ -1,0 +1,45 @@
+@use 'theme' as vars;
+
+.product-group-card {
+  margin-bottom: 1em;
+  /*cursor: pointer;*/
+
+  :global .card {
+    transition: 150ms box-shadow;
+    &:hover {
+      box-shadow: vars.$shadow-raised;
+    }
+  }
+
+  :global .main-content {
+    display: grid;
+    grid-template-columns: auto 1fr 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 1em;
+  }
+
+  .icon {
+    padding: 0.8em;
+    border-radius: 50%;
+    background: vars.$main;
+    color: white;
+    grid-row: span 2;
+    align-self: center;
+
+    :global svg {
+      display: block;
+    }
+  }
+
+  @media only screen and (min-width: 640px) {
+    margin-bottom: 2.5em;
+
+    :global .card {
+      width: 20em;
+    }
+  }
+
+  @media only screen and (min-width: 1024px) {
+    margin-bottom: 1em;
+  }
+}

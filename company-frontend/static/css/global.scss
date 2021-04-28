@@ -38,6 +38,13 @@
     }*/
   }
 
+  .button-bar {
+    text-align: end;
+    button {
+      display: inline !important;
+    }
+  }
+
   .ml {
     margin-left: 0.4em;
   }

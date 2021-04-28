@@ -10,10 +10,10 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "@felte/reporter-tippy": "^0.1.13",
-    "@felte/validator-yup": "^0.1.1",
+    "@felte/reporter-tippy": "^0.2.9",
+    "@felte/validator-yup": "^0.2.4",
     "compression": "^1.7.1",
-    "felte": "^0.5.7",
+    "felte": "^0.6.8",
     "polka": "next",
     "sirv": "^1.0.0",
     "tippy.js": "^6.3.1",
@@ -43,6 +43,7 @@
     "sapper": "^0.28.0",
     "sass": "^1.32.11",
     "svelte": "^3.17.3",
+    "svelte-feather-icons": "^3.3.0",
     "svelte-preprocess": "^4.7.2"
   }
 }

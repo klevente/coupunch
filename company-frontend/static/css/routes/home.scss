@@ -1,0 +1,9 @@
+@use 'theme' as vars;
+
+.main-menu {
+  height: 50%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-content: space-between;
+}
