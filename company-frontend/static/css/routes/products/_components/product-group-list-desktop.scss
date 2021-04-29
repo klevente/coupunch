@@ -1,0 +1,34 @@
+@use 'sass:color';
+@use 'attractions-theme' as vars;
+
+nav {
+  display: none;
+
+  @media only screen and (min-width: 1024px) {
+    display: block;
+    margin-right: 3em;
+    padding: 0.5em 0.5em 0.5em 0;
+    min-width: 13em;
+    border-right: 1px solid color.adjust(vars.$main, $alpha: -0.75);
+
+    :global .btn {
+      white-space: nowrap;
+      margin-bottom: 0.25em;
+    }
+
+    :global .accordion {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      section {
+        margin: 0.5em 0 0.5em 1em;
+        padding-left: 0.5em;
+        border-left: 1px solid vars.$light-contrast;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  }
+}

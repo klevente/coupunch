@@ -10,6 +10,4 @@ interface ProductGroupService {
     fun updateProductGroup()
 
     fun deleteProductGroup(id: Long)
-
-    fun getGroupsByIds(ids: Collection<Long>): Set<ProductGroup>
 }

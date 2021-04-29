@@ -12,7 +12,7 @@ data class ProductGroup(
     @Column(nullable = false)
     var name: String = "",
 
-    @ManyToMany
+    @OneToMany(mappedBy = "group")
     var products: MutableSet<Product> = hashSetOf(),
 ) {
     override fun equals(other: Any?): Boolean {

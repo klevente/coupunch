@@ -15,8 +15,8 @@ data class Product(
     @Column(nullable = false)
     var price: Double = 0.0,
 
-    @ManyToMany(mappedBy = "products")
-    var groups: MutableSet<ProductGroup> = hashSetOf(),
+    @ManyToOne
+    var group: ProductGroup,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

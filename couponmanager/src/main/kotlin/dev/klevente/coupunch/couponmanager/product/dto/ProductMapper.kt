@@ -7,5 +7,5 @@ fun Product.toResponse() = ProductResponse(
     id = id,
     name = name,
     price = price,
-    groups = groups.map(ProductGroup::toSimpleResponse).toTypedArray()
+    group = group.toSimpleResponse()
 )

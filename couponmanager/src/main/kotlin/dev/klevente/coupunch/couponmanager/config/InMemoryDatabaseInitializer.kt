@@ -27,11 +27,5 @@ class InMemoryDatabaseInitializer(
                 roles = mutableSetOf(Role.COMPANY_USER)
             )
         )
-
-        val defaultGroup = productGroupRepository.save(
-            ProductGroup(
-                name = "default",
-            )
-        )
     }
 }

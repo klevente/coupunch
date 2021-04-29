@@ -4,5 +4,5 @@ class ProductResponse(
     val id: Long,
     val name: String,
     val price: Double,
-    val groups: Array<ProductGroupSimpleResponse>
+    val group: ProductGroupSimpleResponse
 )

@@ -14,12 +14,12 @@ class ProductCreateRequest(
     @JsonProperty("price")
     private val _price: Double?,
 
-    @JsonProperty("groups")
-    private val _groups: LongArray?,
+    @JsonProperty("group")
+    private val _group: Long?,
 ) {
     val name get() = _name!!
     val price get() = _price!!
-    val groups get() = _groups!!
+    val group get() = _group!!
 }
 
 class ProductUpdateRequest(
@@ -32,11 +32,11 @@ class ProductUpdateRequest(
     @JsonProperty("price")
     private val _price: Double?,
 
-    @JsonProperty("groups")
-    private val _groups: LongArray?,
+    @JsonProperty("group")
+    private val _group: Long?,
 ) {
     val name get() = _name!!
     val price get() = _price!!
-    val groups get() = _groups!!
+    val group get() = _group!!
 }
 
