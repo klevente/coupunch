@@ -1,59 +1,39 @@
 <script>
-    import { goto } from '@sapper/app';
-    import { Tab, DropdownShell, Dropdown, Button } from 'attractions';
-    import { ChevronDownIcon } from 'svelte-feather-icons';
+    import { createEventDispatcher } from 'svelte';
+    import { Tab, Loading } from 'attractions';
 
-    export let places;
-    export let segment;
+    const dispatch = createEventDispatcher();
 
-    let currentPlace = places.find(place => place.segment === segment);
+    export let productGroups;
+    export let defaultGroup;
+    export let selectedGroup;
 
-    function handleTabClick(place) {
-        if (place.segment != null) {
-            goto(`./docs/${place.segment}`);
-        }
-    }
-
-    function clearSubmenu({ detail }) {
-        if (!detail.value) {
-            currentPlace = places.find(place => place.segment === segment);
-        }
-    }
 </script>
 
-<DropdownShell let:toggle on:change={clearSubmenu}>
-    <nav class="mobile padded">
-        {#each places as place}
+<nav class="mobile padded">
+    <Tab
+            class={$selectedGroup.id === defaultGroup.id && 'selected'}
+            value={defaultGroup}
+            bind:group={$selectedGroup}
+            name="nav-mobile"
+    >
+        {defaultGroup.name}
+    </Tab>
+    {#if $productGroups.isLoading()}
+        <Loading />
+    {/if}
+    {#if $productGroups.hasData()}
+        {#each $productGroups.data as productGroup}
             <Tab
-                    class={currentPlace != null &&
-          place.sub === currentPlace.sub &&
-          'selected'}
-                    value={place}
+                    class={$selectedGroup.id === productGroup.id && 'selected'}
+                    value={productGroup}
+                    bind:group={$selectedGroup}
                     name="nav-mobile"
-                    bind:group={currentPlace}
-                    on:change={() => handleTabClick(place)}
-                    on:click={() => place.sub != null && toggle()}
             >
-                {#if typeof place.title === 'string'}
-                    {place.title}
-                {:else}
-                    <svelte:component this={place.title} size="24" />
-                {/if}
-                {#if place.sub != null}
-                    <ChevronDownIcon size="24" class="tab-chevron ml" />
-                {/if}
+                {productGroup.name}
             </Tab>
         {/each}
-    </nav>
-    <Dropdown right>
-        {#if currentPlace != null && currentPlace.sub != null}
-            {#each currentPlace.sub as entry (entry.segment)}
-                <Button href="./docs/{entry.segment}" on:click={toggle}>
-                    {entry.title}
-                </Button>
-            {/each}
-        {/if}
-    </Dropdown>
-</DropdownShell>
+    {/if}
+</nav>
 
-<style src="../../../static/css/routes/products/components/product-group-list-mobile.scss"></style>
+<style src="../../../../static/css/routes/products/_components/product-group-list-mobile.scss"></style>

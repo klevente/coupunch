@@ -1,16 +1,16 @@
 @use 'theme' as vars;
 
-.menu-card {
-  margin-bottom: 1em;
+.coupon-card {
+
   cursor: pointer;
 
-  :global .card {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-template-rows: auto auto;
-    column-gap: 1em;
-    transition: 150ms box-shadow;
+  .info {
+    display: flex;
+    align-items: center;
+  }
 
+  :global .card {
+    transition: 150ms box-shadow;
     &:hover {
       box-shadow: vars.$shadow-raised;
     }
@@ -21,23 +21,34 @@
     border-radius: 50%;
     background: vars.$main;
     color: white;
-    grid-row: span 2;
     align-self: center;
 
     :global svg {
       display: block;
     }
   }
+}
 
-  @media only screen and (min-width: 640px) {
-    margin-bottom: 2.5em;
+.disabled {
+  cursor: auto;
 
-    :global .card {
-      width: 15em;
+  color: vars.$disabled;
+
+  :global .card {
+    transition: none;
+
+    &:hover {
+      box-shadow: vars.$shadow-0;
     }
   }
 
-  @media only screen and (min-width: 1024px) {
-    margin-bottom: 1em;
+  .icon {
+    background: vars.$disabled;
+  }
+}
+
+.redeemed {
+  :global .card {
+    background: vars.$success;
   }
 }

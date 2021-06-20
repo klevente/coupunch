@@ -23,7 +23,6 @@
 
     const schema = yup.object({
         name: yup.string().required(),
-        price: yup.number().required().min(0.01),
     });
 
     const { form, setFields } = createForm({
@@ -32,13 +31,9 @@
         onSubmit: values => {
             console.log(values);
             if (!!values.id) {
-                dispatch('updateProduct', {
-                    product: values
-                });
+                console.log('update');
             } else {
-                dispatch('addProduct', {
-                    product: values
-                });
+                console.log('add');
             }
             close();
         },
@@ -48,25 +43,16 @@
 
 <Modal bind:open={modalOpen} noClickaway>
     <Dialog
-        title={editing ? 'Edit Product' : 'Add Product'}
+            title={editing ? 'Edit Product Group' : 'Add Product Group'}
     >
         <form use:form>
             <input type="hidden" name="id">
             <FormField
-                name="Name"
-                help="Name of the product"
-                required
-            >
-                <TextField name="name" />
-            </FormField>
-            <FormField
-                    name="Price"
-                    help="Unit price of the product"
+                    name="Name"
+                    help="Name of the product group"
                     required
             >
-                <TextField name="price" withItem itemRight type="number" min="0.01" step="0.01">
-                    <span class="item currency">$</span>
-                </TextField>
+                <TextField name="name" />
             </FormField>
             <div class="button-bar">
                 <Button on:click={close}>Cancel</Button>
@@ -76,4 +62,4 @@
     </Dialog>
 </Modal>
 
-<style src="../../../../static/css/routes/products/_components/product-edit-dialog.scss"></style>
+<style src="../../../../static/css/routes/products/_components/product-group-edit-dialog.scss"></style>

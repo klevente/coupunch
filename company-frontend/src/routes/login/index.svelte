@@ -69,21 +69,21 @@
         help="The name of the company"
         required
     >
-        <TextField id="company" name="company" />
+        <TextField name="company" />
     </FormField>
     <FormField
             name="Username"
             help="Your username in the company"
             required
     >
-        <TextField id="username" name="username" />
+        <TextField name="username" />
     </FormField>
     <FormField
             name="Password"
             help="Your password"
             required
     >
-        <TextField id="password" name="password" type="password" />
+        <TextField name="password" type="password" />
     </FormField>
     <Button type="submit" outline>Login</Button>
 </form>

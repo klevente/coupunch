@@ -1,5 +1,5 @@
 @use 'sass:color';
-@use 'attractions-theme' as vars;
+@use 'theme' as vars;
 
 nav {
   display: none;
@@ -15,20 +15,10 @@ nav {
       white-space: nowrap;
       margin-bottom: 0.25em;
     }
+  }
 
-    :global .accordion {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-
-      section {
-        margin: 0.5em 0 0.5em 1em;
-        padding-left: 0.5em;
-        border-left: 1px solid vars.$light-contrast;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-    }
+  .product-item {
+    width: 100%;
+    display: flex;
   }
 }

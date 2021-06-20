@@ -1,43 +1,25 @@
 <script>
     import { goto, stores } from '@sapper/app';
     import { create } from '@beyonk/sapper-httpclient';
-    import { Button, H1, Card } from 'attractions';
+    import { Button, H1, Card, Headline, Subhead } from 'attractions';
     import MenuCard from '../../components/menu-card.svelte';
     import { AwardIcon, GiftIcon, CreditCardIcon, BarChartIcon } from 'svelte-feather-icons';
 
     const { session } = stores();
 
-    $: userData = JSON.stringify($session.user);
-    $: console.log(userData);
-
-    async function click() {
-        const api = create();
-        const res = await api
-            .endpoint('couponmanager/users/current')
-            .accessDenied(e => {
-                goto('/logout');
-            })
-            .get();
-
-        console.log(res);
-    }
+    const { username, companyName } = $session.user;
 </script>
 
 <svelte:head>
-    <title>Company Home With Login</title>
+    <title>Home :: {companyName}</title>
 </svelte:head>
 
-<H1>Coupunch Company logged in home page</H1>
-<div>
-    You are logged in!
-</div>
-<div>
-    {userData}
-</div>
+<header>
+    <Headline>Welcome to {companyName}!</Headline>
+    <Subhead>You are logged in as {username}.</Subhead>
+</header>
 
-<Button filled on:click={click}>Get</Button>
-
-<div class="main-menu">
+<article>
     <MenuCard
             icon={AwardIcon}
             title="Redeem"
@@ -62,6 +44,6 @@
             subtitle="View reports"
             href="./reports"
     />
-</div>
+</article>
 
 <style src="../../../static/css/routes/home.scss"></style>

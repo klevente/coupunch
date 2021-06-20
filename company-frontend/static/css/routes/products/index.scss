@@ -1,12 +1,19 @@
 @use 'theme' as vars;
 
-.product-group-container {
+section {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
 }
 
 .product-container {
+  width: 100%;
+}
+
+.product-header {
+  display: flex;
+  margin-bottom: 2em;
+}
+
+.product-list {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;

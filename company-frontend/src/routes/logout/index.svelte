@@ -10,6 +10,7 @@
 </script>
 
 <script>
+    import { onMount } from 'svelte';
     import { goto, stores } from '@sapper/app';
 
     const { session } = stores();
@@ -19,6 +20,9 @@
             scope: [],
         }
     });
-    goto('/');
-
+    // goto('/');
+    // window.location.href = '/';
+    onMount(() => {
+        window.location.href = '/';
+    })
 </script>

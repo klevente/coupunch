@@ -1,47 +1,35 @@
 <script>
-    import { H2, Button, Accordion, AccordionSection } from 'attractions';
-    import { PlusIcon, ChevronDownIcon } from 'svelte-feather-icons';
+    import { onMount } from 'svelte';
+    import { stores } from '@sapper/app';
+    import { Button, H1, H2, Loading, TextField } from 'attractions';
     import ProductCard from './_components/product-card.svelte';
-    import ProductGroupCard from './_components/product-group-card.svelte';
     import ConfirmDialog from './../../components/confirm-dialog.svelte';
     import ProductEditDialog from './_components/product-edit-dialog.svelte';
+    import ProductGroupEditDialog from './_components/product-group-edit-dialog.svelte';
+    import ProductGroupListDesktop from './_components/product-group-list-desktop.svelte'
+    import ProductGroupListMobile from './_components/product-group-list-mobile.svelte';
 
-    const products = [
-        {
-            id: 1,
-            name: 'Product 1',
-            price: 4.34,
-            groups: [
-                'default', 'coffee'
-            ]
-        },
-        {
-            id: 2,
-            name: 'Product 2',
-            price: 10.5,
-            groups: [
-                'default', 'food'
-            ]
-        }
-    ];
+    import productService, { defaultGroup } from '../../services/product-service';
+    import productGroupService from '../../services/product-group-service';
+    import { writable } from 'svelte/store';
 
-    const productGroups = [
-        {
-            id: 1,
-            name: 'default',
-        },
-        {
-            id: 2,
-            name: 'coffee',
-        },
-        {
-            id: 3,
-            name: 'food',
-        }
-    ];
+    const { session } = stores();
+    const { companyUrl, companyName } = $session.user;
+
+    const selectedGroup = writable(defaultGroup);
+    const productSearchTerm = writable('');
+
+    const products = productService.filteredProducts(selectedGroup, productSearchTerm);
+    const productGroups = productGroupService.productGroups;
+
+    onMount(async () => {
+        await productService.fetch(companyUrl);
+        await productGroupService.fetch(companyUrl);
+    });
 
     let productEditDialog;
     let productDeleteDialog;
+    let productGroupEditDialog;
     let productGroupDeleteDialog;
 
     function openProductEditDialog({ detail: { product } }) {
@@ -52,76 +40,85 @@
         productDeleteDialog.open(product);
     }
 
+    function openProductGroupEditDialog({ detail: { productGroup } }) {
+        productGroupEditDialog.open(productGroup)
+    }
+
     function openProductGroupDeleteDialog({ detail: { productGroup } }) {
         productGroupDeleteDialog.open(productGroup);
     }
 
+    function addProduct({ detail: { product } }) {
+        productService.add(companyUrl, product);
+    }
+
+    function updateProduct({ detail: { product } }) {
+        productService.update(companyUrl, product);
+    }
+
     function deleteProduct({ detail: { extra } }) {
-        console.log(extra);
+        productService.delete(companyUrl, extra);
     }
 
     function deleteProductGroup({ detail: { extra } }) {
         console.log(extra);
     }
 
+    function changeSelectedProductGroup({ detail: { productGroup } }) {
+        const newlySelectedGroup = productGroup.id === defaultGroup.id ?
+            defaultGroup :
+            $productGroups.data.find(g => g.id === productGroup.id)
+        selectedGroup.set(newlySelectedGroup);
+    }
+
 </script>
 
 <svelte:head>
-    <title>Products</title>
+    <title>Products :: {companyName}</title>
 </svelte:head>
 
-<main>
-    <Accordion multiple>
-        <AccordionSection let:toggle>
-            <div slot="handle">
-                <Button on:click={toggle}>
-                    <H2>Product Groups</H2>
-                    <ChevronDownIcon size="20" class="ml accordion-chevron" />
-                </Button>
+<H1>Products</H1>
+<ProductGroupListMobile
+        {productGroups}
+        {defaultGroup}
+        {selectedGroup}
+/>
+<section>
+    <ProductGroupListDesktop
+            {productGroups}
+            {defaultGroup}
+            {selectedGroup}
+            on:changeProductGroup={changeSelectedProductGroup}
+            on:addProductGroup={openProductGroupEditDialog}
+            on:editProductGroup={openProductGroupEditDialog}
+            on:deleteProductGroup={openProductGroupDeleteDialog}
+    />
+    <div class="product-container">
+        <div class="product-header">
+            <Button filled on:click={openProductEditDialog}>
+                Add
+            </Button>
+            <div class="flex-spacer"></div>
+            <TextField outline type="search" placeholder="Search..." bind:value={$productSearchTerm}/>
+        </div>
+        {#if $products.isLoading()}
+            <Loading/>
+        {/if}
+        {#if $products.hasData()}
+            <div class="product-list">
+                {#each $products.data as product}
+                    <ProductCard
+                            {product}
+                            on:editProduct={openProductEditDialog}
+                            on:deleteProduct={openProductDeleteDialog}
+                    />
+                {/each}
             </div>
-            <div>
-                <span>
-                    <Button style="display: inline" filled>
-                        <PlusIcon size="20"/>
-                        Add
-                    </Button>
-                </span>
-                <div class="product-group-container">
-                    {#each productGroups as productGroup}
-                        <ProductGroupCard
-                                {productGroup}
-                                on:deleteProductGroup={openProductGroupDeleteDialog}
-                        />
-                    {/each}
-                </div>
-            </div>
-        </AccordionSection>
-        <AccordionSection let:toggle open>
-            <div slot="handle">
-                <Button on:click={toggle}>
-                    <H2>Products</H2>
-                    <ChevronDownIcon size="20" class="ml accordion-chevron" />
-                </Button>
-            </div>
-            <div>
-                <span>
-                <Button style="display: inline" filled on:click={openProductEditDialog}>
-                    <PlusIcon size="20"/>
-                    Add
-                </Button>
-                </span>
-                <div class="product-container">
-                    {#each products as product}
-                        <ProductCard
-                                {product}
-                                on:editProduct={openProductEditDialog}
-                                on:deleteProduct={openProductDeleteDialog}
-                        />
-                    {/each}
-                </div>
-            </div>
-        </AccordionSection>
-    </Accordion>
+        {/if}
+        {#if $products.isError()}
+            <div>Error</div>
+        {/if}
+    </div>
 
     <ConfirmDialog
             bind:this={productDeleteDialog}
@@ -141,7 +138,11 @@
         Are you sure you want to delete this product group?
     </ConfirmDialog>
 
-    <ProductEditDialog bind:this={productEditDialog}/>
-</main>
+    <ProductEditDialog bind:this={productEditDialog}
+                       on:addProduct={addProduct}
+                       on:updateProduct={updateProduct}
+    />
+    <ProductGroupEditDialog bind:this={productGroupEditDialog}/>
+</section>
 
 <style src="../../../static/css/routes/products/index.scss"></style>

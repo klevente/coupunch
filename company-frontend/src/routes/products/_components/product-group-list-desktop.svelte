@@ -1,45 +1,71 @@
 <script>
-    import { Button, Accordion, AccordionSection } from 'attractions';
-    import { ChevronDownIcon } from 'svelte-feather-icons';
+    import { createEventDispatcher } from 'svelte';
+    import { Button, Loading } from 'attractions';
+    import { XIcon, EditIcon } from 'svelte-feather-icons';
 
-    export let places;
-    export let segment;
+    const dispatch = createEventDispatcher();
 
-    $: currentPlace = places.find(place => place.segment === segment);
+    export let productGroups;
+    export let defaultGroup;
+    export let selectedGroup;
+
+    function onGroupClick(productGroup) {
+        dispatch('changeProductGroup', {
+            productGroup
+        });
+    }
+
+    function onAddClick() {
+        dispatch('addProductGroup', {});
+    }
+
+    function onEditClick(productGroup) {
+        dispatch('editProductGroup', {
+            productGroup
+        });
+    }
+
+    function onDeleteClick(productGroup) {
+        dispatch('deleteProductGroup', {
+            productGroup
+        });
+    }
 </script>
 
 <nav class="desktop">
-    <Accordion let:closeOtherPanels>
-        {#each places as place}
-            {#if typeof place.title === 'string'}
-                {#if place.sub != null}
-                    <AccordionSection on:panel-open={closeOtherPanels} let:toggle>
-                        <div slot="handle">
-                            <Button on:click={toggle}>
-                                {place.title}
-                                <ChevronDownIcon size="18" class="accordion-chevron ml" />
-                            </Button>
-                        </div>
-                        {#each place.sub as entry}
-                            <Button
-                                    href="./docs/{entry.segment}"
-                                    selected={place === currentPlace}
-                            >
-                                {entry.title}
-                            </Button>
-                        {/each}
-                    </AccordionSection>
-                {:else}
-                    <Button
-                            href="./docs/{place.segment}"
-                            selected={place === currentPlace}
-                    >
-                        {place.title}
-                    </Button>
-                {/if}
-            {/if}
+    <Button filled on:click={onAddClick}>
+        Add
+    </Button>
+    <div class="product-item">
+        <Button
+                on:click={() => onGroupClick(defaultGroup)}
+                selected={$selectedGroup.id === defaultGroup.id}
+        >
+            {defaultGroup.name}
+        </Button>
+    </div>
+    {#if $productGroups.isLoading()}
+        <Loading/>
+    {/if}
+    {#if $productGroups.hasData()}
+        {#each $productGroups.data as productGroup}
+            <div class="product-item">
+                <Button
+                        on:click={() => onGroupClick(productGroup)}
+                        selected={$selectedGroup.id === productGroup.id}
+                >
+                    {productGroup.name}
+                </Button>
+                <div class="flex-spacer"></div>
+                <Button round neutral on:click={() => onEditClick(productGroup)}>
+                    <EditIcon size="20"/>
+                </Button>
+                <Button round neutral on:click={() => onDeleteClick(productGroup)}>
+                    <XIcon size="20"/>
+                </Button>
+            </div>
         {/each}
-    </Accordion>
+    {/if}
 </nav>
 
-<style src="../../../static/css/routes/products/components/product-group-list-desktop.scss"></style>
+<style src="../../../../static/css/routes/products/_components/product-group-list-desktop.scss"></style>

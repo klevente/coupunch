@@ -23,22 +23,18 @@
 
 <div class="product-card">
     <Card>
-        <div class="main-content">
-            <div class="icon">
-                <BoxIcon size="24" />
-            </div>
-            <div class="name">{product.name}</div>
-            <div class="groups">
-                {#each product.groups as group}
-                    <div>{group}</div>
-                {/each}
-            </div>
-            <div class="price">${product.price}</div>
+        <div class="icon flex-mr">
+            <BoxIcon size="24"/>
         </div>
-        <div class="button-bar">
-            <Button round neutral on:click={onEditClick}><EditIcon size="20" /></Button>
-            <Button round neutral on:click={onDeleteClick}><XIcon size="20" /></Button>
-        </div>
+        <div class="name flex-mr">{product.name}</div>
+        <div class="subtitle">${product.price}</div>
+        <div class="flex-spacer"></div>
+        <Button round neutral on:click={onEditClick}>
+            <EditIcon size="20"/>
+        </Button>
+        <Button round neutral on:click={onDeleteClick}>
+            <XIcon size="20"/>
+        </Button>
     </Card>
 </div>
 

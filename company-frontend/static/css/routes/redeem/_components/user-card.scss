@@ -1,11 +1,11 @@
 @use 'theme' as vars;
 
-.product-card {
+.user-card {
 
   width: 100%;
 
   margin-bottom: 1em;
-  /*cursor: pointer;*/
+  cursor: pointer;
 
   :global .card {
     transition: 150ms box-shadow;
@@ -17,21 +17,6 @@
     padding: 0.5em;
     display: flex;
     align-items: center;
-  }
-
-  .icon {
-    padding: 0.8em;
-    border-radius: 50%;
-    background: vars.$main;
-    color: white;
-    align-self: center;
-
-    :global svg {
-      display: block;
-    }
-  }
-
-  .coupons {
-
+    justify-content: space-between;
   }
 }

@@ -1,9 +1,13 @@
 @use 'theme' as vars;
 
-.main-menu {
+header {
+  margin-bottom: 2em;
+}
+
+article {
   height: 50%;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  align-content: space-between;
+  align-content: start;
 }
