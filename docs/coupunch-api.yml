@@ -1,0 +1,1051 @@
+openapi: "3.0.2"
+info:
+  title: Coupunch API
+  version: "1.0"
+servers:
+  - url: https://api.server.test/v1
+tags:
+  - name: "user"
+    description: "User operations"
+  - name: "company"
+    description: "Company operations"
+  - name: "product"
+    description: "Product operations"
+  - name: "coupon"
+    description: "Coupon operations"
+  - name: "redeem"
+    description: "Redeem operations"
+paths:
+  /users:
+    post:
+      tags:
+        - "user"
+      summary: "Register a new user"
+      description: ""
+      operationId: "addUser"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserAddRequest"
+      responses:
+        "200":
+          description: "Successful registration"
+        "400":
+          description: "Invalid request"
+        "409":
+          description: "Username/email already in use"
+  /users/{userId}:
+    get:
+      tags:
+        - "user"
+      summary: "Get a users data"
+      description: ""
+      operationId: "getUser"
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "400":
+          description: "Invalid ID format"
+        "404":
+          description: "User not found"
+    put:
+      tags:
+        - "user"
+      summary: "Update a user"
+      description: ""
+      operationId: "updateUser"
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserAddRequest"
+      responses:
+        "200":
+          description: "Successful update"
+        "400":
+          description: "Invalid request"
+        "404":
+          description: "User not found"
+        "409":
+          description: "Username/email already in use"
+  /users/{userId}/password:
+    put:
+      tags:
+        - "user"
+      summary: "Update the password of a user"
+      description: ""
+      operationId: "updateUserPassword"
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserPasswordUpdateRequest"
+      responses:
+        "200":
+          description: "Successful update"
+        "400":
+          description: "Invalid request"
+        "404":
+          description: "User not found"
+  /users/login:
+    post:
+      tags:
+        - "user"
+      summary: "Log in as a customer"
+      description: ""
+      operationId: "login"
+      requestBody:
+        required: true
+        content:
+          x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/UserLoginRequest"
+      responses:
+        "200":
+          description: "Successful login"
+        "401":
+          description: "Invalid credentials"
+  /users/{userId}/qr:
+    get:
+      tags:
+        - "user"
+      summary: "Get the QR code of a user"
+      description: ""
+      operationId: "getQR"
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful request"
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+        "400":
+          description: "Invalid ID format"
+        "404":
+          description: "User not found"
+    post:
+      tags:
+        - "user"
+      summary: "Update the QR code of a user"
+      operationId: "updateQR"
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful update"
+        "400":
+          description: "Invalid ID format"
+        "404":
+          description: "User not found"
+  /users/{userId}/qr/export:
+    get:
+      tags:
+        - "user"
+      summary: "Get the exported QR code of a user"
+      description: ""
+      operationId: "getQR"
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful request"
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        "400":
+          description: "Invalid ID format"
+        "404":
+          description: "User not found"
+
+  /{companyName}:
+    get:
+      tags:
+        - "company"
+      summary: "Get company data"
+      description: ""
+      operationId: "getCompany"
+      parameters:
+        - name: companyName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Successful request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompanyResponse"
+        "400":
+          description: "Invalid ID format"
+        "404":
+          description: "Company not found"
+    put:
+      tags:
+        - "company"
+      summary: "Update company data"
+      description: ""
+      operationId: "updateCompany"
+      parameters:
+        - name: companyName
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompanyUpdateRequest"
+      responses:
+        "200":
+          description: "Successful update"
+        "400":
+          description: "Invalid request"
+        "404":
+          description: "Company not found"
+  /{companyName}/login:
+    post:
+      tags:
+        - "company"
+      summary: "Log in as a company employee"
+      operationId: "loginEmployee"
+      parameters:
+        - name: companyName
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/UserLoginRequest"
+      responses:
+        "200":
+          description: "Successful login"
+        "401":
+          description: "Invalid credentials"
+  /users/{userId}/companies:
+    get:
+      tags:
+        - "user"
+      summary: "Get companies of a user"
+      description: ""
+      operationId: "getUserCompanies"
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful request"
+        "400":
+          description: "Invalid ID format"
+        "404":
+          description: "User not found"
+
+  /users/{userId}/companies/{companyName}:
+    delete:
+      tags:
+        - "user"
+      summary: "Delete a company from a user list"
+      description: ""
+      operationId: "deleteCompanyFromUserList"
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: companyName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Successful delete"
+        "400":
+          description: "Invalid ID format"
+        "404":
+          description: "User/company not found"
+
+  /{companyName}/products:
+    get:
+      tags:
+        - "product"
+      summary: "Get the product list of a company"
+      description: ""
+      operationId: "getProducts"
+      parameters:
+        - name: companyName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Successful request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductListResponse"
+        "400":
+          description: "Invalid ID format"
+        "404":
+          description: "Company not found"
+    post:
+      tags:
+        - "product"
+      summary: "Add a new product to the company list"
+      description: ""
+      operationId: "addProduct"
+      parameters:
+        - name: companyName
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductAddRequest"
+      responses:
+        "200":
+          description: "Successful addition"
+        "400":
+          description: "Invalid request"
+        "404":
+          description: "Company not found"
+  /{companyName}/products/{productId}:
+    get:
+      tags:
+        - "product"
+      summary: "Get a product by ID"
+      description: ""
+      operationId: "getProduct"
+      parameters:
+        - name: companyName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductResponse"
+        "400":
+          description: "Invalid ID format"
+        "404":
+          description: "Company/product not found"
+    put:
+      tags:
+        - "product"
+      summary: "Update a product"
+      description: ""
+      operationId: "updateProduct"
+      parameters:
+        - name: companyName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductAddRequest"
+      responses:
+        "200":
+          description: "Successful update"
+        "400":
+          description: "Invalid request"
+        "404":
+          description: "Company/product not found"
+    delete:
+      tags:
+        - "product"
+      summary: "Delete a product"
+      description: ""
+      operationId: "deleteProduct"
+      parameters:
+        - name: companyName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful delete"
+        "400":
+          description: "Invalid ID"
+        "404":
+          description: "Company/product not found"
+  /{companyName}/product-groups:
+    get:
+      tags:
+        - "product"
+      summary: "Get the product group list of a company"
+      description: ""
+      operationId: "getProductGroups"
+      parameters:
+        - name: companyName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Successful request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductGroupListResponse"
+        "400":
+          description: "Invalid ID format"
+        "404":
+          description: "Company not found"
+    post:
+      tags:
+        - "product"
+      summary: "Add a new product group to the company list"
+      description: ""
+      operationId: "addProductGroup"
+      parameters:
+        - name: companyName
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductGroupAddRequest"
+      responses:
+        "200":
+          description: "Successful addition"
+        "400":
+          description: "Invalid request"
+        "404":
+          description: "Company not found"
+  /{companyName}/product-groups/{groupId}:
+    get:
+      tags:
+        - "product"
+      summary: "Get a product group by ID"
+      description: ""
+      operationId: "getProductGroup"
+      parameters:
+        - name: companyName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductGroupResponse"
+        "400":
+          description: "Invalid ID format"
+        "404":
+          description: "Company/product group not found"
+    put:
+      tags:
+        - "product"
+      summary: "Update a product group"
+      description: ""
+      operationId: "updateProductGroup"
+      parameters:
+        - name: companyName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductGroupAddRequest"
+      responses:
+        "200":
+          description: "Successful update"
+        "400":
+          description: "Invalid request"
+        "404":
+          description: "Company/product group not found"
+    delete:
+      tags:
+        - "product"
+      summary: "Delete a product group"
+      description: ""
+      operationId: "deleteProductGroup"
+      parameters:
+        - name: companyName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful delete"
+        "400":
+          description: "Invalid ID"
+        "404":
+          description: "Company/product group not found"
+
+  /{companyName}/coupons:
+    get:
+      tags:
+        - "coupon"
+      summary: "Get coupons of a company"
+      description: ""
+      parameters:
+        - name: companyName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Successful request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CouponListResponse"
+        "400":
+          description: "Invalid ID format"
+        "404":
+          description: "Company not found"
+    post:
+      tags:
+        - "coupon"
+      summary: "Add a new coupon"
+      description: ""
+      parameters:
+        - name: companyName
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CouponAddRequest"
+      responses:
+        "200":
+          description: "Successful addition"
+        "400":
+          description: "Invalid request"
+        "404":
+          description: "Company not found"
+  /{companyName}/coupons/{couponId}:
+    get:
+      tags:
+        - "coupon"
+      summary: "Get a coupon by ID"
+      description: ""
+      parameters:
+        - name: companyName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: couponId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CouponResponse"
+        "400":
+          description: "Invalid ID format"
+        "404":
+          description: "Company/coupon not found"
+    put:
+      tags:
+        - "coupon"
+      summary: "Update a coupon"
+      description: ""
+      parameters:
+        - name: companyName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: couponId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CouponAddRequest"
+      responses:
+        "200":
+          description: "Successful update"
+        "400":
+          description: "Invalid request"
+        "404":
+          description: "Company/coupon not found"
+    delete:
+      tags:
+        - "coupon"
+      summary: "Delete a coupon"
+      description: ""
+      parameters:
+        - name: companyName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: couponId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful delete"
+        "400":
+          description: "Invalid ID"
+        "404":
+          description: "Company/coupon not found"
+  /users/{userId}/companies/{companyName}/coupons:
+    get:
+      tags:
+        - "coupon"
+      summary: "Get current progress of a user for coupons in a company"
+      description: ""
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: companyName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Successful request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CouponCustomerListResponse"
+        "400":
+          description: "Invalid ID format"
+        "404":
+          description: "User/company not found"
+  /users/{userId}/companies/{companyName}/coupons/{couponId}:
+    get:
+      tags:
+        - "coupon"
+      summary: "Get current progress of a user for a coupon in a company"
+      description: ""
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: companyName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: couponId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CouponCustomerResponse"
+        "400":
+          description: "Invalid ID format"
+        "404":
+          description: "User/company not found"
+
+  /{companyName}/redeem:
+    post:
+      tags:
+        - "company"
+      summary: "Redeem points and coupons for a user"
+      description: ""
+      parameters:
+        - name: companyName
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RedeemRequest"
+      responses:
+        "200":
+          description: "Successful redeeming, the response contains the discounts"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RedeemResponse"
+        "400":
+          description: "Invalid request"
+        "404":
+          description: "Company not found"
+
+components:
+  schemas:
+    UserAddRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+    UserPasswordUpdateRequest:
+      type: object
+      properties:
+        password:
+          type: string
+    UserLoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    UserResponse:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+    CompanyResponse:
+      type: object
+      properties:
+        name:
+          type: string
+    CompanyUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+    ProductAddRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        price:
+          type: number
+        groups:
+          type: array
+          items:
+            type: integer # group ids
+    ProductListResponse:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductResponse"
+    ProductResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        price:
+          type: number
+        groups:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductGroupSimpleResponse"
+    ProductGroupSimpleResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    ProductGroupListResponse:
+      type: object
+      properties:
+        productGroups:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductGroupResponse"
+    ProductGroupResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        products:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductSimpleResponse"
+    ProductSimpleResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        price:
+          type: number
+    ProductGroupAddRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        products:
+          type: array
+          items:
+            type: integer # product ids
+    CouponAddRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        eligibleProducts:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              points:
+                type: integer
+        rewards:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              points:
+                type: integer
+
+    CouponListResponse:
+      type: object
+      properties:
+        coupons:
+          type: array
+          items:
+            $ref: "#/components/schemas/CouponResponse"
+    CouponResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+        eligibleProducts:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              points:
+                type: integer
+        rewards:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              points:
+                type: integer
+              discount:
+                type: string
+    CouponCustomerListResponse:
+      type: object
+      properties:
+        coupons:
+          type: array
+          items:
+            $ref: "#/components/schemas/CouponCustomerResponse"
+    CouponCustomerResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+        points:
+          type: integer
+        eligibleProducts:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              points:
+                type: integer
+        rewards:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              points:
+                type: integer
+              discount:
+                type: string
+    RedeemRequest:
+      type: object
+      properties:
+        userId:
+          type: integer
+        purchasedProducts:
+          type: array
+          items:
+            type: object
+            properties:
+              productId:
+                type: integer
+              amount:
+                type: integer
+        redeemedCoupons:
+          type: array
+          items:
+            type: object
+            properties:
+              couponId:
+                type: integer
+    RedeemResponse:
+      type: object
+      properties:
+        discounts:
+          type: array
+          items:
+            type: object
+            properties:
+              productName:
+                type: string
+              discount:
+                type: string
