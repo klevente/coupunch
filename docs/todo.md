@@ -1,2 +1,51 @@
-# Todo
+# Todo List
 
+- [ ] Rework Checkout UI:
+  - [ ] Make max-width larger (on iPad it should stretch fully)
+  - [ ] Split Products and Coupons
+  - [ ] Create searchable table view for displaying data - maybe generic?
+  - [ ] Create Product selector modal for reward selection
+  - [ ] Create finalising modal detailing redeemed rewards
+  - [ ] Redesign basket as per wireframe
+- [ ] Create ViewModel-based data handling on frontend
+  - [ ] Create ViewModels for each page, as per the presentation
+  - [ ] Expose functions and data which the page can use
+- [ ] Implement Product handling on backend
+  - [ ] Review entity class
+  - [ ] Write tests
+  - [ ] Implement the service layer
+  - [ ] Implement the controller layer
+  - [ ] Wire up endpoints to frontend
+- [ ] Implement Product Group handling on backend
+  - [ ] Review entity class
+  - [ ] Write tests
+  - [ ] Implement the service layer
+  - [ ] Implement the controller layer
+  - [ ] Wire up endpoints to frontend
+- [ ] Implement User search
+  - [ ] Create new User search modal on frontend
+  - [ ] Implement new User search on backend (usermanager)
+  - [ ] Implement existing user search on backend (couponmanager)
+- [ ] Implement QR search
+  - [ ] Implement QR-code scanning on frontend
+  - [ ] Implement search by QR on backend
+  - [ ] Come up with better QR-generation logic
+- [ ] Finish Products Page
+  - [ ] Add an optional Product Icon
+  - [ ] Add a selector for choosing a Product Group for a Product
+  - [ ] Redesign Product and Product Group rows as per wireframe
+- [ ] Create Reports Page
+  - [ ] Find library for managing charts
+  - [ ] Find a solution for aggregating data in a separate service
+- [ ] Create Customer UI
+  - [ ] Add Company list page
+  - [ ] Add Company detail page
+  - [ ] Add Company Coupons page
+  - [ ] Add Coupon detail page
+  - [ ] Add Profile page (QR-generation)
+  - [ ] Add QR-export page
+- [ ] Handle deployment
+  - [ ] Come up with creating Docker images easily
+  - [ ] Implement startup logic for new instances
+  - [ ] Orchestrate containers to work together
+- [ ] Create Documentation
