@@ -35,6 +35,32 @@ Base URL: `company.coupunch.xyz`
 * `/company1/reports`: Reports page
 * `/company1/settings`: Company-specific settings page
 
+## Product Management
+
+Employees can manage products using the provided interface.
+
+### Product Groups
+
+On the left, there is an editable list of product groups. Each item can be edited or removed. New items can be added using the button at the top. A group row displays its name, how many products are in it, and how many coupons use it as a requirement and how many use it as a reward.
+
+The first item is a hardwired "All products" group, which lists every product without filter. Upon clicking on a group, only the relevant products show up in the middle.
+
+Removing a product group is only enabled when it contains no items.
+
+On the backend, a "default" group is readily available to place any items which fit nowhere else.
+
+#### Product Group Edit Form
+
+This modal exposes the following data to edit a group: name.
+
+### Products
+
+In the middle, a searchable table shows products based on the current search term and selected group. Each row displays the product name, price and icon. It also displays how many coupons use it as a requirement and how many use it as a reward. Each item can be edited or removed. Removal is only enabled when there are no coupons referring this product.
+
+#### Product Edit Form
+
+This modal exposes the following data to edit a group: name, price, icon, product group. If no product group choice is made, the "default" one will be used.
+
 ## User Selection
 
 Employees have 2 ways of selecting a user upon checkout:
@@ -52,3 +78,47 @@ After pressing the *Scan QR Code* button, the device's camera pops up, which wil
 The QR-code contains the user's ID and a randomly generated string, encoded in base64 - this makes it impossible to try and guess another user's QR based on their ID alone.
 
 Verification is achieved by comparing the request with the stored QR data in the database, and in case of a match, the ID will be returned. For this, the request is first parsed for extracting the user's ID. If anything goes wrong, the server sends back an error.
+
+## Checkout
+
+After selecting a user for checkout, the employee must select the purchased items and any eligible coupons which the customer wants to redeem. This interface is structured as follows:
+
+### Basket
+
+The basket stores the items which are being purchased by the customer. It holds both normal purchases and items which are acquired using coupons.
+
+#### Normal Purchase
+
+This row displays the product name, quantity and unit price. It also displays a plus and minus icon for altering quantity. Additionally, the whole row can be discarded by clicking the cross icon
+
+#### Coupon row
+
+This row displays the product name, quantity, unit price and discounted price, with a different background color. It also displays a cross icon for discarding the redeemed coupon.
+
+The basket is always visible on the right side of the screen.
+
+### Selections
+
+Selecting products and coupons requires more space, so their respective elements live on different tabs. The default tab is products, as it is reasonable to assume that employees want to select those first before coupons.
+
+#### Products
+
+A searchable table displaying every product with its name and price. Clicking one will add it to the basket; repeatedly clicking on it will increase the amount. 
+
+This view is only visible when its tab is selected.
+
+#### Coupons
+
+A searchable table displaying every *redeemable* coupon the user has at the moment of purchase. Clicking one will redeem it, adding the respective reward to the basket as a new row with a different style. If a coupon offers a reward for a product group, a selector for the individual product from that group will open so the employee can select the appropriate product.
+
+This view is only visible when its tab is selected.
+
+#### Product Selector
+
+For easy reward selection for coupons with product groups or multiple products as rewards, this modal will offer a searchable table with the products in it, from which the employee can choose the required product. Upon choosing, the modal will close, and the respective product will be added to the basket as a new row.
+
+### Redeeming
+
+After everything has been selected and verified, the employee clicks the *Finish* button, which will send the request to the server. The response will contain the coupons which have just been redeemed with the exact reward information: what product, with what discount. For extra ease, a modal with this information will be displayed to the employee, so they can review it once more while they add the info to the cash register.
+
+Clicking the *Finish* button on the modal will close it and end the checkout process, redirecting the interface to the main page.
