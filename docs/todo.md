@@ -1,5 +1,8 @@
 # Todo List
 
+- [ ] Create ViewModel-based data handling on frontend
+  - [ ] Create ViewModels for each page, as per the presentation
+  - [ ] Expose functions and data which the page can use
 - [ ] Rework Checkout UI:
   - [ ] Make max-width larger (on iPad it should stretch fully)
   - [ ] Split Products and Coupons
@@ -7,9 +10,6 @@
   - [ ] Create Product selector modal for reward selection
   - [ ] Create finalising modal detailing redeemed rewards
   - [ ] Redesign basket as per wireframe
-- [ ] Create ViewModel-based data handling on frontend
-  - [ ] Create ViewModels for each page, as per the presentation
-  - [ ] Expose functions and data which the page can use
 - [ ] Implement Product handling on backend
   - [ ] Review entity class
   - [ ] Write tests
