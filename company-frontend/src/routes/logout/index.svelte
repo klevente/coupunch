@@ -3,7 +3,7 @@
     export async function preload(page, session) {
         const api = create();
         await api
-            .transport(this.fetch)
+            .context(this)
             .endpoint('users/logout')
             .post();
     }

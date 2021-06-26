@@ -1,8 +1,8 @@
 diff --git a/node_modules/@beyonk/sapper-httpclient/lib/api/api.js b/node_modules/@beyonk/sapper-httpclient/lib/api/api.js
-index 886091f..ede436b 100644
+index 81c785e..40c1089 100644
 --- a/node_modules/@beyonk/sapper-httpclient/lib/api/api.js
 +++ b/node_modules/@beyonk/sapper-httpclient/lib/api/api.js
-@@ -20,6 +20,7 @@ class ApiBase {
+@@ -21,6 +21,7 @@ class ApiBase {
      this.config = {
        endpoint: null,
        method: 'get',
@@ -10,7 +10,7 @@ index 886091f..ede436b 100644
        payload: null,
        query: null,
        headers: {},
-@@ -54,11 +55,11 @@ class ApiBase {
+@@ -55,11 +56,11 @@ class ApiBase {
          credentials: 'include',
          headers: Object.assign(
            { Accept: 'application/json' },
@@ -24,11 +24,11 @@ index 886091f..ede436b 100644
        this.config.overrides
      )
  
-@@ -125,6 +126,17 @@ class ApiBase {
+@@ -126,6 +127,17 @@ class ApiBase {
      }
    }
  
-+  _formatPayload() {
++  _formatPayload () {
 +    switch (this.config.contentType) {
 +      case 'application/json':
 +        return JSON.stringify(this.config.payload)
@@ -39,10 +39,10 @@ index 886091f..ede436b 100644
 +    }
 +  }
 +
-   transport (client) {
-     this.client = client
-     return this
-@@ -140,6 +152,16 @@ class ApiBase {
+   context (ctx) {
+     if (ctx.fetch) {
+       this.client = ctx.fetch
+@@ -134,6 +146,16 @@ class ApiBase {
      return this
    }
  
@@ -56,6 +56,6 @@ index 886091f..ede436b 100644
 +    return this
 +  }
 +
-   async get (fn) {
-     this.config.method = 'get'
-     return this.send(fn)
+   override (override) {
+     this.config.overrides = override
+     return this

@@ -9,7 +9,7 @@
 			try {
 				const api = create();
 				const currentUser = await api
-						.transport(this.fetch)
+						.context(this)
 						.endpoint('couponmanager/users/current')
 						.accessDenied(e => {
 							this.redirect(302, '/logout');
