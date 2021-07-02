@@ -227,4 +227,29 @@ class EntityListViewModel {
     }
 }
 ```
+
+This can be generalized using the following function:
+
+```javascript
+function x({serviceCall, serviceParams, serviceCallback}) {
+    let shouldUpdateLocally = true;
+    const res = await serviceCall(...serviceParams, (...args) => {
+        serviceCallback(args);
+        shouldUpdateLocally = false;
+    });
+    if (shouldUpdateLocally) {
+        localCallback(res);
+    }
+}
+
+class EntityListViewModel {
+    async add(entity) {
+        x({
+            serviceCall: entityService.add,
+            serviceParams: [entity],
+            serviceCallback: serverEntities => this.entities.update(entities => entities.setData(serverEntities)),
+            localCallback: newEntity => this.entities.update(entities => entities.setData([...entities, newEntity]))
+        })
+    }
+}
 ```
