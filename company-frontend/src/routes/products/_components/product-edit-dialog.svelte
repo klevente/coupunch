@@ -76,4 +76,12 @@
     </Dialog>
 </Modal>
 
-<style src="../../../../static/css/routes/products/_components/product-edit-dialog.scss"></style>
+<!--<style src="../../../../static/css/routes/products/_components/product-edit-dialog.scss"></style>-->
+<style lang="scss">
+    @use 'theme' as vars;
+
+    .currency {
+      font-weight: 500;
+      top: 0.8em !important;
+    }
+</style>

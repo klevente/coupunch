@@ -8,7 +8,7 @@
     export let title;
 
     let modalOpen = false;
-    let extra = undefined;
+    let extra = null;
 
     export function open(data) {
         extra = data;
@@ -20,12 +20,12 @@
     }
 
     function onNo() {
-        dispatch('no', {});
+        dispatch('no', null);
         close();
     }
 
     function onYes() {
-        dispatch('yes', { extra });
+        dispatch('yes', extra);
         close();
     }
 </script>

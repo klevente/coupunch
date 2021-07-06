@@ -13,9 +13,9 @@
 </script>
 
 <Modal bind:open={modalOpen} noClickaway>
-    <Dialog title="Loading">
+    <Dialog>
         <Loading />
     </Dialog>
 </Modal>
 
-<style src="../../static/css/components/loading-dialog.scss"></style>
+<style lang="scss"></style>

@@ -1,20 +1,22 @@
 import { asArray } from '../util/iterable';
 
-export default class AbstractViewmodel {
+export default class BaseViewmodel {
+
+    constructor(...services) {
+        if (new.target === BaseViewmodel) {
+            throw new TypeError(`Cannot construct BaseViewmodel instances directly.`);
+        }
+        this._initServices(...services);
+    }
+
     get _resource() {
-        throw new Error('Must be overridden!');
+        console.error('BaseViewmodel._resource() must be overridden to return a datastore.');
+        return null;
     }
 
     get _state() {
-        throw new Error('Must be overridden!');
-    }
-
-    _defaultServiceCallback(serverResource) {
-        this._resource.setSuccess(serverResource);
-    }
-
-    _defaultErrorCallback(error) {
-
+        console.error(`BaseViewmodel._state() must be overridden to return a statestore.`);
+        return null;
     }
 
     _defaultOperations = {
@@ -28,7 +30,7 @@ export default class AbstractViewmodel {
         }
     }
 
-    async call({
+    async execute({
                    stateStore = this._state,
                    action,
                    serviceParams,
@@ -49,6 +51,7 @@ export default class AbstractViewmodel {
                 localCallback(resource);
             }
         } catch (e) {
+            console.error(e);
             stateStore.emitFailure(e);
             errorCallback(e);
         }
@@ -56,16 +59,29 @@ export default class AbstractViewmodel {
 
     async load({
                    dataStore = this._resource,
-                   serviceCall,
+                   action,
                    serviceParams = [],
                }) {
         try {
             dataStore.setLoading();
             serviceParams = asArray(serviceParams);
-            const resource = await serviceCall(...serviceParams);
+            const resource = await action.serviceCall(...serviceParams);
             dataStore.setSuccess(resource);
         } catch (e) {
+            console.error(e);
             dataStore.setFailure(e);
         }
+    }
+
+    _initServices(...services) {
+        services.forEach(service => service.updateCompanyUrl());
+    }
+
+    _defaultServiceCallback(serverResource) {
+        this._resource.setSuccess(serverResource);
+    }
+
+    _defaultErrorCallback(error) {
+
     }
 }
