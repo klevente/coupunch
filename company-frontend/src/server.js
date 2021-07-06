@@ -4,18 +4,18 @@ import compression from 'compression';
 import * as sapper from '@sapper/server';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import cookieParser from 'cookie-parser';
-import Api from '@beyonk/sapper-httpclient'
-import routes from './routes';
 import { guard } from '@beyonk/sapper-rbac';
-
+import { initApi } from './services/api';
+import routes from './routes';
 
 const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === 'development';
+const backend = 'http://localhost:8000/';
 
-Api.configure({ baseUrl: '/api', parseErrors: false });
+initApi();
 
 polka() // You can also use Express
-	.use('/api', createProxyMiddleware({ target: 'http://localhost:8000/' }))
+	.use('/api', createProxyMiddleware({ target: backend }))
 	.use(
 		compression({ threshold: 0 }),
 		sirv('static', { dev }),
@@ -26,9 +26,9 @@ polka() // You can also use Express
 			const user = {
 				authenticated,
 				scope: authenticated ? ['COMPANY_USER'] : [],
-				id: undefined,
-				username: undefined,
-				email: undefined,
+				id: null,
+				username: null,
+				email: null,
 			};
 
 			const options = {
