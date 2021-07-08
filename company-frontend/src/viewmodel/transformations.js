@@ -96,3 +96,16 @@ export function sorted({
         return dataStore;
     });
 }
+
+export function filteredAndSorted({
+                                      dataStore,
+                                      searchTerm,
+                                      searchField = 'name',
+                                      sortBy,
+                                      orderBy
+                                  }) {
+    return sorted({
+        dataStore: filtered({ dataStore, searchTerm, searchField }),
+        sortBy, orderBy
+    })
+}

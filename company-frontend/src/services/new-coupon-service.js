@@ -34,10 +34,10 @@ export default class NewCouponService extends CompanyUrlService {
 
     static async update(coupon, fetchCallback) {
         await sleep();
-        const couponToUpdate = dummyCoupons.find(({ id }) => id === coupon.id);
-        couponToUpdate.name = coupon.name;
+        const idx = dummyCoupons.findIndex(({ id }) => id === coupon.id);
+        dummyCoupons[idx] = coupon;
         NewCouponService._cb(fetchCallback);
-        return couponToUpdate;
+        return coupon;
     }
 
     static async delete(coupon, fetchCallback) {
@@ -46,6 +46,64 @@ export default class NewCouponService extends CompanyUrlService {
         dummyCoupons = dummyCoupons.filter(({ id }) => id !== idToDelete);
         NewCouponService._cb(fetchCallback);
         return coupon;
+    }
+
+    static async fetchForUser(username) {
+        await sleep();
+        return [
+            {
+                id: 1,
+                name: 'Coupon 1',
+                actual: 7,
+                required: 10,
+                products: [
+                    {
+                        id: 1,
+                        name: 'Product 1'
+                    }
+                ],
+                reward: {
+                    id: 1,
+                    name: 'Product 1'
+                }
+            },
+            {
+                id: 2,
+                name: 'Coupon 2',
+                actual: 8,
+                required: 10,
+                products: [
+                    {
+                        id: 2,
+                        name: 'Product 2'
+                    },
+                    {
+                        id: 3,
+                        name: 'Product 3'
+                    }
+                ],
+                reward: {
+                    id: 2,
+                    name: 'Product 2'
+                }
+            },
+            {
+                id: 3,
+                name: 'Coupon 3',
+                actual: 10,
+                required: 10,
+                products: [
+                    {
+                        id: 5,
+                        name: 'Product 5'
+                    }
+                ],
+                reward: {
+                    id: 5,
+                    name: 'Product 5'
+                }
+            }
+        ];
     }
 
     static _cb(fetchCallback) {

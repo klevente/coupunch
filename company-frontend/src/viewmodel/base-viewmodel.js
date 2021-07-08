@@ -19,7 +19,7 @@ export default class BaseViewmodel {
         return null;
     }
 
-    _defaultOperations = {
+    /*_defaultOperations = {
         array: {
             add: (newResource) => this._resource.updateData(array => [...array, newResource]),
             update: (updatedResource) => this._resource.updateData(array => array.map(resource => resource.id === updatedResource.id ? updatedResource : resource)),
@@ -28,15 +28,28 @@ export default class BaseViewmodel {
         single: {
             update: (updatedResource) => this._resource.updateData(_ => updatedResource),
         }
+    }*/
+
+    _defaultOperations(dataStore = this._resource) {
+        return {
+            array: {
+                add: (newResource) => dataStore.updateData(array => [...array, newResource]),
+                update: (updatedResource) => dataStore.updateData(array => array.map(resource => resource.id === updatedResource.id ? updatedResource : resource)),
+                delete: (deletedResource) => dataStore.updateData(array => array.filter(({ id }) => deletedResource.id !== id)),
+            },
+            single: {
+                update: (updatedResource) => dataStore.updateData(_ => updatedResource),
+            }
+        };
     }
 
     async execute({
                    stateStore = this._state,
                    action,
                    serviceParams,
-                   serviceCallback = this._defaultServiceCallback.bind(this),
+                   serviceCallback = this._defaultServiceCallback(),
                    localCallback,
-                   errorCallback = this._defaultErrorCallback.bind(this),
+                   errorCallback = this._defaultErrorCallback(),
                }) {
         try {
             stateStore.emitLoading();
@@ -73,15 +86,15 @@ export default class BaseViewmodel {
         }
     }
 
+    _defaultServiceCallback(dataStore = this._resource) {
+        return (serverResource) => dataStore.setSuccess(serverResource);
+    }
+
     _initServices(...services) {
         services.forEach(service => service.updateCompanyUrl());
     }
 
-    _defaultServiceCallback(serverResource) {
-        this._resource.setSuccess(serverResource);
-    }
-
-    _defaultErrorCallback(error) {
-
+    _defaultErrorCallback() {
+        return (error) => {};
     }
 }

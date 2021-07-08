@@ -23,7 +23,7 @@ export default class Viewmodel extends BaseViewmodel {
             serviceCall: NewCouponService.delete,
             successText: 'Coupon deleted',
         },
-    }
+    };
 
     constructor() {
         super(NewCouponService);
@@ -39,7 +39,7 @@ export default class Viewmodel extends BaseViewmodel {
         await this.execute({
             action: this.#actions.add,
             serviceParams: coupon,
-            localCallback: this._defaultOperations.array.add
+            localCallback: this._defaultOperations().array.add
         });
     }
 
@@ -47,7 +47,7 @@ export default class Viewmodel extends BaseViewmodel {
         await this.execute({
             action: this.#actions.update,
             serviceParams: coupon,
-            localCallback: this._defaultOperations.array.update
+            localCallback: this._defaultOperations().array.update
         });
     }
 
@@ -55,7 +55,7 @@ export default class Viewmodel extends BaseViewmodel {
         await this.execute({
             action: this.#actions.delete,
             serviceParams: coupon,
-            localCallback: this._defaultOperations.array.delete
+            localCallback: this._defaultOperations().array.delete
         });
     }
 

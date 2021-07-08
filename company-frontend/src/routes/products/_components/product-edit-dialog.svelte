@@ -32,13 +32,9 @@
         onSubmit: values => {
             console.log(values);
             if (!!values.id) {
-                dispatch('updateProduct', {
-                    product: values
-                });
+                dispatch('updateProduct', values);
             } else {
-                dispatch('addProduct', {
-                    product: values
-                });
+                dispatch('addProduct', values);
             }
             close();
         },
