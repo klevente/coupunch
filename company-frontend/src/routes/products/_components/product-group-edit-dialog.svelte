@@ -1,21 +1,28 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import { Modal, Dialog, FormField, TextField, Button } from 'attractions';
-    import { createForm } from 'felte';
-    import reporter from '@felte/reporter-tippy';
-    import { validator } from '@felte/validator-yup';
+    import { isEditing, createForm } from '../../../util/form';
     import * as yup from 'yup';
 
     const dispatch = createEventDispatcher();
 
-    export function open(product) {
+    export function open(productGroup) {
         modalOpen = true;
-        setFields(product);
-        editing = product && !!product.id;
+        setFields(productGroup);
+        editing = isEditing(productGroup);
     }
 
     function close() {
         modalOpen = false;
+    }
+
+    function onSubmit(productGroup) {
+        dispatch(editing ? 'update' : 'add', productGroup);
+        close();
+    }
+
+    function onError(errors) {
+        console.error(errors);
     }
 
     let modalOpen = false;
@@ -25,20 +32,7 @@
         name: yup.string().required(),
     });
 
-    const { form, setFields } = createForm({
-        extend: [validator, reporter()],
-        validateSchema: schema,
-        onSubmit: values => {
-            console.log(values);
-            if (!!values.id) {
-                console.log('update');
-            } else {
-                console.log('add');
-            }
-            close();
-        },
-        onError: errors => console.error(errors),
-    });
+    const { form, setFields } = createForm({ schema, onSubmit, onError });
 </script>
 
 <Modal bind:open={modalOpen} noClickaway>

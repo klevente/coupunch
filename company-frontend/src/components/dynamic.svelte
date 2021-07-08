@@ -21,6 +21,8 @@
 {/if}
 {#if $data.failure}
     <div class="error">
-        <slot name="error" error={$data.error} />
+        <slot name="error" error={$data.error}>
+            <p>{$data.error}</p>
+        </slot>
     </div>
 {/if}

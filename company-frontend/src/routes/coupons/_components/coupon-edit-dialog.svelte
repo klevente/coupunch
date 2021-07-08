@@ -1,16 +1,10 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import { Modal, Dialog, FormField, TextField, Button } from 'attractions';
-    import { createForm } from 'felte';
-    import reporter from '@felte/reporter-tippy';
-    import { validator } from '@felte/validator-yup';
+    import { isEditing, createForm } from '../../../util/form';
     import * as yup from 'yup';
 
     const dispatch = createEventDispatcher();
-
-    function isEditing(obj) {
-        return obj && !!obj.id;
-    }
 
     export function open(coupon) {
         modalOpen = true;
@@ -38,12 +32,7 @@
         name: yup.string().required(),
     });
 
-    const { form, setFields } = createForm({
-        extend: [validator, reporter()],
-        validateSchema: schema,
-        onSubmit,
-        onError
-    });
+    const { form, setFields } = createForm({ schema, onSubmit, onError });
 </script>
 
 <Modal bind:open={modalOpen} noClickaway>
@@ -51,11 +40,11 @@
         <form use:form>
             <input type="hidden" name="id">
             <FormField
-                name="Name"
-                help="Name of the coupon"
-                required
+                    name="Name"
+                    help="Name of the coupon"
+                    required
             >
-                <TextField name="name" />
+                <TextField name="name"/>
             </FormField>
             <div class="button-bar">
                 <Button on:click={close}>Cancel</Button>

@@ -1,6 +1,7 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import { Tab, Loading } from 'attractions';
+    import Dynamic from '../../../components/dynamic.svelte';
 
     const dispatch = createEventDispatcher();
 
@@ -19,21 +20,18 @@
     >
         {defaultGroup.name}
     </Tab>
-    {#if $productGroups.isLoading()}
-        <Loading />
-    {/if}
-    {#if $productGroups.hasData()}
-        {#each $productGroups.data as productGroup}
+    <Dynamic data={productGroups}>
+        <svelte:fragment slot="data" let:item>
             <Tab
-                    class={$selectedGroup.id === productGroup.id && 'selected'}
-                    value={productGroup}
+                    class={$selectedGroup.id === item.id && 'selected'}
+                    value={item}
                     bind:group={$selectedGroup}
                     name="nav-mobile"
             >
-                {productGroup.name}
+                {item.name}
             </Tab>
-        {/each}
-    {/if}
+        </svelte:fragment>
+    </Dynamic>
 </nav>
 
 <style src="../../../../static/css/routes/products/_components/product-group-list-mobile.scss"></style>

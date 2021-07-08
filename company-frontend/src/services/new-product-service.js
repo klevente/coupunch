@@ -1,18 +1,20 @@
 import sleep from '../util/sleep';
 import CompanyUrlService from './companyurl-service';
 
-let dummyProducts = new Array(20).map((_, i) => ({
-    id: i + 1,
-    name: `Product ${i}`,
-    price: Math.trunc((Math.random() * 50 + 1) * 100) / 100,
-    group: Math.random() > 0.5 ? {
-        id: 1,
-        name: 'coffee'
-    } : {
-        id: 2,
-        name: 'food'
-    }
-}));
+let dummyProducts = [...Array(20)].map((_, i) => {
+    return {
+        id: i + 1,
+        name: `Product ${i}`,
+        price: Math.trunc((Math.random() * 50 + 1) * 100) / 100,
+        group: Math.random() > 0.5 ? {
+            id: 1,
+            name: 'coffee'
+        } : {
+            id: 2,
+            name: 'food'
+        }
+    };
+});
 let cnt = 21;
 
 export default class NewProductService extends CompanyUrlService {

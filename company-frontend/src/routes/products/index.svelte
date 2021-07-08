@@ -2,6 +2,8 @@
     import { onMount } from 'svelte';
     import { stores } from '@sapper/app';
     import { Button, H1, H2, Loading, TextField } from 'attractions';
+    import Dynamic from '../../components/dynamic.svelte';
+    import State from '../../components/state.svelte';
     import ProductCard from './_components/product-card.svelte';
     import ConfirmDialog from './../../components/confirm-dialog.svelte';
     import ProductEditDialog from './_components/product-edit-dialog.svelte';
@@ -9,22 +11,25 @@
     import ProductGroupListDesktop from './_components/product-group-list-desktop.svelte'
     import ProductGroupListMobile from './_components/product-group-list-mobile.svelte';
 
-    import productService, { defaultGroup } from '../../services/product-service';
-    import productGroupService from '../../services/product-group-service';
     import { writable } from 'svelte/store';
 
+    import Viewmodel from './_viewmodel';
+
+    const defaultGroup = {
+        id: 0,
+        name: 'All',
+    };
+
+    const viewmodel = new Viewmodel();
+    const { filteredProducts, productGroups, state, searchTerm } = viewmodel;
+
     const { session } = stores();
-    const { companyUrl, companyName } = $session.user;
+    const { companyName } = $session.user;
 
     const selectedGroup = writable(defaultGroup);
-    const productSearchTerm = writable('');
-
-    const products = productService.filteredProducts(selectedGroup, productSearchTerm);
-    const productGroups = productGroupService.productGroups;
 
     onMount(async () => {
-        await productService.fetch(companyUrl);
-        await productGroupService.fetch(companyUrl);
+        await viewmodel.getAll();
     });
 
     let productEditDialog;
@@ -32,43 +37,24 @@
     let productGroupEditDialog;
     let productGroupDeleteDialog;
 
-    function openProductEditDialog({ detail: { product } }) {
-        productEditDialog.open(product);
-    }
+    const openProductEditDialog = ({ detail }) => productEditDialog.open(detail);
+    const openProductDeleteDialog = ({ detail }) => productDeleteDialog.open(detail);
+    const addProduct = ({ detail }) => viewmodel.addProduct(detail);
+    const updateProduct = ({ detail }) => viewmodel.updateProduct(detail);
+    const deleteProduct = ({ detail }) => viewmodel.deleteProduct(detail);
 
-    function openProductDeleteDialog({ detail: { product } }) {
-        productDeleteDialog.open(product);
-    }
+    const openProductGroupEditDialog = ({ detail }) => productGroupEditDialog.open(detail);
+    const openProductGroupDeleteDialog = ({ detail }) => productGroupDeleteDialog.open(detail);
+    const addProductGroup = ({ detail }) => viewmodel.addProductGroup(detail);
+    const updateProductGroup = ({ detail }) => viewmodel.updateProductGroup(detail);
+    const deleteProductGroup = ({ detail }) => viewmodel.deleteProductGroup(detail);
 
-    function openProductGroupEditDialog({ detail: { productGroup } }) {
-        productGroupEditDialog.open(productGroup)
-    }
-
-    function openProductGroupDeleteDialog({ detail: { productGroup } }) {
-        productGroupDeleteDialog.open(productGroup);
-    }
-
-    function addProduct({ detail: { product } }) {
-        productService.add(companyUrl, product);
-    }
-
-    function updateProduct({ detail: { product } }) {
-        productService.update(companyUrl, product);
-    }
-
-    function deleteProduct({ detail: { extra } }) {
-        productService.delete(companyUrl, extra);
-    }
-
-    function deleteProductGroup({ detail: { extra } }) {
-        console.log(extra);
-    }
-
-    function changeSelectedProductGroup({ detail: { productGroup } }) {
-        const newlySelectedGroup = productGroup.id === defaultGroup.id ?
+    function changeSelectedProductGroup({ detail }) {
+        const productGroup = detail;
+        /*const newlySelectedGroup = productGroup.id === defaultGroup.id ?
             defaultGroup :
             $productGroups.data.find(g => g.id === productGroup.id)
-        selectedGroup.set(newlySelectedGroup);
+        selectedGroup.set(newlySelectedGroup);*/
     }
 
 </script>
@@ -99,50 +85,51 @@
                 Add
             </Button>
             <div class="flex-spacer"></div>
-            <TextField outline type="search" placeholder="Search..." bind:value={$productSearchTerm}/>
+            <TextField outline type="search" placeholder="Search..." bind:value={$searchTerm}/>
         </div>
-        {#if $products.isLoading()}
-            <Loading/>
-        {/if}
-        {#if $products.hasData()}
-            <div class="product-list">
-                {#each $products.data as product}
-                    <ProductCard
-                            {product}
-                            on:editProduct={openProductEditDialog}
-                            on:deleteProduct={openProductDeleteDialog}
-                    />
-                {/each}
-            </div>
-        {/if}
-        {#if $products.isError()}
-            <div>Error</div>
-        {/if}
+
+        <State {state}/>
+
+        <Dynamic data={filteredProducts}>
+            <svelte:fragment slot="data" let:item>
+                <ProductCard
+                        product={item}
+                        on:editProduct={openProductEditDialog}
+                        on:deleteProduct={openProductDeleteDialog}
+                />
+            </svelte:fragment>
+            <svelte:fragment slot="error" let:error>
+                <p>{error}</p>
+            </svelte:fragment>
+        </Dynamic>
     </div>
+
+    <ProductEditDialog
+            bind:this={productEditDialog}
+            on:add={addProduct}
+            on:update={updateProduct}
+    />
+    <ProductGroupEditDialog
+            bind:this={productGroupEditDialog}
+            on:add={addProductGroup}
+            on:update={updateProductGroup}
+    />
 
     <ConfirmDialog
             bind:this={productDeleteDialog}
             title="Delete product?"
             on:yes={deleteProduct}
-            on:no={() => console.log('no')}
     >
         Are you sure you want to delete this product?
     </ConfirmDialog>
 
     <ConfirmDialog
             bind:this={productGroupDeleteDialog}
-            on:yes={deleteProductGroup}
-            on:no={() => console.log('no')}
             title="Delete product group?"
+            on:yes={deleteProductGroup}
     >
         Are you sure you want to delete this product group?
     </ConfirmDialog>
-
-    <ProductEditDialog bind:this={productEditDialog}
-                       on:addProduct={addProduct}
-                       on:updateProduct={updateProduct}
-    />
-    <ProductGroupEditDialog bind:this={productGroupEditDialog}/>
 </section>
 
 <style src="../../../static/css/routes/products/index.scss"></style>

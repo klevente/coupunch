@@ -1,9 +1,7 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import { Modal, Dialog, FormField, TextField, Button } from 'attractions';
-    import { createForm } from 'felte';
-    import reporter from '@felte/reporter-tippy';
-    import { validator } from '@felte/validator-yup';
+    import { isEditing, createForm } from '../../../util/form';
     import * as yup from 'yup';
 
     const dispatch = createEventDispatcher();
@@ -11,11 +9,20 @@
     export function open(product) {
         modalOpen = true;
         setFields(product);
-        editing = product && !!product.id;
+        editing = isEditing(product)
     }
 
     function close() {
         modalOpen = false;
+    }
+
+    function onSubmit(product) {
+        dispatch(editing ? 'update' : 'add', product);
+        close();
+    }
+
+    function onError(errors) {
+        console.error(errors);
     }
 
     let modalOpen = false;
@@ -26,34 +33,21 @@
         price: yup.number().required().min(0.01),
     });
 
-    const { form, setFields } = createForm({
-        extend: [validator, reporter()],
-        validateSchema: schema,
-        onSubmit: values => {
-            console.log(values);
-            if (!!values.id) {
-                dispatch('updateProduct', values);
-            } else {
-                dispatch('addProduct', values);
-            }
-            close();
-        },
-        onError: errors => console.error(errors),
-    });
+    const { form, setFields } = createForm({ schema, onSubmit, onError });
 </script>
 
 <Modal bind:open={modalOpen} noClickaway>
     <Dialog
-        title={editing ? 'Edit Product' : 'Add Product'}
+            title={editing ? 'Edit Product' : 'Add Product'}
     >
         <form use:form>
             <input type="hidden" name="id">
             <FormField
-                name="Name"
-                help="Name of the product"
-                required
+                    name="Name"
+                    help="Name of the product"
+                    required
             >
-                <TextField name="name" />
+                <TextField name="name"/>
             </FormField>
             <FormField
                     name="Price"
@@ -74,10 +68,10 @@
 
 <!--<style src="../../../../static/css/routes/products/_components/product-edit-dialog.scss"></style>-->
 <style lang="scss">
-    @use 'theme' as vars;
+  @use 'theme' as vars;
 
-    .currency {
-      font-weight: 500;
-      top: 0.8em !important;
-    }
+  .currency {
+    font-weight: 500;
+    top: 0.8em !important;
+  }
 </style>

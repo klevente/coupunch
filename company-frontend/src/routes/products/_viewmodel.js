@@ -34,7 +34,7 @@ export default class Viewmodel extends BaseViewmodel {
         super(NewProductService, NewProductGroupService);
     }
 
-    async getData() {
+    async getAll() {
         await Promise.all([this.getProducts(), this.getProductGroups()]);
     }
 
