@@ -1,29 +1,36 @@
 <script>
     import { createEventDispatcher } from 'svelte';
-    import { Button, Loading } from 'attractions';
+    import { Button } from 'attractions';
     import { XIcon, EditIcon } from 'svelte-feather-icons';
     import Dynamic from '../../../components/dynamic.svelte';
 
     const dispatch = createEventDispatcher();
 
     export let productGroups;
-    export let defaultGroup;
-    export let selectedGroup;
+    export let selectedProductGroup;
 
     function onGroupClick(productGroup) {
-        dispatch('changeProductGroup', productGroup);
+        selectedProductGroup.set(productGroup);
     }
 
     function onAddClick() {
-        dispatch('addProductGroup');
+        dispatch('add');
     }
 
     function onEditClick(productGroup) {
-        dispatch('editProductGroup', productGroup);
+        dispatch('edit', productGroup);
     }
 
     function onDeleteClick(productGroup) {
-        dispatch('deleteProductGroup', productGroup);
+        dispatch('delete', productGroup);
+    }
+
+    function isSelected(selectedProductGroup, productGroup) {
+        return selectedProductGroup && selectedProductGroup.id === productGroup.id;
+    }
+
+    function isDefaultSelected(selectedProductGroup) {
+        return selectedProductGroup === null;
     }
 </script>
 
@@ -31,19 +38,19 @@
     <Button filled on:click={onAddClick}>
         Add
     </Button>
-    <div class="product-item">
+    <div class="product-group-item">
         <Button
-                on:click={() => onGroupClick(defaultGroup)}
-                selected={$selectedGroup.id === defaultGroup.id}
+                on:click={() => onGroupClick(null)}
+                selected={isDefaultSelected($selectedProductGroup)}
         >
-            {defaultGroup.name}
+            All products
         </Button>
     </div>
     <Dynamic data={productGroups}>
-        <div class="product-item" slot="data" let:item>
+        <div class="product-group-item" slot="data" let:item>
             <Button
                     on:click={() => onGroupClick(item)}
-                    selected={$selectedGroup.id === item.id}
+                    selected={isSelected($selectedProductGroup, item)}
             >
                 {item.name}
             </Button>

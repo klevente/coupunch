@@ -10,22 +10,13 @@
     import ProductGroupEditDialog from './_components/product-group-edit-dialog.svelte';
     import ProductGroupListDesktop from './_components/product-group-list-desktop.svelte'
 
-    import { writable } from 'svelte/store';
-
     import Viewmodel from './_viewmodel';
 
-    const defaultGroup = {
-        id: 0,
-        name: 'All',
-    };
-
     const viewmodel = new Viewmodel();
-    const { filteredProducts, productGroups, state, searchTerm } = viewmodel;
+    const { categorizedProducts, productGroups, state, searchTerm, selectedProductGroup } = viewmodel;
 
     const { session } = stores();
     const { companyName } = $session.user;
-
-    const selectedGroup = writable(defaultGroup);
 
     onMount(async () => {
         await viewmodel.getAll();
@@ -47,15 +38,6 @@
     const addProductGroup = ({ detail }) => viewmodel.addProductGroup(detail);
     const updateProductGroup = ({ detail }) => viewmodel.updateProductGroup(detail);
     const deleteProductGroup = ({ detail }) => viewmodel.deleteProductGroup(detail);
-
-    function changeSelectedProductGroup({ detail }) {
-        const productGroup = detail;
-        /*const newlySelectedGroup = productGroup.id === defaultGroup.id ?
-            defaultGroup :
-            $productGroups.data.find(g => g.id === productGroup.id)
-        selectedGroup.set(newlySelectedGroup);*/
-    }
-
 </script>
 
 <svelte:head>
@@ -66,12 +48,10 @@
 <section>
     <ProductGroupListDesktop
             {productGroups}
-            {defaultGroup}
-            {selectedGroup}
-            on:changeProductGroup={changeSelectedProductGroup}
-            on:addProductGroup={openProductGroupEditDialog}
-            on:editProductGroup={openProductGroupEditDialog}
-            on:deleteProductGroup={openProductGroupDeleteDialog}
+            {selectedProductGroup}
+            on:add={openProductGroupEditDialog}
+            on:edit={openProductGroupEditDialog}
+            on:delete={openProductGroupDeleteDialog}
     />
     <div class="product-container">
         <div class="product-header">
@@ -82,7 +62,7 @@
 
         <State {state}/>
 
-        <Dynamic data={filteredProducts}>
+        <Dynamic data={categorizedProducts}>
             <svelte:fragment slot="data" let:item>
                 <ProductCard
                         product={item}
