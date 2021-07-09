@@ -8,15 +8,11 @@
     export let product;
 
     function onEditClick() {
-        dispatch('editProduct', {
-            product
-        });
+        dispatch('edit', product);
     }
 
     function onDeleteClick() {
-        dispatch('deleteProduct', {
-            product
-        });
+        dispatch('delete', product);
     }
 
 </script>

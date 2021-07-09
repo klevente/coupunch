@@ -1,4 +1,4 @@
-import { asArray } from '../util/iterable';
+import { asArray } from '../util/array';
 
 export default class BaseViewmodel {
 

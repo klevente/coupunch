@@ -4,7 +4,3 @@ export function isIterable(obj) {
     }
     return typeof obj[Symbol.iterator] === 'function';
 }
-
-export function asArray(obj) {
-    return isIterable(obj) ? obj : [obj];
-}

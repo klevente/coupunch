@@ -2,27 +2,17 @@ import BaseViewmodel from '../../viewmodel/base-viewmodel';
 import { dataStore } from '../../viewmodel/data-store';
 import { stateStore } from '../../viewmodel/state-store';
 import NewCouponService from '../../services/new-coupon-service';
+import { action } from '../../viewmodel/action';
 
 export default class Viewmodel extends BaseViewmodel {
     coupons = dataStore();
     state = stateStore();
 
     #actions = {
-        get: {
-            serviceCall: NewCouponService.get
-        },
-        add: {
-            serviceCall: NewCouponService.add,
-            successText: 'Coupon added',
-        },
-        update: {
-            serviceCall: NewCouponService.update,
-            successText: 'Coupon updated',
-        },
-        delete: {
-            serviceCall: NewCouponService.delete,
-            successText: 'Coupon deleted',
-        },
+        get: action(NewCouponService.get),
+        add: action(NewCouponService.add, 'Coupon added'),
+        update: action(NewCouponService.update, 'Coupon updated'),
+        delete: action(NewCouponService.delete, 'Coupon deleted')
     };
 
     constructor() {

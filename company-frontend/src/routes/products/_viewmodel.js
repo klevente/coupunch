@@ -4,7 +4,7 @@ import { stateStore } from '../../viewmodel/state-store';
 import { action } from '../../viewmodel/action';
 import NewProductService from '../../services/new-product-service';
 import NewProductGroupService from '../../services/new-product-group-service';
-import { filtered, searchStore } from '../../viewmodel/transformations';
+import { categoryStore, filtered, searchStore } from '../../viewmodel/transformations';
 
 export default class Viewmodel extends BaseViewmodel {
 
@@ -13,6 +13,7 @@ export default class Viewmodel extends BaseViewmodel {
     state = stateStore();
 
     searchTerm = searchStore();
+    selectedProductGroup = categoryStore();
     filteredProducts = filtered({
         dataStore: this.products,
         searchTerm: this.searchTerm,
@@ -21,7 +22,7 @@ export default class Viewmodel extends BaseViewmodel {
 
     #actions = {
         getProducts: action(NewProductService.get),
-        addProduct: action(NewProductGroupService.get, 'Product added'),
+        addProduct: action(NewProductService.add, 'Product added'),
         updateProduct: action(NewProductService.update, 'Product updated'),
         deleteProduct: action(NewProductService.delete, 'Product deleted'),
         getProductGroups: action(NewProductGroupService.get),
@@ -109,5 +110,4 @@ export default class Viewmodel extends BaseViewmodel {
     get _state() {
         return this.state;
     }
-
 }

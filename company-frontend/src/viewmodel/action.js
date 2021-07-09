@@ -1,4 +1,4 @@
-export function action(serviceCall, successText = '', errorText = '') {
+export function action(serviceCall, successText = null, errorText = null) {
     return {
         serviceCall,
         successText,

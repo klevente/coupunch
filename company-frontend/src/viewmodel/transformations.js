@@ -1,10 +1,15 @@
 import { derived, writable } from 'svelte/store';
 import { isIterable } from '../util/iterable';
+import { resolve } from '../util/resolve';
 
 function throwIfNotIterable(dataStore) {
     if (!isIterable(dataStore.data)) {
-        throw new TypeError('Supplied data store does not contain an iterable resource');
+        throw new TypeError('Supplied data store does not contain an iterable resource.');
     }
+}
+
+function hasNoData(dataStore) {
+    return !dataStore.success;
 }
 
 export function searchStore() {
@@ -19,13 +24,17 @@ export function orderByStore(order = 'asc') {
     return writable(order);
 }
 
+export function categoryStore(initial = null) {
+    return writable(initial);
+}
+
 export function filtered({
                              dataStore,
                              searchTerm,
                              searchField = 'name',
                          }) {
     return derived([dataStore, searchTerm], ([$dataStore, $searchTerm]) => {
-        if (!$dataStore.success) {
+        if (hasNoData($dataStore)) {
             return $dataStore;
         }
         throwIfNotIterable($dataStore);
@@ -80,7 +89,7 @@ export function sorted({
                            orderBy
                        }) {
     return derived([dataStore, sortBy, orderBy], ([$dataStore, $sortBy, $orderBy]) => {
-        if (!$dataStore.success) {
+        if (hasNoData($dataStore)) {
             return $dataStore;
         }
         throwIfNotIterable($dataStore);
@@ -94,6 +103,33 @@ export function sorted({
         sortedArray.sort(sortingStrategies[type][$orderBy]($sortBy));
         dataStore._setSuccess(sortedArray);
         return dataStore;
+    });
+}
+
+export function categorized({
+                             dataStore,
+                             selected,
+                             dataField = 'path.to.field',
+                             selectedField = 'path.to.field'
+                         }) {
+    return derived([dataStore, selected], ([$dataStore, $selected]) => {
+       if (hasNoData($dataStore)) {
+           return $dataStore;
+       }
+       throwIfNotIterable($dataStore);
+
+       if (!$selected) {
+           return $dataStore;
+       }
+
+       const dataStore = $dataStore._clone();
+       const selectedValue = resolve(selectedField, $selected);
+       const filteredData = dataStore.data.filter(element => {
+           const elementValue = resolve(dataField, element);
+           return selectedValue === elementValue;
+       });
+       dataStore._setSuccess(filteredData);
+       return dataStore;
     });
 }
 

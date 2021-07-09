@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { stores } from '@sapper/app';
-    import { Button, H1, H2, Loading, TextField } from 'attractions';
+    import { Button, H1, TextField } from 'attractions';
     import Dynamic from '../../components/dynamic.svelte';
     import State from '../../components/state.svelte';
     import ProductCard from './_components/product-card.svelte';
@@ -9,7 +9,6 @@
     import ProductEditDialog from './_components/product-edit-dialog.svelte';
     import ProductGroupEditDialog from './_components/product-group-edit-dialog.svelte';
     import ProductGroupListDesktop from './_components/product-group-list-desktop.svelte'
-    import ProductGroupListMobile from './_components/product-group-list-mobile.svelte';
 
     import { writable } from 'svelte/store';
 
@@ -64,11 +63,6 @@
 </svelte:head>
 
 <H1>Products</H1>
-<ProductGroupListMobile
-        {productGroups}
-        {defaultGroup}
-        {selectedGroup}
-/>
 <section>
     <ProductGroupListDesktop
             {productGroups}
@@ -81,9 +75,7 @@
     />
     <div class="product-container">
         <div class="product-header">
-            <Button filled on:click={openProductEditDialog}>
-                Add
-            </Button>
+            <Button filled on:click={openProductEditDialog}>Add</Button>
             <div class="flex-spacer"></div>
             <TextField outline type="search" placeholder="Search..." bind:value={$searchTerm}/>
         </div>
@@ -94,12 +86,9 @@
             <svelte:fragment slot="data" let:item>
                 <ProductCard
                         product={item}
-                        on:editProduct={openProductEditDialog}
-                        on:deleteProduct={openProductDeleteDialog}
+                        on:edit={openProductEditDialog}
+                        on:delete={openProductDeleteDialog}
                 />
-            </svelte:fragment>
-            <svelte:fragment slot="error" let:error>
-                <p>{error}</p>
             </svelte:fragment>
         </Dynamic>
     </div>
