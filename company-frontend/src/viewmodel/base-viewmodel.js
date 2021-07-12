@@ -19,17 +19,6 @@ export default class BaseViewmodel {
         return null;
     }
 
-    /*_defaultOperations = {
-        array: {
-            add: (newResource) => this._resource.updateData(array => [...array, newResource]),
-            update: (updatedResource) => this._resource.updateData(array => array.map(resource => resource.id === updatedResource.id ? updatedResource : resource)),
-            delete: (deletedResource) => this._resource.updateData(array => array.filter(({ id }) => deletedResource.id !== id)),
-        },
-        single: {
-            update: (updatedResource) => this._resource.updateData(_ => updatedResource),
-        }
-    }*/
-
     _defaultOperations(dataStore = this._resource) {
         return {
             array: {

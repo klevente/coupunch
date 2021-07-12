@@ -1,10 +1,9 @@
 import BaseViewmodel from '../../viewmodel/base-viewmodel';
-import { dataStore } from '../../viewmodel/data-store';
-import { stateStore } from '../../viewmodel/state-store';
-import { action } from '../../viewmodel/action';
+import { action, dataStore, stateStore } from '../../viewmodel';
 import NewProductService from '../../services/new-product-service';
 import NewProductGroupService from '../../services/new-product-group-service';
-import { categorized, categoryStore, filtered, searchStore } from '../../viewmodel/transformations';
+import { categorized, filtered } from '../../viewmodel/transformations';
+import { categoryStore, searchStore } from '../../viewmodel/transformations/stores';
 
 export default class Viewmodel extends BaseViewmodel {
 

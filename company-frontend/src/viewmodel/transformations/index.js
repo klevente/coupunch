@@ -1,6 +1,6 @@
 import { derived, writable } from 'svelte/store';
-import { isIterable } from '../util/iterable';
-import { resolve } from '../util/resolve';
+import { isIterable } from '../../util/iterable';
+import { resolve } from '../../util/resolve';
 
 function throwIfNotIterable(dataStore) {
     if (!isIterable(dataStore.data)) {
@@ -10,22 +10,6 @@ function throwIfNotIterable(dataStore) {
 
 function hasNoData(dataStore) {
     return !dataStore.success;
-}
-
-export function searchStore() {
-    return writable('');
-}
-
-export function sortByStore(initial) {
-    return writable(initial);
-}
-
-export function orderByStore(order = 'asc') {
-    return writable(order);
-}
-
-export function categoryStore(initial = null) {
-    return writable(initial);
 }
 
 export function filtered({
@@ -107,29 +91,29 @@ export function sorted({
 }
 
 export function categorized({
-                             dataStore,
-                             selected,
-                             dataField = 'path.to.field',
-                             selectedField = 'path.to.field'
-                         }) {
+                                dataStore,
+                                selected,
+                                dataField = 'path.to.field',
+                                selectedField = 'path.to.field'
+                            }) {
     return derived([dataStore, selected], ([$dataStore, $selected]) => {
-       if (hasNoData($dataStore)) {
-           return $dataStore;
-       }
-       throwIfNotIterable($dataStore);
+        if (hasNoData($dataStore)) {
+            return $dataStore;
+        }
+        throwIfNotIterable($dataStore);
 
-       if (!$selected) {
-           return $dataStore;
-       }
+        if (!$selected) {
+            return $dataStore;
+        }
 
-       const dataStore = $dataStore._clone();
-       const selectedValue = resolve(selectedField, $selected);
-       const filteredData = dataStore.data.filter(element => {
-           const elementValue = resolve(dataField, element);
-           return selectedValue === elementValue;
-       });
-       dataStore._setSuccess(filteredData);
-       return dataStore;
+        const dataStore = $dataStore._clone();
+        const selectedValue = resolve(selectedField, $selected);
+        const filteredData = dataStore.data.filter(element => {
+            const elementValue = resolve(dataField, element);
+            return selectedValue === elementValue;
+        });
+        dataStore._setSuccess(filteredData);
+        return dataStore;
     });
 }
 

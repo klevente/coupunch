@@ -1,8 +1,6 @@
 import BaseViewmodel from '../../viewmodel/base-viewmodel';
-import { dataStore } from '../../viewmodel/data-store';
-import { stateStore } from '../../viewmodel/state-store';
+import { action, dataStore, stateStore } from '../../viewmodel';
 import NewCouponService from '../../services/new-coupon-service';
-import { action } from '../../viewmodel/action';
 
 export default class Viewmodel extends BaseViewmodel {
     coupons = dataStore();
