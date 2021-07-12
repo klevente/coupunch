@@ -62,4 +62,16 @@
     {/if}
 </article>
 
-<style src="../../../static/css/routes/redeem/index.scss"></style>
+<style lang="scss">
+  @use 'theme' as vars;
+
+  .user-header {
+    display: flex;
+    align-items: center;
+  }
+
+  :global h2 {
+    margin-bottom: 0 !important;
+  }
+
+</style>

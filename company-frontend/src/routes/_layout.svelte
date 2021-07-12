@@ -66,4 +66,19 @@
     <slot/>
 </main>
 
-<style src="../..//static/css/routes/_layout.scss"></style>
+<style lang="scss">
+  @use 'global';
+  @use 'theme' as vars;
+
+  main {
+    position: relative;
+    max-width: 60em;
+    background-color: vars.$background;
+    padding: 2em;
+    margin: 0 auto;
+    box-sizing: border-box;
+    max-height: 100%;
+    min-height: calc(100vh - 50px - 1px);
+  }
+
+</style>

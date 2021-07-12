@@ -27,4 +27,33 @@
     </Card>
 </div>
 
-<style src="../../../../../static/css/routes/redeem/[username]/_components/product-card.scss"></style>
+<style lang="scss">
+  @use 'theme' as vars;
+
+  .product-card {
+
+    cursor: pointer;
+
+    :global .card {
+      transition: 150ms box-shadow;
+      &:hover {
+        box-shadow: vars.$shadow-raised;
+      }
+
+      display: flex;
+      align-items: center;
+    }
+
+    .icon {
+      padding: 0.8em;
+      border-radius: 50%;
+      background: vars.$main;
+      color: white;
+      align-self: center;
+
+      :global svg {
+        display: block;
+      }
+    }
+  }
+</style>

@@ -35,4 +35,60 @@
     </Card>
 </div>
 
-<style src="../../../../../static/css/routes/redeem/[username]/_components/coupon-card.scss"></style>
+<style lang="scss">
+  @use 'theme' as vars;
+
+  .coupon-card {
+
+    cursor: pointer;
+
+    .info {
+      display: flex;
+      align-items: center;
+    }
+
+    :global .card {
+      transition: 150ms box-shadow;
+
+      &:hover {
+        box-shadow: vars.$shadow-raised;
+      }
+    }
+
+    .icon {
+      padding: 0.8em;
+      border-radius: 50%;
+      background: vars.$main;
+      color: white;
+      align-self: center;
+
+      :global svg {
+        display: block;
+      }
+    }
+  }
+
+  .disabled {
+    cursor: auto;
+
+    color: vars.$disabled;
+
+    :global .card {
+      transition: none;
+
+      &:hover {
+        box-shadow: vars.$shadow-0;
+      }
+    }
+
+    .icon {
+      background: vars.$disabled;
+    }
+  }
+
+  .redeemed {
+    :global .card {
+      background: vars.$success;
+    }
+  }
+</style>

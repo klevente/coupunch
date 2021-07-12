@@ -29,4 +29,4 @@
     </Dialog>
 </Modal>
 
-<style src="../../../../static/css/routes/redeem/_components/user-add-dialog.scss"></style>
+<style lang="scss"></style>

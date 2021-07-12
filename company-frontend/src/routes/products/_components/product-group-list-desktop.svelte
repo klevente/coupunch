@@ -65,4 +65,25 @@
     </Dynamic>
 </nav>
 
-<style src="../../../../static/css/routes/products/_components/product-group-list-desktop.scss"></style>
+<style lang="scss">
+  @use 'sass:color';
+  @use 'theme' as vars;
+
+  nav {
+    display: block;
+    margin-right: 3em;
+    padding: 0.5em 0.5em 0.5em 0;
+    min-width: 13em;
+    border-right: 1px solid color.adjust(vars.$main, $alpha: -0.75);
+
+    :global .btn {
+      white-space: nowrap;
+      margin-bottom: 0.25em;
+    }
+
+    .product-group-item {
+      width: 100%;
+      display: flex;
+    }
+  }
+</style>

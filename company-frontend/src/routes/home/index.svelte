@@ -46,4 +46,18 @@
     />
 </article>
 
-<style src="../../../static/css/routes/home.scss"></style>
+<style lang="scss">
+  @use 'theme' as vars;
+
+  header {
+    margin-bottom: 2em;
+  }
+
+  article {
+    height: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-content: start;
+  }
+</style>

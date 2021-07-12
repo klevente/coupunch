@@ -44,5 +44,24 @@
     </Dialog>
 </Modal>
 
-<style src="../../../../../static/css/routes/redeem/[username]/_components/checkout-dialog.scss"></style>
+<style lang="scss">
+  @use 'theme' as vars;
+
+  .coupon-card {
+    :global .card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    margin-bottom: 1em;
+  }
+
+  :global .dialog {
+    min-width: 20em;
+  }
+
+  .amount {
+    font-weight: 500;
+  }
+</style>
 

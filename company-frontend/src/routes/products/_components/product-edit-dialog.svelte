@@ -66,7 +66,6 @@
     </Dialog>
 </Modal>
 
-<!--<style src="../../../../static/css/routes/products/_components/product-edit-dialog.scss"></style>-->
 <style lang="scss">
   @use 'theme' as vars;
 

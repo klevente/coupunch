@@ -40,4 +40,24 @@
     </Card>
 </div>
 
-<style src="../../../../../static/css/routes/redeem/[username]/_components/basket-item-card.scss"></style>
+<style lang="scss">
+  @use 'theme' as vars;
+
+  .basket-item-card {
+    :global .card {
+      transition: 150ms box-shadow;
+      &:hover {
+        box-shadow: vars.$shadow-raised;
+      }
+
+      /*display: flex;
+      align-items: center;*/
+    }
+  }
+
+  .coupon {
+    :global .card {
+      background: vars.$success;
+    }
+  }
+</style>

@@ -101,4 +101,45 @@
     </ConfirmDialog>
 </section>
 
-<style src="../../../static/css/routes/products/index.scss"></style>
+<style lang="scss">
+  @use 'theme' as vars;
+
+  section {
+    display: flex;
+  }
+
+  .product-container {
+    width: 100%;
+  }
+
+  .product-header {
+    display: flex;
+    margin-bottom: 2em;
+  }
+
+  .product-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  :global .btn {
+    display: flex;
+    align-content: center;
+  }
+
+  .panel {
+    &:not(.open) + section {
+      display: none;
+    }
+
+    :global .accordion-chevron {
+      transition: transform 100ms;
+    }
+
+    &.open :global .accordion-chevron {
+      transform: rotate(180deg);
+    }
+  }
+
+</style>

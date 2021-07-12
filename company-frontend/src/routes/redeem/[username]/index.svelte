@@ -160,4 +160,51 @@
     </div>
 </article>
 
-<style src="../../../../static/css/routes/redeem/[username]/index.scss"></style>
+<style lang="scss">
+  @use 'theme' as vars;
+
+  .checkout-header {
+    display: flex;
+    align-items: center;
+  }
+
+  .checkout-content {
+    height: 70vh;
+    display: grid;
+    grid-template-areas: "products basket"
+                       "coupons basket";
+    grid-template-rows: 60% 40%;
+    grid-template-columns: 75% 25%;
+
+    > .products {
+      grid-area: products;
+    }
+
+    > .basket {
+      grid-area: basket;
+    }
+
+    > .coupons {
+      grid-area: coupons;
+    }
+  }
+
+  .card-container-flex {
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    overflow-y: auto;
+  }
+
+  .card-container {
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  .buttons {
+    margin-top: 1em;
+    display: flex;
+  }
+
+</style>

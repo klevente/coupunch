@@ -43,4 +43,4 @@
     </Dialog>
 </Modal>
 
-<style src="../../static/css/components/confirm-dialog.scss"></style>
+<style lang="scss"></style>

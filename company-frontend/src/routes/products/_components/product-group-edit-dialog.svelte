@@ -56,4 +56,4 @@
     </Dialog>
 </Modal>
 
-<style src="../../../../static/css/routes/products/_components/product-group-edit-dialog.scss"></style>
+<style lang="scss"></style>
