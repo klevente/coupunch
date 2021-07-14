@@ -3,8 +3,8 @@
 - [x] Create ViewModel-based data handling on frontend
   - [x] Create ViewModels for each page, as per the presentation
   - [x] Expose functions and data which the page can use
-- [ ] Create generic sortable table view
-  - [ ] Create table header component with column name and sorting key props
+- [x] Create generic sortable table view
+  - [x] Create table header component with column name and sorting key props
 - [ ] Rework Checkout UI:
   - [ ] Make max-width larger (on iPad it should stretch fully)
   - [ ] Split Products and Coupons
