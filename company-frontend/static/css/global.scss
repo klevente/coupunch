@@ -64,66 +64,10 @@
     color: vars.$main;
   }
 
-  $border-radius: 0.5em;
-
   .bordered {
     border: 1px solid color.adjust(vars.$main, $alpha: -0.75);
-    border-radius: $border-radius;
+    border-radius: vars.$border-radius;
     padding: 1em
-  }
-
-  table {
-    border-spacing: 0;
-    border-collapse: separate;
-    display: block;
-    overflow-x: auto;
-    margin-bottom: 1em;
-  }
-
-  th {
-    text-align: left;
-    padding: 0.5em 1em;
-  }
-
-  tr {
-    &:nth-child(even) {
-      background: color.adjust(vars.$main, $alpha: -0.97);
-    }
-
-    &:first-child :global {
-      > td:first-child {
-        border-top-left-radius: $border-radius;
-      }
-
-      > td:last-child {
-        border-top-right-radius: $border-radius;
-      }
-    }
-
-    &:last-child :global {
-      > td {
-        border-bottom-width: 1px;
-      }
-
-      > td:first-child {
-        border-bottom-left-radius: $border-radius;
-      }
-
-      > td:last-child {
-        border-bottom-right-radius: $border-radius;
-      }
-    }
-  }
-
-  td {
-    padding: 1em;
-    border: 0 solid color.adjust(vars.$main, $alpha: -0.75);
-    border-width: 1px 0 0 1px;
-    line-height: 1.3em;
-
-    &:last-child {
-      border-right-width: 1px;
-    }
   }
 
   .button-bar {

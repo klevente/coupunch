@@ -15,7 +15,7 @@ function hasNoData(dataStore) {
 export function filtered({
                              dataStore,
                              searchTerm,
-                             searchField = 'name',
+                             searchProperty = 'name',
                          }) {
     return derived([dataStore, searchTerm], ([$dataStore, $searchTerm]) => {
         if (hasNoData($dataStore)) {
@@ -25,7 +25,7 @@ export function filtered({
         const dataStore = $dataStore._clone();
         const term = $searchTerm.toLowerCase().trim();
         const filteredData = dataStore.data.filter(element => {
-            const elementValue = element[searchField].toLowerCase();
+            const elementValue = element[searchProperty].toLowerCase();
             return elementValue.includes(term);
         });
         dataStore._setSuccess(filteredData);
@@ -35,12 +35,12 @@ export function filtered({
 
 const sortingStrategies = {
     string: {
-        asc: (sortBy) => (a, b) => a[sortBy].localeCompare(b[sortBy]),
-        desc: (sortBy) => (a, b) => b[sortBy].localeCompare(a[sortBy]),
+        asc: (property) => (a, b) => a[property].localeCompare(b[property]),
+        desc: (property) => (a, b) => b[property].localeCompare(a[property]),
     },
     number: {
-        asc: (sortBy) => (a, b) => a[sortBy] - b[sortBy],
-        desc: (sortBy) => (a, b) => b[sortBy] - a[sortBy],
+        asc: (property) => (a, b) => a[property] - b[property],
+        desc: (property) => (a, b) => b[property] - a[property],
     }
 };
 
@@ -48,8 +48,8 @@ function isSupportedSortingType(type) {
     return sortingStrategies.hasOwnProperty(type);
 }
 
-function isSupportedOrderByForType(type, orderBy) {
-    return sortingStrategies[type].hasOwnProperty(orderBy);
+function isSupportedOrderByForType(type, order) {
+    return sortingStrategies[type].hasOwnProperty(order);
 }
 
 function formatKeyList(obj) {
@@ -58,21 +58,20 @@ function formatKeyList(obj) {
         .join(', ');
 }
 
-function throwIfNotSupportedSortingStrategy(type, orderBy) {
+function throwIfNotSupportedSortingStrategy(type, order) {
     if (!isSupportedSortingType(type)) {
         throw new TypeError(`Unsupported sorted type: ${type}. Supported types: ${formatKeyList(sortingStrategies)}.`);
     }
-    if (!isSupportedOrderByForType(type, orderBy)) {
-        throw new Error(`Unsupported order by: ${orderBy}. Supported orderings: ${formatKeyList(sortingStrategies[type])}.`);
+    if (!isSupportedOrderByForType(type, order)) {
+        throw new Error(`Unsupported order by: ${order}. Supported orderings: ${formatKeyList(sortingStrategies[type])}.`);
     }
 }
 
 export function sorted({
                            dataStore,
-                           sortBy,
-                           orderBy
+                           sortBy
                        }) {
-    return derived([dataStore, sortBy, orderBy], ([$dataStore, $sortBy, $orderBy]) => {
+    return derived([dataStore, sortBy], ([$dataStore, $sortBy]) => {
         if (hasNoData($dataStore)) {
             return $dataStore;
         }
@@ -82,9 +81,10 @@ export function sorted({
         }
         const dataStore = $dataStore._clone();
         const sortedArray = [...dataStore.data];
-        const type = typeof sortedArray[0][$sortBy];
-        throwIfNotSupportedSortingStrategy(type, $orderBy);
-        sortedArray.sort(sortingStrategies[type][$orderBy]($sortBy));
+        const { property, order } = $sortBy;
+        const type = typeof sortedArray[0][property];
+        throwIfNotSupportedSortingStrategy(type, order);
+        sortedArray.sort(sortingStrategies[type][order](property));
         dataStore._setSuccess(sortedArray);
         return dataStore;
     });
@@ -93,8 +93,8 @@ export function sorted({
 export function categorized({
                                 dataStore,
                                 selected,
-                                dataField = 'path.to.field',
-                                selectedField = 'path.to.field'
+                                dataProperty = 'path.to.field',
+                                selectedProperty = 'path.to.field'
                             }) {
     return derived([dataStore, selected], ([$dataStore, $selected]) => {
         if (hasNoData($dataStore)) {
@@ -107,25 +107,12 @@ export function categorized({
         }
 
         const dataStore = $dataStore._clone();
-        const selectedValue = resolve(selectedField, $selected);
+        const selectedValue = resolve(selectedProperty, $selected);
         const filteredData = dataStore.data.filter(element => {
-            const elementValue = resolve(dataField, element);
+            const elementValue = resolve(dataProperty, element);
             return selectedValue === elementValue;
         });
         dataStore._setSuccess(filteredData);
         return dataStore;
     });
-}
-
-export function filteredAndSorted({
-                                      dataStore,
-                                      searchTerm,
-                                      searchField = 'name',
-                                      sortBy,
-                                      orderBy
-                                  }) {
-    return sorted({
-        dataStore: filtered({ dataStore, searchTerm, searchField }),
-        sortBy, orderBy
-    })
 }

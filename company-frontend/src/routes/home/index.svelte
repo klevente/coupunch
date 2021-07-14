@@ -1,7 +1,6 @@
 <script>
-    import { goto, stores } from '@sapper/app';
-    import { create } from '@beyonk/sapper-httpclient';
-    import { Button, H1, Card, Headline, Subhead } from 'attractions';
+    import { stores } from '@sapper/app';
+    import { Headline, Subhead } from 'attractions';
     import MenuCard from '../../components/menu-card.svelte';
     import { AwardIcon, GiftIcon, CreditCardIcon, BarChartIcon } from 'svelte-feather-icons';
 

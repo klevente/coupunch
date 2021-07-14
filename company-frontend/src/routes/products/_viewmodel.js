@@ -2,27 +2,32 @@ import BaseViewmodel from '../../viewmodel/base-viewmodel';
 import { action, dataStore, stateStore } from '../../viewmodel';
 import NewProductService from '../../services/new-product-service';
 import NewProductGroupService from '../../services/new-product-group-service';
-import { categorized, filtered } from '../../viewmodel/transformations';
-import { categoryStore, searchStore } from '../../viewmodel/transformations/stores';
+import { categorized, filtered, sorted } from '../../viewmodel/transformations';
+import { categoryStore, searchStore, sortByStore } from '../../viewmodel/transformations/stores';
 
 export default class Viewmodel extends BaseViewmodel {
 
-    products = dataStore();
+    #products = dataStore();
     productGroups = dataStore();
     state = stateStore();
 
     searchTerm = searchStore();
     selectedProductGroup = categoryStore();
-    filteredProducts = filtered({
-        dataStore: this.products,
+    sortBy = sortByStore();
+    #filteredProducts = filtered({
+        dataStore: this.#products,
         searchTerm: this.searchTerm,
-        searchField: 'name'
+        searchProperty: 'name'
     });
-    categorizedProducts = categorized({
-        dataStore: this.filteredProducts,
+    #categorizedProducts = categorized({
+        dataStore: this.#filteredProducts,
         selected: this.selectedProductGroup,
-        dataField: 'group.id',
-        selectedField: 'id',
+        dataProperty: 'group.id',
+        selectedProperty: 'id',
+    });
+    displayedProducts = sorted({
+        dataStore: this.#categorizedProducts,
+        sortBy: this.sortBy,
     });
 
     #actions = {
@@ -46,7 +51,7 @@ export default class Viewmodel extends BaseViewmodel {
 
     async getProducts() {
         await this.load({
-            dataStore: this.products,
+            dataStore: this.#products,
             action: this.#actions.getProducts
         });
     }
@@ -55,8 +60,8 @@ export default class Viewmodel extends BaseViewmodel {
         await this.execute({
             action: this.#actions.addProduct,
             serviceParams: product,
-            serviceCallback: this._defaultServiceCallback(this.products),
-            localCallback: this._defaultOperations(this.products).array.add
+            serviceCallback: this._defaultServiceCallback(this.#products),
+            localCallback: this._defaultOperations(this.#products).array.add
         });
     }
 
@@ -64,8 +69,8 @@ export default class Viewmodel extends BaseViewmodel {
         await this.execute({
             action: this.#actions.updateProduct,
             serviceParams: product,
-            serviceCallback: this._defaultServiceCallback(this.products),
-            localCallback: this._defaultOperations(this.products).array.update
+            serviceCallback: this._defaultServiceCallback(this.#products),
+            localCallback: this._defaultOperations(this.#products).array.update
         });
     }
 
@@ -73,8 +78,8 @@ export default class Viewmodel extends BaseViewmodel {
         await this.execute({
             action: this.#actions.deleteProduct,
             serviceParams: product,
-            serviceCallback: this._defaultServiceCallback(this.products),
-            localCallback: this._defaultOperations(this.products).array.delete
+            serviceCallback: this._defaultServiceCallback(this.#products),
+            localCallback: this._defaultOperations(this.#products).array.delete
         });
     }
 

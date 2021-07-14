@@ -1,28 +1,24 @@
 <script>
-    import { isIterable } from '../util/iterable';
     import { Loading } from 'attractions';
 
     export let data;
+    export let iterate = false;
 </script>
 
 {#if $data.loading}
-    <Loading />
+    <Loading/>
 {/if}
 {#if $data.success}
-    <div class="data">
-        {#if isIterable($data.data)}
-            {#each $data.data as item}
-                <slot name="data" item={item} />
-            {/each}
-        {:else}
-            <slot name="data" item={$data.data} />
-        {/if}
-    </div>
+    {#if iterate}
+        {#each $data.data as item}
+            <slot name="data" item={item}/>
+        {/each}
+    {:else}
+        <slot name="data" data={$data.data}/>
+    {/if}
 {/if}
 {#if $data.failure}
-    <div class="error">
-        <slot name="error" error={$data.error}>
-            <p>{$data.error}</p>
-        </slot>
-    </div>
+    <slot name="error" error={$data.error}>
+        <p>{$data.error}</p>
+    </slot>
 {/if}

@@ -4,7 +4,8 @@
     import { Button, H1, TextField } from 'attractions';
     import Dynamic from '../../components/dynamic.svelte';
     import State from '../../components/state.svelte';
-    import ProductCard from './_components/product-card.svelte';
+    import { Table, Header, Body, Row, Column } from '../../components/table';
+    import ProductRow from './_components/product-row.svelte';
     import ConfirmDialog from './../../components/confirm-dialog.svelte';
     import ProductEditDialog from './_components/product-edit-dialog.svelte';
     import ProductGroupEditDialog from './_components/product-group-edit-dialog.svelte';
@@ -13,7 +14,7 @@
     import Viewmodel from './_viewmodel';
 
     const viewmodel = new Viewmodel();
-    const { categorizedProducts, productGroups, state, searchTerm, selectedProductGroup } = viewmodel;
+    const { displayedProducts, productGroups, state, searchTerm, selectedProductGroup, sortBy } = viewmodel;
 
     const { session } = stores();
     const { companyName } = $session.user;
@@ -62,13 +63,26 @@
 
         <State {state}/>
 
-        <Dynamic data={categorizedProducts}>
-            <svelte:fragment slot="data" let:item>
-                <ProductCard
-                        product={item}
-                        on:edit={openProductEditDialog}
-                        on:delete={openProductDeleteDialog}
-                />
+        <Dynamic data={displayedProducts}>
+            <!-- Syntactic sugar for for slotted components is coming soon -->
+            <svelte:fragment slot="data" let:data>
+                <Table>
+                    <Header {sortBy} columns={[
+                    { name: 'Icon' },
+                    { name: 'Name', property: 'name' },
+                    { name: 'Price', property: 'price' },
+                    { name: 'Actions' }
+                ]}/>
+                    <Body {data}>
+                    <svelte:fragment slot="row" let:row>
+                        <ProductRow
+                                product={row}
+                                on:edit={openProductEditDialog}
+                                on:delete={openProductDeleteDialog}
+                        />
+                    </svelte:fragment>
+                    </Body>
+                </Table>
             </svelte:fragment>
         </Dynamic>
     </div>

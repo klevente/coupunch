@@ -46,7 +46,7 @@
             All products
         </Button>
     </div>
-    <Dynamic data={productGroups}>
+    <Dynamic data={productGroups} iterate>
         <div class="product-group-item" slot="data" let:item>
             <Button
                     on:click={() => onGroupClick(item)}

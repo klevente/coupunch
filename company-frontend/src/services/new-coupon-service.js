@@ -48,7 +48,7 @@ export default class NewCouponService extends CompanyUrlService {
         return coupon;
     }
 
-    static async fetchForUser(username) {
+    static async getForUser(username) {
         await sleep();
         return [
             {
