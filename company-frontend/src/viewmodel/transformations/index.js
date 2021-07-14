@@ -1,4 +1,4 @@
-import { derived, writable } from 'svelte/store';
+import { derived } from 'svelte/store';
 import { isIterable } from '../../util/iterable';
 import { resolve } from '../../util/resolve';
 
@@ -8,8 +8,12 @@ function throwIfNotIterable(dataStore) {
     }
 }
 
-function hasNoData(dataStore) {
-    return !dataStore.success;
+function hasNoValidData(dataStore) {
+    if (!dataStore.success) {
+        return true;
+    }
+    throwIfNotIterable(dataStore);
+    return dataStore.data.length === 0;
 }
 
 export function filtered({
@@ -18,10 +22,10 @@ export function filtered({
                              searchProperty = 'name',
                          }) {
     return derived([dataStore, searchTerm], ([$dataStore, $searchTerm]) => {
-        if (hasNoData($dataStore)) {
+        if (hasNoValidData($dataStore)) {
             return $dataStore;
         }
-        throwIfNotIterable($dataStore);
+
         const dataStore = $dataStore._clone();
         const term = $searchTerm.toLowerCase().trim();
         const filteredData = dataStore.data.filter(element => {
@@ -72,13 +76,10 @@ export function sorted({
                            sortBy
                        }) {
     return derived([dataStore, sortBy], ([$dataStore, $sortBy]) => {
-        if (hasNoData($dataStore)) {
+        if (hasNoValidData($dataStore)) {
             return $dataStore;
         }
-        throwIfNotIterable($dataStore);
-        if ($dataStore.length === 0) {
-            return $dataStore;
-        }
+
         const dataStore = $dataStore._clone();
         const sortedArray = [...dataStore.data];
         const { property, order } = $sortBy;
@@ -97,10 +98,9 @@ export function categorized({
                                 selectedProperty = 'path.to.field'
                             }) {
     return derived([dataStore, selected], ([$dataStore, $selected]) => {
-        if (hasNoData($dataStore)) {
+        if (hasNoValidData($dataStore)) {
             return $dataStore;
         }
-        throwIfNotIterable($dataStore);
 
         if (!$selected) {
             return $dataStore;
