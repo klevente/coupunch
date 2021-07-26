@@ -59,3 +59,16 @@ index a64a0e7..f719aeb 100644
    override (override) {
      this.config.overrides = override
      return this
+diff --git a/node_modules/@beyonk/sapper-httpclient/lib/entrypoint.js b/node_modules/@beyonk/sapper-httpclient/lib/entrypoint.js
+index dfc7f7d..7eb6306 100644
+--- a/node_modules/@beyonk/sapper-httpclient/lib/entrypoint.js
++++ b/node_modules/@beyonk/sapper-httpclient/lib/entrypoint.js
+@@ -7,7 +7,7 @@ function configure (options) {
+   config = options
+ }
+ 
+-function create () {
++export function create () {
+   if (!config) { throw new Error('Api client must be configured') }
+   return new Api(config)
+ }

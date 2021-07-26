@@ -100,7 +100,7 @@ class ProductService {
     }
 
     async add(companyUrl, product) {
-        const api = create();
+        const api = Api.create();
         this.products.update(products => {
             products.data.push(product);
             return products;
