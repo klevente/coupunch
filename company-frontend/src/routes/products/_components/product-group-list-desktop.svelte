@@ -9,29 +9,13 @@
     export let productGroups;
     export let selectedProductGroup;
 
-    function onGroupClick(productGroup) {
-        selectedProductGroup.set(productGroup);
-    }
+    const onGroupClick = productGroup => selectedProductGroup.set(productGroup);
+    const onAddClick = () => dispatch('add');
+    const onEditClick = productGroup => dispatch('edit', productGroup);
+    const onDeleteClick = productGroup => dispatch('delete', productGroup);
 
-    function onAddClick() {
-        dispatch('add');
-    }
-
-    function onEditClick(productGroup) {
-        dispatch('edit', productGroup);
-    }
-
-    function onDeleteClick(productGroup) {
-        dispatch('delete', productGroup);
-    }
-
-    function isSelected(selectedProductGroup, productGroup) {
-        return selectedProductGroup && selectedProductGroup.id === productGroup.id;
-    }
-
-    function isDefaultSelected(selectedProductGroup) {
-        return selectedProductGroup === null;
-    }
+    const isSelected = (selectedProductGroup, productGroup) => selectedProductGroup && selectedProductGroup.id === productGroup.id;
+    const isDefaultSelected = selectedProductGroup => selectedProductGroup === null;
 </script>
 
 <nav class="desktop">

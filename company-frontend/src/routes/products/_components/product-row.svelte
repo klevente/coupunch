@@ -29,7 +29,5 @@
 </Row>
 
 <style lang="scss">
-    .buttons {
-      display: flex;
-    }
+
 </style>
