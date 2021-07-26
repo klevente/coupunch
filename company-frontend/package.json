@@ -25,7 +25,7 @@
     "@babel/plugin-transform-runtime": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/runtime": "^7.0.0",
-    "@beyonk/sapper-httpclient": "^9.0.0",
+    "@beyonk/sapper-httpclient": "^10.0.1",
     "@beyonk/sapper-rbac": "^0.0.3",
     "@rollup/plugin-babel": "^5.0.0",
     "@rollup/plugin-commonjs": "^14.0.0",

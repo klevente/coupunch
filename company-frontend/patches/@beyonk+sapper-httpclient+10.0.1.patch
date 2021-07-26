@@ -1,8 +1,8 @@
-diff --git a/node_modules/@beyonk/sapper-httpclient/lib/api/api.js b/node_modules/@beyonk/sapper-httpclient/lib/api/api.js
-index 81c785e..40c1089 100644
---- a/node_modules/@beyonk/sapper-httpclient/lib/api/api.js
-+++ b/node_modules/@beyonk/sapper-httpclient/lib/api/api.js
-@@ -21,6 +21,7 @@ class ApiBase {
+diff --git a/node_modules/@beyonk/sapper-httpclient/lib/api/index.js b/node_modules/@beyonk/sapper-httpclient/lib/api/index.js
+index a64a0e7..f719aeb 100644
+--- a/node_modules/@beyonk/sapper-httpclient/lib/api/index.js
++++ b/node_modules/@beyonk/sapper-httpclient/lib/api/index.js
+@@ -47,6 +47,7 @@ class Api extends Behaviours {
      this.config = {
        endpoint: null,
        method: 'get',
@@ -10,7 +10,7 @@ index 81c785e..40c1089 100644
        payload: null,
        query: null,
        headers: {},
-@@ -55,11 +56,11 @@ class ApiBase {
+@@ -81,11 +82,11 @@ class Api extends Behaviours {
          credentials: 'include',
          headers: Object.assign(
            { Accept: 'application/json' },
@@ -24,7 +24,7 @@ index 81c785e..40c1089 100644
        this.config.overrides
      )
  
-@@ -126,6 +127,17 @@ class ApiBase {
+@@ -152,6 +153,17 @@ class Api extends Behaviours {
      }
    }
  
@@ -42,7 +42,7 @@ index 81c785e..40c1089 100644
    context (ctx) {
      if (ctx.fetch) {
        this.client = ctx.fetch
-@@ -134,6 +146,16 @@ class ApiBase {
+@@ -160,6 +172,16 @@ class Api extends Behaviours {
      return this
    }
  
