@@ -1,7 +1,7 @@
 <script>
     import { SnackbarContainer } from 'attractions';
     import LoadingDialog from './loading-dialog.svelte';
-    import { StateStatus } from '../viewmodel/state-store';
+    import { StateStatus } from '../viewmodel';
 
     export let state;
 

@@ -40,12 +40,12 @@ export function filtered({
 // Maybe refactor to use `resolve()` for enabling nested properties?
 const sortingStrategies = {
     string: {
-        asc: (property) => (a, b) => a[property].localeCompare(b[property]),
-        desc: (property) => (a, b) => b[property].localeCompare(a[property]),
+        asc: (property) => (a, b) => resolve(property, a).localeCompare(resolve(property, b)),
+        desc: (property) => (a, b) => resolve(property, b).localeCompare(resolve(property, a)),
     },
     number: {
-        asc: (property) => (a, b) => a[property] - b[property],
-        desc: (property) => (a, b) => b[property] - a[property],
+        asc: (property) => (a, b) => resolve(property, a) - resolve(property, b),
+        desc: (property) => (a, b) => resolve(property, b) - resolve(property, a),
     }
 };
 
@@ -84,7 +84,7 @@ export function sorted({
         const dataStore = $dataStore._clone();
         const sortedArray = [...dataStore.data];
         const { property, order } = $sortBy;
-        const type = typeof sortedArray[0][property];
+        const type = typeof resolve(property, sortedArray[0]);
         throwIfNotSupportedSortingStrategy(type, order);
         sortedArray.sort(sortingStrategies[type][order](property));
         dataStore._setSuccess(sortedArray);
@@ -115,5 +115,21 @@ export function categorized({
         });
         dataStore._setSuccess(filteredData);
         return dataStore;
+    });
+}
+
+export function filteredAndSorted({
+                               dataStore,
+                               searchTerm,
+                               searchProperty = 'name',
+                               sortBy
+                           }) {
+    return sorted({
+        dataStore: filtered({
+            dataStore,
+            searchTerm,
+            searchProperty
+        }),
+        sortBy
     });
 }

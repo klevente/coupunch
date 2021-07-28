@@ -1,14 +1,28 @@
 <script>
+    import { createEventDispatcher } from 'svelte';
 
+    const dispatch = createEventDispatcher();
+
+    export let clickable = false;
+
+    function onClick() {
+        if (clickable) {
+            dispatch('click');
+        }
+    }
 </script>
 
-<tr>
+<tr on:click={onClick} class:clickable>
     <slot />
 </tr>
 
 <style lang="scss">
   @use 'sass:color';
   @use 'theme' as vars;
+
+  .clickable {
+    cursor: pointer;
+  }
 
   tr {
     &:nth-child(even) {

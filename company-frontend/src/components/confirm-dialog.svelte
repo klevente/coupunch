@@ -20,7 +20,7 @@
     }
 
     function onNo() {
-        dispatch('no', null);
+        dispatch('no');
         close();
     }
 

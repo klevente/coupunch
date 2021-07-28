@@ -4,6 +4,7 @@
     import { Button, H1, TextField } from 'attractions';
     import Dynamic from '../../components/dynamic.svelte';
     import State from '../../components/state.svelte';
+    import SearchField from '../../components/search-field.svelte';
     import { Table, Header, Body, Row, Column } from '../../components/table';
     import ProductRow from './_components/product-row.svelte';
     import ConfirmDialog from './../../components/confirm-dialog.svelte';
@@ -58,7 +59,7 @@
         <div class="product-header">
             <Button filled on:click={openProductEditDialog}>Add</Button>
             <div class="flex-spacer"></div>
-            <TextField outline type="search" placeholder="Search..." bind:value={$searchTerm}/>
+            <SearchField {searchTerm} />
         </div>
 
         <State {state}/>
