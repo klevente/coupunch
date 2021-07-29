@@ -105,8 +105,7 @@ Below are the types required for handling coupons during redeeming.
 
     interface Reward {
         threshold: number, // represents the point/price threshold required to redeem this reward
-        products: ProductReward[];
-        productGroups: ProductGroupReward[];
+        products: ProductReward[]; // this contains a concatenated list of possible single or group rewards for easy selection
         discount: number; // contains a price reduction or percentage reduction depending on the reward type
         discountType: DiscountType;
     }
@@ -115,20 +114,6 @@ Below are the types required for handling coupons during redeeming.
         id: number;
         name: string;
         amount: number;
-        originalPrice: number;
-        discountedPrice: number;
-    }
-
-    interface ProductGroupReward {
-        id: number;
-        name: string;
-        amount: number;
-        products: ProductGroupRewardProduct[];
-    }
-
-    interface ProductGroupRewardProduct {
-        id: number;
-        name: string;
         originalPrice: number;
         discountedPrice: number;
     }
