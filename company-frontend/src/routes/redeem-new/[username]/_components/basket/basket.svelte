@@ -11,6 +11,8 @@
 </script>
 
 <div class="basket">
+    Sum: todo
+
     <EasyTable {items} columns={[
         { name: 'Name' },
         { name: 'Price' },
@@ -33,8 +35,6 @@
             {/if}
         </svelte:fragment>
     </EasyTable>
-
-    Sum: todo
 </div>
 
 

@@ -122,7 +122,7 @@ function basket() {
                     basket.push(reward);
                     return basket;
                 } else {
-                    return basket.filter(i => i.coupon.id !== coupon.id);
+                    return basket.filter(i => i.type === 'purchase' || i.coupon.id !== coupon.id);
                 }
             });
         },
