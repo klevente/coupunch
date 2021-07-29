@@ -6,9 +6,9 @@
 - [x] Create generic sortable table view
   - [x] Create table header component with column name and sorting key props
 - [ ] Rework Checkout UI:
-  - [ ] Make max-width larger (on iPad it should stretch fully)
-  - [ ] Split Products and Coupons
-  - [ ] Create searchable table view for displaying data - maybe generic?
+  - [x] Make max-width larger (on iPad it should stretch fully)
+  - [x] Split Products and Coupons
+  - [x] Create searchable table view for displaying data - maybe generic?
   - [ ] Create Product selector modal for reward selection
   - [ ] Create finalising modal detailing redeemed rewards
   - [ ] Redesign basket as per wireframe
