@@ -1,5 +1,8 @@
 <script>
+    import { createEventDispatcher } from 'svelte';
     import { Dialog, Modal, Button } from 'attractions';
+
+    const dispatch = createEventDispatcher();
 
     export function open(couponToDisplay) {
         coupon = couponToDisplay;
@@ -11,21 +14,28 @@
         modalOpen = false;
     }
 
+    const onRewardClick = (reward) => {
+        dispatch('chooseReward', { coupon, reward });
+        close();
+    };
+
     let modalOpen = false;
     let coupon;
 </script>
 
 <Modal bind:open={modalOpen} noClickaway>
-    <Dialog title={`Choose Reward for ${coupon.name}`}>
-        {#if !!coupon}
-            {#each coupon.rewards as reward}
-                <div>{reward.name}</div>
-                <div>{reward.amount}</div>
-                <div>{reward.originalPrice}</div>
-                <div>{reward.discountedPrice}</div>
+    {#if !!coupon}
+        <Dialog title={`Choose Reward for '${coupon.name}' - Level ${coupon.redeemLevel + 1}`}>
+            {#each coupon.rewards[coupon.redeemLevel].products as reward}
+                <div on:click={() => onRewardClick(reward)}>
+                    {reward.name} {reward.amount} ${reward.originalPrice} ${reward.discountedPrice}
+                </div>
             {/each}
-        {/if}
-    </Dialog>
+            <div class="button-bar">
+                <Button on:click={close}>Cancel</Button>
+            </div>
+        </Dialog>
+    {/if}
 </Modal>
 
 <style lang="scss">

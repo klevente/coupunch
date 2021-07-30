@@ -17,7 +17,7 @@
     <SearchField {searchTerm}/>
     <DynamicTable data={coupons} {sortBy} columns={[
         { name: 'Name', property: 'name' },
-        { name: 'Rewards', property: 'reward.name' },
+        { name: 'Type', property: 'type' },
         { name: 'Progress' }
     ]}>
         <svelte:fragment slot="row" let:row>

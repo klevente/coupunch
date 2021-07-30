@@ -1,15 +1,24 @@
 <script>
+    import { createEventDispatcher } from 'svelte';
     import { Dot } from 'attractions';
     import { Row, Column } from '../../../../components/table';
 
+    const dispatch = createEventDispatcher();
+
     export let coupon;
+
+    function onClick() {
+        if (!coupon.redeemed) {
+            dispatch('click');
+        }
+    }
 </script>
 
-<Row clickable={coupon.redeemable} on:click>
+<Row clickable={coupon.redeemable} on:click={onClick}>
     <Column>{coupon.name}</Column>
-    <Column>Rewards: {coupon.reward.name}</Column>
+    <Column>{coupon.type}</Column>
     <Column>
-        Progress: {coupon.actual}/{coupon.required}
+        Redeem level: {coupon.redeemLevel + 1}
         {#if coupon.redeemable}
             <Dot success />
         {/if}

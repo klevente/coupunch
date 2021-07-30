@@ -7,11 +7,219 @@ let dummyCoupons = [
     {
         id: 1,
         name: 'Free Coffee',
+        type: 'point',
+        eligibleItems: {
+            products: [
+                {
+                    id: 1,
+                    name: 'Ham sandwich',
+                    price: 5,
+                    points: 1
+                },
+            ],
+            productGroups: [
+                {
+                    id: 1,
+                    name: 'coffee',
+                    points: 2
+                }
+            ]
+        },
+        rewards: [
+            {
+                threshold: 10,
+                products: [],
+                productGroups: [
+                    {
+                        id: 1,
+                        name: 'coffee',
+                        amount: 1,
+                        products: [
+                            {
+                                id: 10,
+                                name: 'Espresso',
+                                originalPrice: 4,
+                                discountedPrice: 0
+                            }
+                        ]
+                    }
+                ],
+                discountType: 'percentage',
+                discount: 100
+            },
+            {
+                threshold: 20,
+                products: [],
+                productGroups: [
+                    {
+                        id: 1,
+                        name: 'coffee',
+                        amount: 2,
+                        products: [
+                            {
+                                id: 10,
+                                name: 'Espresso',
+                                originalPrice: 4,
+                                discountedPrice: 0
+                            }
+                        ]
+                    }
+                ],
+                discountType: 'percentage',
+                discount: 100
+            }
+        ]
     },
     {
         id: 2,
-        name: 'Discount Croissant',
+        name: 'Discount Sandwich for Croissants',
+        type: 'price',
+        eligibleItems: {
+            products: [
+                {
+                    id: 2,
+                    name: 'Croissant',
+                    price: 5
+                },
+                {
+                    id: 3,
+                    name: 'Chocolate Croissant',
+                    price: 6
+                }
+            ],
+            productGroups: []
+        },
+        rewards: [
+            {
+                threshold: 40,
+                discountType: 'fixed',
+                discount: 3,
+                products: [],
+                productGroups: [
+                    {
+                        id: 2,
+                        name: 'sandwich',
+                        amount: 1,
+                        products: [
+                            {
+                                id: 1,
+                                name: 'Ham Sandwich',
+                                originalPrice: 5,
+                                discountedPrice: 2
+                            },
+                            {
+                                id: 4,
+                                name: 'Salami Sandwich',
+                                originalPrice: 10,
+                                discountedPrice: 7
+                            },
+                        ]
+                    }
+                ]
+            },
+            {
+                threshold: 80,
+                discountType: 'percentage',
+                discount: 75,
+                products: [
+                    {
+                        id: 5,
+                        name: 'Premium Sandwich',
+                        amount: 2,
+                        originalPrice: 20,
+                        discountedPrice: 5
+                    }
+                ],
+                productGroups: []
+            }
+        ]
     },
+];
+
+let dummyUserCoupons =  [
+    {
+        id: 1,
+        name: 'Free Coffee',
+        type: 'point',
+        currentStanding: 12,
+        redeemable: true,
+        redeemLevel: 0,
+        rewards: [
+            {
+                threshold: 10,
+                discountType: 'percentage',
+                discount: 100,
+                products: [
+                    {
+                        id: 10,
+                        name: 'Espresso',
+                        amount: 1,
+                        originalPrice: 4,
+                        discountedPrice: 0
+                    }
+                ],
+            },
+            {
+                threshold: 20,
+                discountType: 'percentage',
+                discount: 100,
+                products: [
+                    {
+                        id: 10,
+                        name: 'Espresso',
+                        amount: 2,
+                        originalPrice: 4,
+                        discountedPrice: 0
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        id: 2,
+        name: 'Discount Sandwich for Croissants',
+        type: 'price',
+        currentStanding: 85,
+        redeemable: true,
+        redeemLevel: 1,
+        rewards: [
+            {
+                threshold: 40,
+                discountType: 'fixed',
+                discount: 3,
+                products: [
+                    {
+                        id: 1,
+                        name: 'Ham Sandwich',
+                        amount: 1,
+                        originalPrice: 5,
+                        discountedPrice: 2
+                    },
+                    {
+                        id: 4,
+                        name: 'Salami Sandwich',
+                        amount: 1,
+                        originalPrice: 10,
+                        discountedPrice: 7
+                    },
+                ],
+            },
+            {
+                threshold: 80,
+                discountType: 'percentage',
+                discount: 75,
+                products: [
+                    {
+                        id: 5,
+                        name: 'Premium Sandwich',
+                        amount: 2,
+                        originalPrice: 20,
+                        discountedPrice: 5
+                    }
+                ]
+            }
+        ]
+    }
 ];
 
 export default class CouponService extends CompanyUrlService {
@@ -50,60 +258,12 @@ export default class CouponService extends CompanyUrlService {
 
     static async getForUser(username) {
         await sleep();
-        return [
-            {
-                id: 1,
-                name: 'Coupon 1',
-                actual: 7,
-                required: 10,
-                products: [
-                    {
-                        id: 1,
-                        name: 'Product 1'
-                    }
-                ],
-                reward: {
-                    id: 1,
-                    name: 'Product 1'
-                }
-            },
-            {
-                id: 2,
-                name: 'Coupon 2',
-                actual: 8,
-                required: 10,
-                products: [
-                    {
-                        id: 2,
-                        name: 'Product 2'
-                    },
-                    {
-                        id: 3,
-                        name: 'Product 3'
-                    }
-                ],
-                reward: {
-                    id: 2,
-                    name: 'Product 2'
-                }
-            },
-            {
-                id: 3,
-                name: 'Coupon 3',
-                actual: 10,
-                required: 10,
-                products: [
-                    {
-                        id: 5,
-                        name: 'Product 5'
-                    }
-                ],
-                reward: {
-                    id: 5,
-                    name: 'Product 5'
-                }
-            }
-        ];
+        return [...dummyUserCoupons];
+    }
+
+    static async checkout(basket) {
+        await sleep();
+        console.log(basket);
     }
 
     static _cb(fetchCallback) {

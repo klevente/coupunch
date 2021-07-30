@@ -13,7 +13,7 @@
 
 <Row>
     <Column>{reward.name}</Column>
-    <Column>price todo</Column>
+    <Column><s>${reward.originalPrice}</s> - ${reward.discountedPrice}</Column>
     <Column>{reward.amount}</Column>
     <Column>
         <IconButton icon={XIcon} size="14" on:click={onRemove} />

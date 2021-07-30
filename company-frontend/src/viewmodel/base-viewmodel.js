@@ -33,13 +33,13 @@ export default class BaseViewmodel {
     }
 
     async execute({
-                   stateStore = this._state,
-                   action,
-                   serviceParams,
-                   serviceCallback = this._defaultServiceCallback(),
-                   localCallback,
-                   errorCallback = this._defaultErrorCallback(),
-               }) {
+                      stateStore = this._state,
+                      action,
+                      serviceParams,
+                      serviceCallback = this._defaultServiceCallback(),
+                      localCallback,
+                      errorCallback = this._defaultErrorCallback(),
+                  }) {
         try {
             stateStore.emitLoading();
             let shouldUpdateLocally = true;
@@ -52,6 +52,26 @@ export default class BaseViewmodel {
             if (shouldUpdateLocally) {
                 localCallback(resource);
             }
+        } catch (e) {
+            console.error(e);
+            stateStore.emitFailure(e);
+            errorCallback(e);
+        }
+    }
+
+    async executeCustom({
+                            stateStore = this._state,
+                            action,
+                            serviceParams,
+                            successCallback,
+                            errorCallback = this._defaultErrorCallback(),
+                        }) {
+        try {
+            stateStore.emitLoading();
+            serviceParams = asArray(serviceParams);
+            const result = await action.serviceCall(...serviceParams);
+            stateStore.emitSuccess(action.successText);
+            successCallback(result);
         } catch (e) {
             console.error(e);
             stateStore.emitFailure(e);
@@ -84,6 +104,7 @@ export default class BaseViewmodel {
     }
 
     _defaultErrorCallback() {
-        return (error) => {};
+        return (error) => {
+        };
     }
 }

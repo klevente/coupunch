@@ -1,12 +1,14 @@
-import { writable } from 'svelte/store';
+import { writable, get } from 'svelte/store';
 import BaseViewmodel from '../../../viewmodel/base-viewmodel';
-import { action, dataStore } from '../../../viewmodel';
+import { action, dataStore, stateStore } from '../../../viewmodel';
 import { searchStore, sortByStore } from '../../../viewmodel/transformations/stores';
 import ProductService from '../../../services/product-service';
 import CouponService from '../../../services/coupon-service';
 import { filteredAndSorted } from '../../../viewmodel/transformations';
 
 export default class Viewmodel extends BaseViewmodel {
+
+    state = stateStore();
 
     #products = dataStore();
     #userCoupons = dataStore();
@@ -31,7 +33,8 @@ export default class Viewmodel extends BaseViewmodel {
 
     #actions = {
         getProducts: action(ProductService.get),
-        getCoupons: action(CouponService.getForUser)
+        getCoupons: action(CouponService.getForUser),
+        checkout: action(CouponService.checkout, 'Successfully checked out items'),
     }
 
     constructor() {
@@ -58,16 +61,61 @@ export default class Viewmodel extends BaseViewmodel {
         this._addExtraCouponProperties()
     }
 
+    async checkout(callback) {
+        const basket = get(this.basket);
+        const basketRequest = basket.reduce(({ products, coupons }, item) => {
+            const { type } = item;
+            if (type === 'purchase') {
+                products.push({
+                    id: item.id,
+                    amount: item.amount
+                });
+            } else if (type === 'reward') {
+                coupons.push({
+                    id: item.coupon.id,
+                    productId: item.id,
+                    amount: item.amount
+                });
+            } else {
+                throw new Error(`Unknown basket item type: '${type}'`);
+            }
+            return { products, coupons };
+        }, {
+            products: [],
+            coupons: []
+        });
+        await this.executeCustom({
+            action: this.#actions.checkout,
+            serviceParams: basketRequest,
+            successCallback: () => {
+                const discountedProducts = basket
+                    .filter(({ type }) => type === 'reward')
+                    .map(({ name, amount, originalPrice, discountedPrice, coupon }) => ({
+                        name: name,
+                        amount: amount,
+                        originalPrice: originalPrice,
+                        discountedPrice: discountedPrice,
+                        couponName: coupon.name
+                    }));
+                callback(discountedProducts);
+            }
+        });
+    }
+
     addProductToBasket(product) {
         this.basket.addProduct(product);
     }
 
-    toggleCouponRedeemStatus(coupon) {
-        if (!coupon.redeemable) {
+    redeemCoupon(coupon, chosenReward) {
+        if (!coupon.redeemable || coupon.redeemed) {
             return;
         }
-        coupon.redeemed = !coupon.redeemed;
-        this.basket.toggleRedeem(coupon);
+        coupon.redeemed = true;
+        const reward = {
+            ...chosenReward,
+            coupon
+        };
+        this.basket.addReward(reward);
     }
 
     removeProductFromBasket(product) {
@@ -83,9 +131,12 @@ export default class Viewmodel extends BaseViewmodel {
     _addExtraCouponProperties() {
         this.#userCoupons.updateData(coupons => coupons.map(coupon => ({
             ...coupon,
-            redeemable: coupon.actual === coupon.required,
             redeemed: false
         })));
+    }
+
+    get _state() {
+        return this.state;
     }
 }
 
@@ -110,20 +161,15 @@ function basket() {
                 return basket;
             });
         },
-        toggleRedeem: (coupon) => {
+        addReward: (reward) => {
             update(basket => {
-                if (coupon.redeemed) {
-                    const reward = {
-                        ...coupon.reward,
-                        amount: 1,
-                        type: 'reward',
-                        coupon
-                    };
-                    basket.push(reward);
-                    return basket;
-                } else {
-                    return basket.filter(i => i.type === 'purchase' || i.coupon.id !== coupon.id);
-                }
+                const rewardToAdd = {
+                    ...reward,
+                    type: 'reward'
+                };
+                basket.push(rewardToAdd);
+                return basket;
+
             });
         },
         removeItem: (item) => {
