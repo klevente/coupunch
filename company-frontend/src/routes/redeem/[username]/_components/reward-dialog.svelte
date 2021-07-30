@@ -28,7 +28,7 @@
         <Dialog title={`Choose Reward for '${coupon.name}' - Level ${coupon.redeemLevel + 1}`}>
             {#each coupon.rewards[coupon.redeemLevel].products as reward}
                 <div on:click={() => onRewardClick(reward)}>
-                    {reward.name} {reward.amount} ${reward.originalPrice} ${reward.discountedPrice}
+                    {reward.name} {reward.amount} <s>${reward.originalPrice}</s> ${reward.discountedPrice}
                 </div>
             {/each}
             <div class="button-bar">

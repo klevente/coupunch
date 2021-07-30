@@ -24,7 +24,7 @@
     <Dialog title="Discounted Items">
         {#each discountedProducts as product}
             <div>
-                {product.name} {product.amount} ${product.originalPrice} ${product.discountedPrice}
+                {product.name} {product.amount} <s>${product.originalPrice}</s> ${product.discountedPrice}
             </div>
         {/each}
         <div class="button-bar">
