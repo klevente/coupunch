@@ -41,10 +41,10 @@ Below are the types required to handle coupon management.
 
     interface Reward {
         threshold: number, // represents the point/price threshold required to redeem this reward
+        discountType: DiscountType;
+        discount: number; // contains a price reduction or percentage reduction depending on the reward type
         products: ProductReward[];
         productGroups: ProductGroupReward[];
-        discount: number; // contains a price reduction or percentage reduction depending on the reward type
-        discountType: DiscountType;
     }
 
     interface ProductReward {
@@ -97,17 +97,19 @@ Below are the types required for handling coupons during redeeming.
         id: number;
         name: string;
         type: CouponType;
-        rewards: Reward[]; // ordered list of reward levels: the thresholds must be increasing throughout
         currentStanding: number; // stores the accumulated points or price the customer has acquired up to this point
+        redeemable: boolean; // true if the coupon can be redeemed at any level
+        redeemLevel: number; // stores the current reward level that can be redeemed, -1 if not redeemable
+        rewards: Reward[]; // ordered list of reward levels: the thresholds must be increasing throughout
     }
 
     type DiscountType = 'fixed' | 'percentage';
 
     interface Reward {
         threshold: number, // represents the point/price threshold required to redeem this reward
-        products: ProductReward[]; // this contains a concatenated list of possible single or group rewards for easy selection
         discount: number; // contains a price reduction or percentage reduction depending on the reward type
         discountType: DiscountType;
+        products: ProductReward[]; // this contains a concatenated list of possible single or group rewards for easy selection
     }
 
     interface ProductReward {
@@ -116,6 +118,26 @@ Below are the types required for handling coupons during redeeming.
         amount: number;
         originalPrice: number;
         discountedPrice: number;
+    }
+```
+
+Below are the types required for checking out the purchased products and redeeming coupons.
+
+```typescript
+    interface Basket {
+        products: PurchasedProduct[];
+        coupons: RedeemedCoupon[];
+    }
+
+    interface PurchasedProduct {
+        id: number; // required for assigning points to coupons and for collecting business data
+        amount: number; // required for assigning points to coupons and for collecting business data
+    }
+
+    interface RedeemedCoupon {
+        id: number;
+        productId: number; // required for collecting business data
+        amount: number; // required for collecting business data
     }
 ```
 
