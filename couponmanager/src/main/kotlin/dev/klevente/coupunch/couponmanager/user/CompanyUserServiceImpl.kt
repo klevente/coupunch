@@ -30,12 +30,14 @@ class CompanyUserServiceImpl(
 
     override fun getUserResponse(id: Long) = getUser(id).toResponse(
         companyName = companyConfigService.getCompanyName(),
-        companyUrl = companyConfigService.getCompanyUrl()
+        companyUrl = companyConfigService.getCompanyUrl(),
+        companyCurrency = companyConfigService.getCompanyCurrency()
     )
 
     override fun getCurrentUserResponse() = getCurrentUser().toResponse(
         companyName = companyConfigService.getCompanyName(),
-        companyUrl = companyConfigService.getCompanyUrl()
+        companyUrl = companyConfigService.getCompanyUrl(),
+        companyCurrency = companyConfigService.getCompanyCurrency()
     )
 
     override fun register(request: CompanyUserAddRequest): CompanyUser {

@@ -4,4 +4,6 @@ interface CompanyConfigService {
     fun getCompanyName(): String
 
     fun getCompanyUrl(): String
+
+    fun getCompanyCurrency(): String
 }

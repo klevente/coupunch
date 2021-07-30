@@ -5,5 +5,6 @@ class CompanyUserResponse(
     val username: String,
     val companyUrl: String,
     val companyName: String,
+    val companyCurrency: String,
     val scope: Array<String>,
 )
