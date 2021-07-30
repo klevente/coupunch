@@ -17,12 +17,14 @@
 
 <Modal bind:open={modalOpen} noClickaway>
     <Dialog title={`Choose Reward for ${coupon.name}`}>
-        {#each coupon.rewards as reward}
-            <div>{reward.name}</div>
-            <div>{reward.amount}</div>
-            <div>{reward.originalPrice}</div>
-            <div>{reward.discountedPrice}</div>
-        {/each}
+        {#if !!coupon}
+            {#each coupon.rewards as reward}
+                <div>{reward.name}</div>
+                <div>{reward.amount}</div>
+                <div>{reward.originalPrice}</div>
+                <div>{reward.discountedPrice}</div>
+            {/each}
+        {/if}
     </Dialog>
 </Modal>
 

@@ -2,8 +2,8 @@ import { writable } from 'svelte/store';
 import BaseViewmodel from '../../../viewmodel/base-viewmodel';
 import { action, dataStore } from '../../../viewmodel';
 import { searchStore, sortByStore } from '../../../viewmodel/transformations/stores';
-import NewProductService from '../../../services/new-product-service';
-import NewCouponService from '../../../services/new-coupon-service';
+import ProductService from '../../../services/product-service';
+import CouponService from '../../../services/coupon-service';
 import { filteredAndSorted } from '../../../viewmodel/transformations';
 
 export default class Viewmodel extends BaseViewmodel {
@@ -30,12 +30,12 @@ export default class Viewmodel extends BaseViewmodel {
     });
 
     #actions = {
-        getProducts: action(NewProductService.get),
-        getCoupons: action(NewCouponService.getForUser)
+        getProducts: action(ProductService.get),
+        getCoupons: action(CouponService.getForUser)
     }
 
     constructor() {
-        super(NewProductService, NewCouponService);
+        super(ProductService, CouponService);
     }
 
     async getAll(username) {

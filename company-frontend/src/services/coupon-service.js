@@ -1,19 +1,56 @@
-import { writable } from "svelte/store";
-import { Data } from "./data";
+import sleep from '../util/sleep';
+import CompanyUrlService from './companyurl-service';
 
-class CouponService {
+let cnt = 3;
 
-    coupons = writable(new Data());
-    couponsForUser = writable(new Data());
+let dummyCoupons = [
+    {
+        id: 1,
+        name: 'Free Coffee',
+    },
+    {
+        id: 2,
+        name: 'Discount Croissant',
+    },
+];
 
-    async fetch(companyUrl) {
+export default class CouponService extends CompanyUrlService {
 
+    static async get() {
+        await sleep();
+        return [...dummyCoupons];
     }
 
-    async fetchForUser(companyUrl, username) {
-        this.couponsForUser.update(couponsForUser => couponsForUser.setLoading());
+    static async add(coupon, fetchCallback) {
+        await sleep();
+        const serverCoupon = {
+            id: cnt++,
+            ...coupon
+        };
+        dummyCoupons.push(serverCoupon);
+        CouponService._cb(fetchCallback);
+        return serverCoupon;
+    }
 
-        const coupons = [
+    static async update(coupon, fetchCallback) {
+        await sleep();
+        const idx = dummyCoupons.findIndex(({ id }) => id === coupon.id);
+        dummyCoupons[idx] = coupon;
+        CouponService._cb(fetchCallback);
+        return coupon;
+    }
+
+    static async delete(coupon, fetchCallback) {
+        await sleep();
+        const idToDelete = coupon.id;
+        dummyCoupons = dummyCoupons.filter(({ id }) => id !== idToDelete);
+        CouponService._cb(fetchCallback);
+        return coupon;
+    }
+
+    static async getForUser(username) {
+        await sleep();
+        return [
             {
                 id: 1,
                 name: 'Coupon 1',
@@ -67,9 +104,9 @@ class CouponService {
                 }
             }
         ];
+    }
 
-        this.couponsForUser.update(couponsForUser => couponsForUser.setData(coupons));
+    static _cb(fetchCallback) {
+        CouponService.get().then(fetchCallback);
     }
 }
-
-export default new CouponService();

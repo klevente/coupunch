@@ -1,77 +1,55 @@
 <script>
     import { onMount } from 'svelte';
-    import { goto, stores } from '@sapper/app';
-    import { Button, Loading, TextField, H1, H2 } from 'attractions';
-    import UserCard from './_components/user-card.svelte';
-    import UserAddDialog from './_components/user-add-dialog.svelte';
-    import userService from '../../services/user-service';
+    import { goto } from '@sapper/app';
+    import { Button, H1, H2 } from 'attractions';
+    import SearchField from '../../components/search-field.svelte';
+    import State from '../../components/state.svelte';
+    import { Row, Column } from '../../components/table';
+    import DynamicTable from '../../components/dynamic-table.svelte';
 
-    import { writable } from 'svelte/store';
+    import Viewmodel from './_viewmodel';
 
-    const { session } = stores();
-    const { companyUrl, companyName } = $session.user;
-
-    const users = userService.users;
-    const userSearchTerm = writable('');
-    let userAddDialog;
+    const viewmodel = new Viewmodel();
+    const { displayedUsers, state, searchTerm, sortBy } = viewmodel;
 
     onMount(async () => {
-        await userService.fetch(companyUrl);
+        await viewmodel.get();
     });
 
-    function onUserClick({ username }) {
-        goto(`redeem/${username}`)
-    }
-
-    function openUserAddDialog() {
-        userAddDialog.open();
-    }
-
+    const onUserClick = ({ username }) => goto(`redeem/${username}`);
 </script>
 
 <svelte:head>
-    <title>Redeem :: {companyName}</title>
+    <title>Redeem</title>
 </svelte:head>
 
-<header>
-    <H1>Redeem Coupon</H1>
-</header>
-<article>
-    {#if $users.isLoading()}
-        <Loading />
-    {/if}
-    {#if $users.hasData()}
-        <div class="user-selector">
-            <div class="user-header">
-                <H2 class="flex-mr">Choose Customer</H2>
-                <TextField outline type="search" bind:value={$userSearchTerm} placeholder="Search..."/>
-                <div class="flex-spacer"></div>
-                <Button filled on:click={openUserAddDialog}>Add new customer</Button>
-            </div>
-            <div class="user-list">
-                {#each $users.data as user}
-                    <UserCard on:click={() => onUserClick(user)} {user}/>
-                {/each}
-            </div>
+<H1>Select User</H1>
+<section>
+    <div class="user-header">
+        <H2>Choose Customer</H2>
+        <SearchField {searchTerm}/>
+        <div class="flex-spacer"></div>
+        <Button filled>Add New Customer</Button>
+    </div>
 
-            <UserAddDialog bind:this={userAddDialog} />
-        </div>
-    {/if}
-    {#if $users.isError()}
-        <div>Error</div>
-    {/if}
-</article>
+    <State {state}/>
+
+    <DynamicTable data={displayedUsers} {sortBy} columns={[
+        { name: 'Name', property: 'name' },
+        { name: 'Username', property: 'username' }
+    ]}>
+        <svelte:fragment slot="row" let:row>
+            <Row clickable on:click={() => onUserClick(row)}>
+                <Column>{row.name}</Column>
+                <Column>{row.username}</Column>
+            </Row>
+        </svelte:fragment>
+    </DynamicTable>
+</section>
+
 
 <style lang="scss">
-  @use 'theme' as vars;
-
   .user-header {
     display: flex;
-    align-items: center;
   }
-
-  :global h2 {
-    margin-bottom: 0 !important;
-  }
-
 </style>

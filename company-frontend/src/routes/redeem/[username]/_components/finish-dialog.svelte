@@ -7,12 +7,12 @@
     }
 
     export function close() {
-        discountedProducts = null;
+        discountedProducts = [];
         modalOpen = false;
     }
 
     let modalOpen = false;
-    let discountedProducts;
+    let discountedProducts = [];
 </script>
 
 <Modal bind:open={modalOpen} noClickaway>

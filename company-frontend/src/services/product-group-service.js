@@ -1,49 +1,53 @@
-import { create } from '@beyonk/sapper-httpclient';
-import { logout } from '../util/logout';
-import { writable } from 'svelte/store';
-import { Data } from './data';
 import sleep from '../util/sleep';
+import CompanyUrlService from './companyurl-service';
 
-class ProductGroupService {
+let dummyGroups = [
+    {
+        id: 1,
+        name: 'coffee',
+    },
+    {
+        id: 2,
+        name: 'food',
+    }
+];
+let cnt = 3;
 
-    productGroups = writable(new Data());
+export default class ProductGroupService extends CompanyUrlService {
 
-    async fetch(companyUrl) {
-        this.productGroups.update(productGroups => productGroups.setLoading());
-        /*const api = create();
-        const productGroups = await api
-            .endpoint(`${companyUrl}/product-groups`)
-            .accessDenied(e => logout())
-            .default(e => throw e)
-            .get(json => json.productGroups)*/
-
-        const groups = [
-            {
-                id: 1,
-                name: 'coffee',
-            },
-            {
-                id: 2,
-                name: 'food',
-            }
-        ];
-
+    static async get() {
         await sleep();
-        this.productGroups.update(productGroups => productGroups.setData(groups));
+        return [...dummyGroups];
     }
 
-    async add(companyUrl, productGroup) {
-        const api = create();
+    static async add(productGroup, fetchCallback) {
+        await sleep();
+        const serverProductGroup = {
+            id: cnt++,
+            ...productGroup
+        };
+        dummyGroups.push(serverProductGroup);
+        ProductGroupService._cb(fetchCallback);
+        return serverProductGroup;
     }
 
-    async update(companyUrl, productGroup) {
-        const api = create();
+    static async update(productGroup, fetchCallback) {
+        await sleep();
+        const idx = dummyGroups.findIndex(({ id }) => id === productGroup.id);
+        dummyGroups[idx] = productGroup;
+        ProductGroupService._cb(fetchCallback);
+        return productGroup;
     }
 
-    async delete(companyUrl, productGroup) {
-        const api = create();
+    static async delete(productGroup, fetchCallback) {
+        await sleep();
+        const idToDelete = productGroup.id;
+        dummyGroups = dummyGroups.filter(({ id }) => id !== idToDelete);
+        ProductGroupService._cb(fetchCallback);
+        return productGroup;
     }
 
+    static _cb(fetchCallback) {
+        ProductGroupService.get().then(fetchCallback);
+    }
 }
-
-export default new ProductGroupService();

@@ -1,7 +1,7 @@
 import BaseViewmodel from '../../viewmodel/base-viewmodel';
 import { action, dataStore, stateStore } from '../../viewmodel';
-import NewProductService from '../../services/new-product-service';
-import NewProductGroupService from '../../services/new-product-group-service';
+import ProductService from '../../services/product-service';
+import ProductGroupService from '../../services/product-group-service';
 import { categorized, filtered, sorted } from '../../viewmodel/transformations';
 import { categoryStore, searchStore, sortByStore } from '../../viewmodel/transformations/stores';
 
@@ -31,18 +31,18 @@ export default class Viewmodel extends BaseViewmodel {
     });
 
     #actions = {
-        getProducts: action(NewProductService.get),
-        addProduct: action(NewProductService.add, 'Product added'),
-        updateProduct: action(NewProductService.update, 'Product updated'),
-        deleteProduct: action(NewProductService.delete, 'Product deleted'),
-        getProductGroups: action(NewProductGroupService.get),
-        addProductGroup: action(NewProductGroupService.add, 'Product group added'),
-        updateProductGroup: action(NewProductGroupService.update, 'Product group updated'),
-        deleteProductGroup: action(NewProductGroupService.delete, 'Product group deleted')
+        getProducts: action(ProductService.get),
+        addProduct: action(ProductService.add, 'Product added'),
+        updateProduct: action(ProductService.update, 'Product updated'),
+        deleteProduct: action(ProductService.delete, 'Product deleted'),
+        getProductGroups: action(ProductGroupService.get),
+        addProductGroup: action(ProductGroupService.add, 'Product group added'),
+        updateProductGroup: action(ProductGroupService.update, 'Product group updated'),
+        deleteProductGroup: action(ProductGroupService.delete, 'Product group deleted')
     };
 
     constructor() {
-        super(NewProductService, NewProductGroupService);
+        super(ProductService, ProductGroupService);
     }
 
     async getAll() {

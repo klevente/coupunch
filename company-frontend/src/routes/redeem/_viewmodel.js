@@ -2,7 +2,7 @@ import BaseViewmodel from '../../viewmodel/base-viewmodel';
 import { action, dataStore, stateStore } from '../../viewmodel';
 import { searchStore, sortByStore } from '../../viewmodel/transformations/stores';
 import { filtered, sorted } from '../../viewmodel/transformations';
-import NewUserService from '../../services/new-user-service';
+import UserService from '../../services/user-service';
 
 export default class Viewmodel extends BaseViewmodel {
     #users = dataStore();
@@ -22,11 +22,11 @@ export default class Viewmodel extends BaseViewmodel {
     });
 
     #actions = {
-        get: action(NewUserService.get)
+        get: action(UserService.get)
     }
 
     constructor() {
-        super(NewUserService);
+        super(UserService);
     }
 
     async get() {

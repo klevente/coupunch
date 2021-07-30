@@ -32,7 +32,7 @@
 <section>
     <State {state}/>
 
-    <Dynamic data={coupons}>
+    <Dynamic data={coupons} iterate>
         <svelte:fragment slot="data" let:item>
             <CouponCard
                     coupon={item}
