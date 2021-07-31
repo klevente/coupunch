@@ -5,13 +5,13 @@
   - [x] Expose functions and data which the page can use
 - [x] Create generic sortable table view
   - [x] Create table header component with column name and sorting key props
-- [ ] Rework Checkout UI:
+- [x] Rework Checkout UI:
   - [x] Make max-width larger (on iPad it should stretch fully)
   - [x] Split Products and Coupons
   - [x] Create searchable table view for displaying data - maybe generic?
-  - [ ] Create Product selector modal for reward selection
-  - [ ] Create finalising modal detailing redeemed rewards
-  - [ ] Redesign basket as per wireframe
+  - [x] Create Product selector modal for reward selection
+  - [x] Create finalising modal detailing redeemed rewards
+  - [x] Redesign basket as per wireframe
 - [ ] Implement Product handling on backend
   - [ ] Review entity class
   - [ ] Write tests
