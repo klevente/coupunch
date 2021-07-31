@@ -4,19 +4,32 @@
     import { Button, H1, H2 } from 'attractions';
     import SearchField from '../../components/search-field.svelte';
     import State from '../../components/state.svelte';
-    import { Row, Column } from '../../components/table';
     import DynamicTable from '../../components/dynamic-table.svelte';
+    import CustomerRow from './_components/customer-row.svelte';
+    import CustomerAddDialog from './_components/customer-add-dialog.svelte';
 
     import Viewmodel from './_viewmodel';
 
     const viewmodel = new Viewmodel();
-    const { displayedUsers, state, searchTerm, sortBy } = viewmodel;
+    const {
+        displayedCustomers,
+        state,
+        searchTerm,
+        sortBy,
+        displayedFoundCustomers,
+        foundCustomersSortBy
+    } = viewmodel;
 
     onMount(async () => {
         await viewmodel.get();
     });
 
-    const onUserClick = ({ username }) => goto(`redeem/${username}`);
+    let customerAddDialog;
+
+    const onCustomerClick = ({ username }) => goto(`redeem/${username}`);
+    const onNewCustomerClick = () => customerAddDialog.open();
+    const onCustomerSearchTermChange = ({ detail }) => viewmodel.searchCustomers(detail);
+    const onAddNewCustomer = ({ detail }) => viewmodel.addToCompany(detail, onCustomerClick);
 </script>
 
 <svelte:head>
@@ -29,22 +42,30 @@
         <H2>Choose Customer</H2>
         <SearchField {searchTerm}/>
         <div class="flex-spacer"></div>
-        <Button filled>Add New Customer</Button>
+        <Button filled on:click={onNewCustomerClick}>Add New Customer</Button>
     </div>
 
     <State {state}/>
 
-    <DynamicTable data={displayedUsers} {sortBy} columns={[
+    <DynamicTable data={displayedCustomers} {sortBy} columns={[
         { name: 'Name', property: 'name' },
         { name: 'Username', property: 'username' }
     ]}>
         <svelte:fragment slot="row" let:row>
-            <Row clickable on:click={() => onUserClick(row)}>
-                <Column>{row.name}</Column>
-                <Column>{row.username}</Column>
-            </Row>
+            <CustomerRow customer={row} on:click={() => onCustomerClick(row)}/>
+        </svelte:fragment>
+        <svelte:fragment slot="empty">
+            No users match the selected search query.
         </svelte:fragment>
     </DynamicTable>
+
+    <CustomerAddDialog
+            bind:this={customerAddDialog}
+            foundCustomers={displayedFoundCustomers}
+            sortBy={foundCustomersSortBy}
+            on:searchTermChange={onCustomerSearchTermChange}
+            on:addCustomer={onAddNewCustomer}
+    />
 </section>
 
 

@@ -5,18 +5,24 @@
     export let data;
     export let sortBy = null;
     export let columns;
+
+    $: empty = $data.empty;
 </script>
 
 <Dynamic {data}>
     <svelte:fragment slot="data" let:data>
-        <Table>
-            <Header {sortBy} {columns}/>
-            <Body {data}>
-            <svelte:fragment slot="row" let:row>
-                <slot name="row" {row}></slot>
-            </svelte:fragment>
-            </Body>
-        </Table>
+        {#if $$slots.empty && empty}
+            <slot name="empty"/>
+        {:else}
+            <Table>
+                <Header {sortBy} {columns}/>
+                <Body {data}>
+                <svelte:fragment slot="row" let:row>
+                    <slot name="row" {row}/>
+                </svelte:fragment>
+                </Body>
+            </Table>
+        {/if}
     </svelte:fragment>
 </Dynamic>
 

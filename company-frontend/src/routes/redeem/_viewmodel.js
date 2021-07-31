@@ -1,28 +1,38 @@
 import BaseViewmodel from '../../viewmodel/base-viewmodel';
+import { debounce } from '../../util/debounce';
 import { action, dataStore, stateStore } from '../../viewmodel';
 import { searchStore, sortByStore } from '../../viewmodel/transformations/stores';
 import { filtered, sorted } from '../../viewmodel/transformations';
 import UserService from '../../services/user-service';
 
 export default class Viewmodel extends BaseViewmodel {
-    #users = dataStore();
+    #customers = dataStore();
     state = stateStore();
 
     searchTerm = searchStore();
     sortBy = sortByStore();
 
-    #filteredUsers = filtered({
-        dataStore: this.#users,
+    #filteredCustomers = filtered({
+        dataStore: this.#customers,
         searchTerm: this.searchTerm,
         searchProperty: 'name'
     });
-    displayedUsers = sorted({
-        dataStore: this.#filteredUsers,
+    displayedCustomers = sorted({
+        dataStore: this.#filteredCustomers,
         sortBy: this.sortBy,
     });
 
+    #foundCustomers = dataStore([]);
+    foundCustomersSortBy = sortByStore();
+    displayedFoundCustomers = sorted({
+        dataStore: this.#foundCustomers,
+        sortBy: this.foundCustomersSortBy
+    });
+
     #actions = {
-        get: action(UserService.get)
+        get: action(UserService.get),
+        searchCustomers: action(UserService.searchCustomers),
+        addToCompany: action(UserService.addToCompany, 'Successfully added customer to the company')
     }
 
     constructor() {
@@ -35,8 +45,31 @@ export default class Viewmodel extends BaseViewmodel {
         });
     }
 
+    async searchCustomers(keyword) {
+        await this._debouncedSearchCustomers(keyword);
+    }
+
+    async addToCompany(customer, callback) {
+        await this.executeCustom({
+            stateStore: this.state,
+            action: this.#actions.addToCompany,
+            serviceParams: customer,
+            successCallback: () => callback(customer)
+        });
+    }
+
+    async _searchCustomers(keyword) {
+        await this.load({
+            dataStore: this.#foundCustomers,
+            action: this.#actions.searchCustomers,
+            serviceParams: keyword
+        });
+    }
+
+    _debouncedSearchCustomers = debounce(this._searchCustomers.bind(this));
+
     get _resource() {
-        return this.#users;
+        return this.#customers;
     }
 
     get _state() {

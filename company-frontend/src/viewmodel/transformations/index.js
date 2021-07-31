@@ -37,7 +37,6 @@ export function filtered({
     });
 }
 
-// Maybe refactor to use `resolve()` for enabling nested properties?
 const sortingStrategies = {
     string: {
         asc: (property) => (a, b) => resolve(property, a).localeCompare(resolve(property, b)),

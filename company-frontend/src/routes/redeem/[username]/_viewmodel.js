@@ -65,19 +65,22 @@ export default class Viewmodel extends BaseViewmodel {
         const basket = get(this.basket);
         const basketRequest = basket.reduce(({ products, coupons }, item) => {
             const { type } = item;
-            if (type === 'purchase') {
-                products.push({
-                    id: item.id,
-                    amount: item.amount
-                });
-            } else if (type === 'reward') {
-                coupons.push({
-                    id: item.coupon.id,
-                    productId: item.id,
-                    amount: item.amount
-                });
-            } else {
-                throw new Error(`Unknown basket item type: '${type}'`);
+            switch (type) {
+                case 'purchase':
+                    products.push({
+                        id: item.id,
+                        amount: item.amount
+                    });
+                    break;
+                case 'reward':
+                    coupons.push({
+                        id: item.coupon.id,
+                        productId: item.id,
+                        amount: item.amount
+                    });
+                    break;
+                default:
+                    throw new Error(`Unknown basket item type: '${type}'`);
             }
             return { products, coupons };
         }, {

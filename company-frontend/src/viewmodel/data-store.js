@@ -1,4 +1,5 @@
 import { writable } from 'svelte/store';
+import { isIterable } from '../util/iterable';
 
 const DataStatus = Object.freeze({
     LOADING: 'loading',
@@ -10,6 +11,13 @@ class Data {
     #status = DataStatus.LOADING;
     #data = null;
     #error = null;
+
+    constructor(initialValue = null) {
+        if (!!initialValue) {
+            this.#status = DataStatus.SUCCESS;
+            this.#data = initialValue;
+        }
+    }
 
     get loading() {
         return this.#status === DataStatus.LOADING;
@@ -29,6 +37,13 @@ class Data {
 
     get error() {
         return this.#error;
+    }
+
+    get empty() {
+        if (this.success) {
+            return (isIterable(this.#data) && this.#data.length === 0) || !this.#data;
+        }
+        return false;
     }
 
     _setLoading() {
@@ -69,8 +84,8 @@ class Data {
     }
 }
 
-export function dataStore() {
-    const { subscribe, update } = writable(new Data());
+export function dataStore(initialValue = null) {
+    const { subscribe, update } = writable(new Data(initialValue));
     return {
         subscribe,
         setLoading: () => update(store => store._setLoading()),

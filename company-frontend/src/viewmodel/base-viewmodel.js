@@ -104,7 +104,6 @@ export default class BaseViewmodel {
     }
 
     _defaultErrorCallback() {
-        return (error) => {
-        };
+        return (error) => {};
     }
 }
