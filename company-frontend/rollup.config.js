@@ -8,6 +8,7 @@ import babel from '@rollup/plugin-babel';
 import { terser } from 'rollup-plugin-terser';
 import config from 'sapper/config/rollup.js';
 import pkg from './package.json';
+import * as fs from 'fs';
 
 const svelteConfig = require('./svelte.config.js');
 
@@ -47,6 +48,22 @@ export default {
 				browser: true,
 				dedupe: ['svelte']
 			}),
+			{
+				name: 'copy-worker',
+				load() {
+					this.addWatchFile(path.resolve(__dirname, 'node_modules/qr-scanner/qr-scanner-worker.min.js'));
+				},
+				generateBundle() {
+					fs.copyFileSync(
+						path.resolve(__dirname, 'node_modules/qr-scanner/qr-scanner-worker.min.js'),
+						path.resolve(__dirname, '__sapper__/dev/client/qr-scanner-worker.min.js')
+					);
+					fs.copyFileSync(
+						path.resolve(__dirname, 'node_modules/qr-scanner/qr-scanner-worker.min.js.map'),
+						path.resolve(__dirname, '__sapper__/dev/client/qr-scanner-worker.min.js.map')
+					);
+				}
+			},
 			commonjs(),
 
 			legacy && babel({

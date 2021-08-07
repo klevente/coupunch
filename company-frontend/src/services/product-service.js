@@ -1,4 +1,4 @@
-import sleep from '../util/sleep';
+import { sleepRandom } from '../util/sleep';
 import CompanyUrlService from './companyurl-service';
 import { generate } from '../util/array';
 
@@ -18,12 +18,12 @@ let cnt = 21;
 
 export default class ProductService extends CompanyUrlService {
     static async get() {
-        await sleep();
+        await sleepRandom();
         return [...dummyProducts];
     }
 
     static async add(product, fetchCallback) {
-        await sleep();
+        await sleepRandom();
         const serverProduct = {
             id: cnt++,
             ...product
@@ -34,7 +34,7 @@ export default class ProductService extends CompanyUrlService {
     }
 
     static async update(product, fetchCallback) {
-        await sleep();
+        await sleepRandom();
         const idx = dummyProducts.findIndex(({ id }) => id === product.id);
         dummyProducts[idx] = product;
         ProductService._cb(fetchCallback);
@@ -42,7 +42,7 @@ export default class ProductService extends CompanyUrlService {
     }
 
     static async delete(product, fetchCallback) {
-        await sleep();
+        await sleepRandom();
         const idToDelete = product.id;
         dummyProducts = dummyProducts.filter(({ id }) => id !== idToDelete);
         ProductService._cb(fetchCallback);

@@ -7,6 +7,8 @@
     import DynamicTable from '../../components/dynamic-table.svelte';
     import CustomerRow from './_components/customer-row.svelte';
     import CustomerAddDialog from './_components/customer-add-dialog.svelte';
+    import QrDialog from './_components/qr-dialog.svelte';
+    import FoundCustomerDialog from './_components/found-customer-dialog.svelte';
 
     import Viewmodel from './_viewmodel';
 
@@ -25,11 +27,22 @@
     });
 
     let customerAddDialog;
+    let qrDialog;
+    let foundCustomerDialog;
 
-    const onCustomerClick = ({ username }) => goto(`redeem/${username}`);
+    const navigateToRedeemPage = ({ username }) => goto(`redeem/${username}`);
+
+    const onCustomerClick = (detail) => navigateToRedeemPage(detail);
     const onNewCustomerClick = () => customerAddDialog.open();
     const onCustomerSearchTermChange = ({ detail }) => viewmodel.searchCustomers(detail);
-    const onAddNewCustomer = ({ detail }) => viewmodel.addToCompany(detail, onCustomerClick);
+    const onAddNewCustomer = ({ detail }) => viewmodel.addToCompany(detail, navigateToRedeemPage);
+    const onQrClick = () => qrDialog.open();
+    const onQrSuccess = (result) => {
+        qrDialog.close();
+        foundCustomerDialog.open(result);
+    };
+    const onScan = ({ detail }) => viewmodel.validateQrCode(detail, onQrSuccess);
+    const onQrUserAccept = ({ detail }) => detail.newlyAdded ? viewmodel.addToCompany(detail, navigateToRedeemPage) : navigateToRedeemPage(detail);
 </script>
 
 <svelte:head>
@@ -43,9 +56,8 @@
         <SearchField {searchTerm}/>
         <div class="flex-spacer"></div>
         <Button filled on:click={onNewCustomerClick}>Add New Customer</Button>
+        <Button filled on:click={onQrClick}>Scan QR</Button>
     </div>
-
-    <State {state}/>
 
     <DynamicTable data={displayedCustomers} {sortBy} columns={[
         { name: 'Name', property: 'name' },
@@ -66,6 +78,18 @@
             on:searchTermChange={onCustomerSearchTermChange}
             on:addCustomer={onAddNewCustomer}
     />
+
+    <QrDialog
+            bind:this={qrDialog}
+            on:scan={onScan}
+    />
+
+    <FoundCustomerDialog
+            bind:this={foundCustomerDialog}
+            on:accept={onQrUserAccept}
+    />
+
+    <State {state}/>
 </section>
 
 

@@ -1,5 +1,6 @@
 import BaseViewmodel from '../../viewmodel/base-viewmodel';
-import { debounce } from '../../util/debounce';
+import { debouncePromise } from '../../util/debounce';
+import { throttlePromise } from '../../util/throttle';
 import { action, dataStore, stateStore } from '../../viewmodel';
 import { searchStore, sortByStore } from '../../viewmodel/transformations/stores';
 import { filtered, sorted } from '../../viewmodel/transformations';
@@ -32,7 +33,8 @@ export default class Viewmodel extends BaseViewmodel {
     #actions = {
         get: action(UserService.get),
         searchCustomers: action(UserService.searchCustomers),
-        addToCompany: action(UserService.addToCompany, 'Successfully added customer to the company')
+        addToCompany: action(UserService.addToCompany, 'Successfully added customer to the company'),
+        validateQrCode: action(UserService.validateQrCode, 'Successfully parsed QR code')
     }
 
     constructor() {
@@ -43,6 +45,10 @@ export default class Viewmodel extends BaseViewmodel {
         await this.load({
             action: this.#actions.get
         });
+    }
+
+    async validateQrCode(qrContent, successCallback) {
+        await this._throttledValidateQrCode(qrContent, successCallback);
     }
 
     async searchCustomers(keyword) {
@@ -58,6 +64,17 @@ export default class Viewmodel extends BaseViewmodel {
         });
     }
 
+    async _validateQrCode(qrContent, successCallback) {
+        await this.executeCustom({
+            stateStore: this.state,
+            action: this.#actions.validateQrCode,
+            serviceParams: qrContent,
+            successCallback
+        });
+    }
+
+    _throttledValidateQrCode = throttlePromise(this._validateQrCode.bind(this), 3000);
+
     async _searchCustomers(keyword) {
         await this.load({
             dataStore: this.#foundCustomers,
@@ -66,7 +83,7 @@ export default class Viewmodel extends BaseViewmodel {
         });
     }
 
-    _debouncedSearchCustomers = debounce(this._searchCustomers.bind(this));
+    _debouncedSearchCustomers = debouncePromise(this._searchCustomers.bind(this));
 
     get _resource() {
         return this.#customers;

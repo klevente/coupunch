@@ -1,5 +1,5 @@
 import CompanyUrlService from './companyurl-service';
-import sleep from '../util/sleep';
+import { sleepRandom } from '../util/sleep';
 
 let dummyCustomers = [
     {
@@ -39,12 +39,12 @@ let dummyExtraCustomers = [
 
 export default class UserService extends CompanyUrlService {
     static async get() {
-        await sleep();
+        await sleepRandom();
         return [...dummyCustomers];
     }
 
     static async searchCustomers(keyword) {
-        await sleep();
+        await sleepRandom();
         console.log(keyword);
         if (!keyword) {
             return [];
@@ -54,8 +54,34 @@ export default class UserService extends CompanyUrlService {
             .filter(foundCustomer => !dummyCustomers.includes(foundCustomer));
     }
 
-    static async addToCompany(customer) {
-        await sleep();
-        dummyCustomers.push(customer);
+    static async addToCompany({ id: userId, username }) {
+        await sleepRandom();
+        const newCustomer = dummyExtraCustomers.find(({ id }) => id === userId);
+        if (!newCustomer) {
+            throw new Error(`User not found: ${username}`);
+        }
+        dummyCustomers.push(newCustomer);
+        console.log('added new customer: ', newCustomer);
+    }
+
+    static async validateQrCode(uuid) {
+        await sleepRandom();
+        const pattern = /userid=\d+$/;
+        if (!uuid.match(pattern)) {
+            throw new Error('Invalid QR code!');
+        }
+        const userId = parseInt(uuid.split('=')[1]);
+        let user = dummyCustomers.find(({ id }) => id === userId);
+        let newlyAdded = false;
+        if (!user) {
+            user = dummyExtraCustomers.find(({ id }) => id === userId);
+            newlyAdded = true;
+        }
+
+        if (!user) {
+            throw new Error('User does not exist!');
+        }
+
+        return { ...user, newlyAdded };
     }
 }

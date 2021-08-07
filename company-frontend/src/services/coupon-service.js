@@ -1,4 +1,4 @@
-import sleep from '../util/sleep';
+import { sleepRandom } from '../util/sleep';
 import CompanyUrlService from './companyurl-service';
 
 let cnt = 3;
@@ -225,12 +225,12 @@ let dummyUserCoupons =  [
 export default class CouponService extends CompanyUrlService {
 
     static async get() {
-        await sleep();
+        await sleepRandom();
         return [...dummyCoupons];
     }
 
     static async add(coupon, fetchCallback) {
-        await sleep();
+        await sleepRandom();
         const serverCoupon = {
             id: cnt++,
             ...coupon
@@ -241,7 +241,7 @@ export default class CouponService extends CompanyUrlService {
     }
 
     static async update(coupon, fetchCallback) {
-        await sleep();
+        await sleepRandom();
         const idx = dummyCoupons.findIndex(({ id }) => id === coupon.id);
         dummyCoupons[idx] = coupon;
         CouponService._cb(fetchCallback);
@@ -249,7 +249,7 @@ export default class CouponService extends CompanyUrlService {
     }
 
     static async delete(coupon, fetchCallback) {
-        await sleep();
+        await sleepRandom();
         const idToDelete = coupon.id;
         dummyCoupons = dummyCoupons.filter(({ id }) => id !== idToDelete);
         CouponService._cb(fetchCallback);
@@ -257,12 +257,12 @@ export default class CouponService extends CompanyUrlService {
     }
 
     static async getForUser(username) {
-        await sleep();
+        await sleepRandom();
         return [...dummyUserCoupons];
     }
 
     static async checkout(basket) {
-        await sleep();
+        await sleepRandom();
         console.log(basket);
     }
 
