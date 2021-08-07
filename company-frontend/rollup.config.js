@@ -54,13 +54,15 @@ export default {
 					this.addWatchFile(path.resolve(__dirname, 'node_modules/qr-scanner/qr-scanner-worker.min.js'));
 				},
 				generateBundle() {
+					const argv = JSON.parse(process.env.npm_config_argv);
+					const outputMode = argv.cooked[1];
 					fs.copyFileSync(
 						path.resolve(__dirname, 'node_modules/qr-scanner/qr-scanner-worker.min.js'),
-						path.resolve(__dirname, '__sapper__/dev/client/qr-scanner-worker.min.js')
+						path.resolve(__dirname, `__sapper__/${outputMode}/client/qr-scanner-worker.min.js`)
 					);
 					fs.copyFileSync(
 						path.resolve(__dirname, 'node_modules/qr-scanner/qr-scanner-worker.min.js.map'),
-						path.resolve(__dirname, '__sapper__/dev/client/qr-scanner-worker.min.js.map')
+						path.resolve(__dirname, `__sapper__/${outputMode}/client/qr-scanner-worker.min.js.map`)
 					);
 				}
 			},
