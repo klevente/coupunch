@@ -29,9 +29,9 @@
   - [ ] Implement new User search on backend (usermanager)
   - [ ] Implement existing user search on backend (couponmanager)
 - [ ] Implement QR search
-  - [ ] Implement QR-code scanning on frontend
+  - [x] Implement QR-code scanning on frontend
   - [ ] Implement search by QR on backend
-  - [ ] Come up with better QR-generation logic
+  - [x] Come up with better QR-generation logic (generating UUID for each user, can be regenerated)
 - [ ] Finish Products Page
   - [ ] Add an optional Product Icon
   - [ ] Add a selector for choosing a Product Group for a Product
