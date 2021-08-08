@@ -6,7 +6,9 @@
 </script>
 
 {#if $data.loading}
-    <Loading/>
+    <slot name="loading">
+        <Loading/>
+    </slot>
 {/if}
 {#if $data.success}
     {#if iterate}
