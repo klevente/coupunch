@@ -1,6 +1,6 @@
 // taken from https://codeburst.io/throttling-and-debouncing-in-javascript-b01cad5c8edf
 export function throttlePromise(f, wait = 1000) {
-    let inThrottle;
+    let inThrottle = false;
     return (...args) => {
         return new Promise((resolve) => {
             if (!inThrottle) {

@@ -1,6 +1,4 @@
-const maxTimeout = 1000;
-
-export function sleepRandom() {
+export function sleepRandom(maxTimeout = 1000) {
     const timeout = Math.random() * maxTimeout;
     return new Promise(resolve => setTimeout(resolve, timeout));
 }
