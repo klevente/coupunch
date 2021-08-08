@@ -10,12 +10,20 @@
     import ConfirmDialog from './../../components/confirm-dialog.svelte';
     import ProductEditDialog from './_components/product-edit-dialog.svelte';
     import ProductGroupEditDialog from './_components/product-group-edit-dialog.svelte';
-    import ProductGroupListDesktop from './_components/product-group-list-desktop.svelte'
+    import ProductGroupList from './_components/product-group-list.svelte'
 
     import Viewmodel from './_viewmodel';
 
     const viewmodel = new Viewmodel();
-    const { displayedProducts, productGroups, state, searchTerm, selectedProductGroup, sortBy } = viewmodel;
+    const {
+        displayedProducts,
+        productGroups,
+        productGroupChips,
+        state,
+        searchTerm,
+        selectedProductGroup,
+        sortBy
+    } = viewmodel;
 
     const { session } = stores();
     const { companyName } = $session.user;
@@ -48,7 +56,7 @@
 
 <H1>Products</H1>
 <section>
-    <ProductGroupListDesktop
+    <ProductGroupList
             {productGroups}
             {selectedProductGroup}
             on:add={openProductGroupEditDialog}
@@ -59,7 +67,7 @@
         <div class="product-header">
             <Button filled on:click={openProductEditDialog}>Add</Button>
             <div class="flex-spacer"></div>
-            <SearchField {searchTerm} />
+            <SearchField {searchTerm}/>
         </div>
 
         <State {state}/>
@@ -90,6 +98,7 @@
 
     <ProductEditDialog
             bind:this={productEditDialog}
+            productGroups={productGroupChips}
             on:add={addProduct}
             on:update={updateProduct}
     />

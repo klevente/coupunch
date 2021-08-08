@@ -1,7 +1,7 @@
 import { sleepRandom } from '../util/sleep';
 import CompanyUrlService from './companyurl-service';
 
-let dummyGroups = [
+export let dummyGroups = [
     {
         id: 1,
         name: 'coffee',

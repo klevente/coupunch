@@ -12,8 +12,27 @@ function hasNoValidData(dataStore) {
     if (!dataStore.success) {
         return true;
     }
-    throwIfNotIterable(dataStore);
-    return dataStore.data.length === 0;
+    if (isIterable(dataStore)) {
+        return dataStore.data.length === 0;
+    } else {
+        return !dataStore.data || dataStore.data === {};
+    }
+}
+
+export function mapped({
+                           dataStore,
+                           mapper
+                       }) {
+    return derived(dataStore, $dataStore => {
+        if (hasNoValidData($dataStore)) {
+            return $dataStore;
+        }
+
+        const dataStore = $dataStore._clone();
+        const mappedData = isIterable(dataStore.data) ? dataStore.data.map(mapper) : mapper(dataStore.data);
+        dataStore._setSuccess(mappedData);
+        return dataStore;
+    });
 }
 
 export function filtered({
@@ -118,11 +137,11 @@ export function categorized({
 }
 
 export function filteredAndSorted({
-                               dataStore,
-                               searchTerm,
-                               searchProperty = 'name',
-                               sortBy
-                           }) {
+                                      dataStore,
+                                      searchTerm,
+                                      searchProperty = 'name',
+                                      sortBy
+                                  }) {
     return sorted({
         dataStore: filtered({
             dataStore,

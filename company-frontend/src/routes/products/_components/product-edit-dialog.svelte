@@ -1,22 +1,36 @@
 <script>
     import { createEventDispatcher } from 'svelte';
-    import { Modal, Dialog, FormField, TextField, Button } from 'attractions';
+    import { Modal, Dialog, FormField, TextField, Button, RadioChipGroup } from 'attractions';
     import { isEditing, createForm } from '../../../util/form';
+    import Dynamic from '../../../components/dynamic.svelte';
     import * as yup from 'yup';
 
     const dispatch = createEventDispatcher();
 
+    export let productGroups;
+
     export function open(product) {
         modalOpen = true;
-        setFields(product);
-        editing = isEditing(product)
+        editing = isEditing(product);
+        if (editing) {
+            product = {
+                ...product,
+                group: product.group.id.toString()
+            };
+            setFields(product);
+        }
     }
 
     function close() {
         modalOpen = false;
+        reset();
     }
 
     function onSubmit(product) {
+        product = {
+            ...product,
+            group: parseInt(product.group)
+        }
         dispatch(editing ? 'update' : 'add', product);
         close();
     }
@@ -31,9 +45,10 @@
     const schema = yup.object({
         name: yup.string().required(),
         price: yup.number().required().min(0.01),
+        group: yup.string().required()
     });
 
-    const { form, setFields } = createForm({ schema, onSubmit, onError });
+    const { form, setFields, reset } = createForm({ schema, onSubmit, onError });
 </script>
 
 <Modal bind:open={modalOpen} noClickaway>
@@ -57,6 +72,17 @@
                 <TextField name="price" withItem itemRight type="number" min="0.01" step="0.01">
                     <span class="item currency">$</span>
                 </TextField>
+            </FormField>
+            <FormField
+                name="Product Group"
+                help="Product Group the Product is a part of"
+                required
+            >
+                <Dynamic data={productGroups}>
+                    <svelte:fragment slot="data" let:data>
+                        <RadioChipGroup items={data} name="group" />
+                    </svelte:fragment>
+                </Dynamic>
             </FormField>
             <div class="button-bar">
                 <Button on:click={close}>Cancel</Button>

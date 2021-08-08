@@ -2,7 +2,7 @@ import BaseViewmodel from '../../viewmodel/base-viewmodel';
 import { action, dataStore, stateStore } from '../../viewmodel';
 import ProductService from '../../services/product-service';
 import ProductGroupService from '../../services/product-group-service';
-import { categorized, filtered, sorted } from '../../viewmodel/transformations';
+import { categorized, filtered, sorted, mapped } from '../../viewmodel/transformations';
 import { categoryStore, searchStore, sortByStore } from '../../viewmodel/transformations/stores';
 
 export default class Viewmodel extends BaseViewmodel {
@@ -29,6 +29,10 @@ export default class Viewmodel extends BaseViewmodel {
         dataStore: this.#categorizedProducts,
         sortBy: this.sortBy,
     });
+    productGroupChips = mapped({
+        dataStore: this.productGroups,
+        mapper: ({ id: value, name: label }) => ({ value, label })
+    })
 
     #actions = {
         getProducts: action(ProductService.get),

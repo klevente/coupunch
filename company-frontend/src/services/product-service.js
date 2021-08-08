@@ -1,6 +1,7 @@
 import { sleepRandom } from '../util/sleep';
 import CompanyUrlService from './companyurl-service';
 import { generate } from '../util/array';
+import { dummyGroups } from './product-group-service';
 
 let dummyProducts = generate(20, i => ({
     id: i + 1,
@@ -25,9 +26,11 @@ export default class ProductService extends CompanyUrlService {
     static async add(product, fetchCallback) {
         await sleepRandom();
         const serverProduct = {
+            ...product,
             id: cnt++,
-            ...product
+            group: dummyGroups.find(({ id }) => id === product.group)
         };
+        console.log(serverProduct);
         dummyProducts.push(serverProduct);
         ProductService._cb(fetchCallback);
         return serverProduct;
@@ -36,7 +39,11 @@ export default class ProductService extends CompanyUrlService {
     static async update(product, fetchCallback) {
         await sleepRandom();
         const idx = dummyProducts.findIndex(({ id }) => id === product.id);
-        dummyProducts[idx] = product;
+        dummyProducts[idx] = {
+            ...product,
+            group: dummyGroups.find(({ id }) => id === product.group)
+        };
+        console.log(dummyProducts[idx]);
         ProductService._cb(fetchCallback);
         return product;
     }
