@@ -1,15 +1,16 @@
 <script>
     import { onMount } from 'svelte';
-    import { H1 } from 'attractions';
+    import { H1, Button } from 'attractions';
+    import SearchField from '../../components/search-field.svelte';
     import Viewmodel from './_viewmodel';
-    import Dynamic from '../../components/dynamic.svelte';
+    import DynamicTable from '../../components/dynamic-table.svelte';
     import State from '../../components/state.svelte';
-    import CouponCard from './_components/coupon-card.svelte';
+    import CouponRow from './_components/coupon-row.svelte';
     import CouponEditDialog from './_components/coupon-edit-dialog.svelte';
     import ConfirmDialog from '../../components/confirm-dialog.svelte';
 
     const viewmodel = new Viewmodel();
-    const { coupons, state } = viewmodel;
+    const { displayedCoupons, sortBy, searchTerm, state } = viewmodel;
 
     let couponEditDialog, couponDeleteDialog;
 
@@ -30,20 +31,29 @@
 
 <H1>Coupons</H1>
 <section>
-    <State {state}/>
-
-    <Dynamic data={coupons} iterate>
-        <svelte:fragment slot="data" let:item>
-            <CouponCard
-                    coupon={item}
+    <div class="coupon-header">
+        <Button filled on:click={openEditDialog}>Add</Button>
+        <div class="flex-spacer"></div>
+        <SearchField {searchTerm}/>
+    </div>
+    <DynamicTable data={displayedCoupons} {sortBy} columns={[
+        { name: 'Name ', property: 'name' },
+        { name: 'Type', property: 'type'},
+        { name: 'Eligible Items' },
+        { name: 'Reward Levels' },
+        { name: 'Actions' }
+    ]}>
+        <svelte:fragment slot="row" let:row>
+            <CouponRow
+                    coupon={row}
                     on:edit={openEditDialog}
                     on:delete={openDeleteDialog}
             />
         </svelte:fragment>
-        <svelte:fragment slot="error" let:error>
-            <p>{error}</p>
+        <svelte:fragment slot="empty">
+            No coupons match the selected search query.
         </svelte:fragment>
-    </Dynamic>
+    </DynamicTable>
 
     <CouponEditDialog
             bind:this={couponEditDialog}
@@ -57,6 +67,13 @@
     >
         Are you sure you want to delete this coupon?
     </ConfirmDialog>
+
+    <State {state}/>
 </section>
 
-<style lang="scss"></style>
+<style lang="scss">
+    .coupon-header {
+      display: flex;
+      margin-bottom: 2em;
+    }
+</style>

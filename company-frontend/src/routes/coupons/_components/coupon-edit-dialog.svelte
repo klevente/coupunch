@@ -1,8 +1,9 @@
 <script>
     import { createEventDispatcher } from 'svelte';
-    import { Modal, Dialog, FormField, TextField, Button } from 'attractions';
+    import { Modal, Dialog, FormField, TextField, Button, RadioChipGroup } from 'attractions';
     import { isEditing, createForm } from '../../../util/form';
     import * as yup from 'yup';
+    import { generate } from '../../../util/array';
 
     const dispatch = createEventDispatcher();
 
@@ -14,6 +15,7 @@
 
     function close() {
         modalOpen = false;
+        reset();
     }
 
     function onSubmit(coupon) {
@@ -32,7 +34,23 @@
         name: yup.string().required(),
     });
 
-    const { form, setFields } = createForm({ schema, onSubmit, onError });
+    const { form, data, setFields, reset } = createForm({
+        schema, onSubmit, onError,
+        initialValues: {
+            eligibleItems: {
+                products: [],
+                productGroups: []
+            },
+            rewards: []
+        }
+    });
+
+    const couponTypes = [
+        { value: 'point', label: 'Point' },
+        { value: 'price', label: 'Price' }
+    ];
+
+    const toIndexArray = arr => generate(arr.size, i => i);
 </script>
 
 <Modal bind:open={modalOpen} noClickaway>
@@ -46,6 +64,30 @@
             >
                 <TextField name="name"/>
             </FormField>
+            <FormField
+                    name="Type"
+                    help="Type of the coupon"
+                    required
+            >
+                <RadioChipGroup items={couponTypes} name="type"/>
+            </FormField>
+            <fieldset name="eligibleItems">
+                {#each toIndexArray($data.eligibleItems.products) as index}
+                    <fieldset name="products[{index}]">
+                        a
+                    </fieldset>
+                {/each}
+                {#each toIndexArray($data.eligibleItems.productGroups) as index}
+                    <fieldset name="productGroups[{index}]">
+                        a
+                    </fieldset>
+                {/each}
+            </fieldset>
+            {#each toIndexArray($data.rewards) as index}
+                <fieldset name="rewards[{index}]">
+                    a
+                </fieldset>
+            {/each}
             <div class="button-bar">
                 <Button on:click={close}>Cancel</Button>
                 <Button type="submit">{editing ? 'Update' : 'Add'}</Button>
@@ -53,3 +95,11 @@
         </form>
     </Dialog>
 </Modal>
+
+<style lang="scss">
+    fieldset {
+      border: none;
+      margin: 0;
+      padding: 0;
+    }
+</style>

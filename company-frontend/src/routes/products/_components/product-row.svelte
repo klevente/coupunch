@@ -13,13 +13,15 @@
 </script>
 
 <Row>
-    <Column><BoxIcon size="24"/></Column>
+    <Column>
+        <BoxIcon size="24"/>
+    </Column>
     <Column>{product.name}</Column>
     <Column>${product.price}</Column>
     <Column>
         <div class="button-bar">
-            <IconButton icon={EditIcon} on:click={onEditClick} />
-            <IconButton icon={XIcon} on:click={onDeleteClick} />
+            <IconButton icon={EditIcon} on:click={onEditClick}/>
+            <IconButton icon={XIcon} on:click={onDeleteClick}/>
         </div>
     </Column>
 </Row>

@@ -5,6 +5,7 @@
     import Dynamic from '../../components/dynamic.svelte';
     import State from '../../components/state.svelte';
     import SearchField from '../../components/search-field.svelte';
+    import DynamicTable from '../../components/dynamic-table.svelte';
     import { Table, Header, Body, Row, Column } from '../../components/table';
     import ProductRow from './_components/product-row.svelte';
     import ConfirmDialog from './../../components/confirm-dialog.svelte';
@@ -70,30 +71,23 @@
             <SearchField {searchTerm}/>
         </div>
 
-        <State {state}/>
-
-        <Dynamic data={displayedProducts}>
-            <!-- Syntactic sugar for for slotted components is coming soon -->
-            <svelte:fragment slot="data" let:data>
-                <Table>
-                    <Header {sortBy} columns={[
-                    { name: 'Icon' },
-                    { name: 'Name', property: 'name' },
-                    { name: 'Price', property: 'price' },
-                    { name: 'Actions' }
-                ]}/>
-                    <Body {data}>
-                    <svelte:fragment slot="row" let:row>
-                        <ProductRow
-                                product={row}
-                                on:edit={openProductEditDialog}
-                                on:delete={openProductDeleteDialog}
-                        />
-                    </svelte:fragment>
-                    </Body>
-                </Table>
+        <DynamicTable data={displayedProducts} {sortBy} columns={[
+            { name: 'Icon' },
+            { name: 'Name', property: 'name' },
+            { name: 'Price', property: 'price' },
+            { name: 'Actions' }
+        ]}>
+            <svelte:fragment slot="row" let:row>
+                <ProductRow
+                        product={row}
+                        on:edit={openProductEditDialog}
+                        on:delete={openProductDeleteDialog}
+                />
             </svelte:fragment>
-        </Dynamic>
+            <svelte:fragment slot="empty">
+                No products match the selected search query.
+            </svelte:fragment>
+        </DynamicTable>
     </div>
 
     <ProductEditDialog
@@ -123,6 +117,8 @@
     >
         Are you sure you want to delete this product group?
     </ConfirmDialog>
+
+    <State {state}/>
 </section>
 
 <style lang="scss">

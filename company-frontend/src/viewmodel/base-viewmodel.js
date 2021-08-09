@@ -28,7 +28,8 @@ export default class BaseViewmodel {
             },
             single: {
                 update: (updatedResource) => dataStore.updateData(_ => updatedResource),
-            }
+            },
+            nop: (resource) => resource
         };
     }
 

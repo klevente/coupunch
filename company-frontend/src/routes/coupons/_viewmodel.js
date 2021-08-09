@@ -1,10 +1,22 @@
 import BaseViewmodel from '../../viewmodel/base-viewmodel';
 import { action, dataStore, stateStore } from '../../viewmodel';
 import CouponService from '../../services/coupon-service';
+import { searchStore, sortByStore } from '../../viewmodel/transformations/stores';
+import { filteredAndSorted } from '../../viewmodel/transformations';
 
 export default class Viewmodel extends BaseViewmodel {
-    coupons = dataStore();
+    #coupons = dataStore();
     state = stateStore();
+
+    sortBy = sortByStore();
+    searchTerm = searchStore();
+
+    displayedCoupons = filteredAndSorted({
+        dataStore: this.#coupons,
+        searchTerm: this.searchTerm,
+        searchProperty: 'name',
+        sortBy: this.sortBy
+    });
 
     #actions = {
         get: action(CouponService.get),
@@ -48,7 +60,7 @@ export default class Viewmodel extends BaseViewmodel {
     }
 
     get _resource() {
-        return this.coupons;
+        return this.#coupons;
     }
 
     get _state() {

@@ -12,7 +12,7 @@ function hasNoValidData(dataStore) {
     if (!dataStore.success) {
         return true;
     }
-    if (isIterable(dataStore)) {
+    if (isIterable(dataStore.data)) {
         return dataStore.data.length === 0;
     } else {
         return !dataStore.data || dataStore.data === {};
