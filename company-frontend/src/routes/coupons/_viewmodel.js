@@ -3,6 +3,8 @@ import { action, dataStore, stateStore } from '../../viewmodel';
 import CouponService from '../../services/coupon-service';
 import { searchStore, sortByStore } from '../../viewmodel/transformations/stores';
 import { filteredAndSorted } from '../../viewmodel/transformations';
+import ProductService from '../../services/product-service';
+import ProductGroupService from '../../services/product-group-service';
 
 export default class Viewmodel extends BaseViewmodel {
     #coupons = dataStore();
@@ -18,15 +20,38 @@ export default class Viewmodel extends BaseViewmodel {
         sortBy: this.sortBy
     });
 
+    #products = dataStore();
+    #productGroups = dataStore();
+
+    productSearchTerm = searchStore();
+    productGroupSearchTerm = searchStore();
+    productSortBy = sortByStore();
+    productGroupSortBy = sortByStore();
+
+    displayedProducts = filteredAndSorted({
+        dataStore: this.#products,
+        searchTerm: this.productSearchTerm,
+        searchProperty: 'name',
+        sortBy: this.productSortBy
+    });
+    displayedProductGroups = filteredAndSorted({
+        dataStore: this.#productGroups,
+        searchTerm: this.productGroupSearchTerm,
+        searchProperty: 'name',
+        sortBy: this.productGroupSortBy
+    });
+
     #actions = {
         get: action(CouponService.get),
         add: action(CouponService.add, 'Coupon added'),
         update: action(CouponService.update, 'Coupon updated'),
-        delete: action(CouponService.delete, 'Coupon deleted')
+        delete: action(CouponService.delete, 'Coupon deleted'),
+        getProducts: action(ProductService.get),
+        getProductGroups: action(ProductGroupService.get)
     };
 
-    constructor() {
-        super(CouponService);
+    async getAll() {
+        await Promise.all([this.get(), this.getProducts(), this.getProductGroups()]);
     }
 
     async get() {
@@ -56,6 +81,20 @@ export default class Viewmodel extends BaseViewmodel {
             action: this.#actions.delete,
             serviceParams: coupon,
             localCallback: this._defaultOperations().array.delete
+        });
+    }
+
+    async getProducts() {
+        await this.load({
+            dataStore: this.#products,
+            action: this.#actions.getProducts
+        });
+    }
+
+    async getProductGroups() {
+        await this.load({
+            dataStore: this.#productGroups,
+            action: this.#actions.getProductGroups
         });
     }
 

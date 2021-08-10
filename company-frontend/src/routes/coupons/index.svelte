@@ -10,7 +10,18 @@
     import ConfirmDialog from '../../components/confirm-dialog.svelte';
 
     const viewmodel = new Viewmodel();
-    const { displayedCoupons, sortBy, searchTerm, state } = viewmodel;
+    const {
+        displayedCoupons,
+        sortBy,
+        searchTerm,
+        displayedProducts,
+        displayedProductGroups,
+        productSearchTerm,
+        productGroupSearchTerm,
+        productSortBy,
+        productGroupSortBy,
+        state
+    } = viewmodel;
 
     let couponEditDialog, couponDeleteDialog;
 
@@ -57,6 +68,12 @@
 
     <CouponEditDialog
             bind:this={couponEditDialog}
+            products={displayedProducts}
+            productGroups={displayedProductGroups}
+            {productSearchTerm}
+            {productGroupSearchTerm}
+            {productSortBy}
+            {productGroupSortBy}
             on:add={addCoupon}
             on:update={updateCoupon}/>
 
@@ -72,8 +89,8 @@
 </section>
 
 <style lang="scss">
-    .coupon-header {
-      display: flex;
-      margin-bottom: 2em;
-    }
+  .coupon-header {
+    display: flex;
+    margin-bottom: 2em;
+  }
 </style>

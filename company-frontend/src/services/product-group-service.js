@@ -1,5 +1,5 @@
 import { sleepRandom } from '../util/sleep';
-import CompanyUrlService from './companyurl-service';
+import { companyUrl } from './companyurl';
 
 export let dummyGroups = [
     {
@@ -13,7 +13,7 @@ export let dummyGroups = [
 ];
 let cnt = 3;
 
-export default class ProductGroupService extends CompanyUrlService {
+export default class ProductGroupService {
 
     static async get() {
         await sleepRandom();

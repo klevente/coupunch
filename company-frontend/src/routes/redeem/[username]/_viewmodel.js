@@ -37,10 +37,6 @@ export default class Viewmodel extends BaseViewmodel {
         checkout: action(CouponService.checkout, 'Successfully checked out items'),
     }
 
-    constructor() {
-        super(ProductService, CouponService);
-    }
-
     async getAll(username) {
         await Promise.all([this.getProducts(), this.getCoupons(username)]);
     }

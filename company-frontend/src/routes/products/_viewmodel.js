@@ -45,10 +45,6 @@ export default class Viewmodel extends BaseViewmodel {
         deleteProductGroup: action(ProductGroupService.delete, 'Product group deleted')
     };
 
-    constructor() {
-        super(ProductService, ProductGroupService);
-    }
-
     async getAll() {
         await Promise.all([this.getProducts(), this.getProductGroups()]);
     }

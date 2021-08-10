@@ -1,5 +1,5 @@
 import { sleepRandom } from '../util/sleep';
-import CompanyUrlService from './companyurl-service';
+import { companyUrl } from './companyurl';
 
 let cnt = 3;
 
@@ -222,7 +222,7 @@ let dummyUserCoupons =  [
     }
 ];
 
-export default class CouponService extends CompanyUrlService {
+export default class CouponService {
 
     static async get() {
         await sleepRandom();

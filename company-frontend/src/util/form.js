@@ -1,6 +1,7 @@
 import { createForm as felteCreateForm } from 'felte';
 import reporter from '@felte/reporter-tippy';
 import { validator } from '@felte/validator-yup';
+import { generate } from './array';
 
 export function isEditing(obj) {
     return obj && !!obj.id;
@@ -19,4 +20,8 @@ export function createForm({
         onError,
         ...rest
     });
+}
+
+export function toIndexArray(array) {
+    return generate(array.length, i => i);
 }

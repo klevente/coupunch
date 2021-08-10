@@ -1,16 +1,29 @@
 <script>
     import { createEventDispatcher } from 'svelte';
-    import { Modal, Dialog, FormField, TextField, Button, RadioChipGroup } from 'attractions';
+    import { Modal, Dialog, FormField, TextField, Button, RadioChipGroup, Label, Autocomplete } from 'attractions';
+    import { PlusIcon, XIcon } from 'svelte-feather-icons';
+    import { ArrayField } from '../../../components/form';
+    import IconButton from '../../../components/icon-button.svelte';
     import { isEditing, createForm } from '../../../util/form';
     import * as yup from 'yup';
-    import { generate } from '../../../util/array';
+    import ProductSelectorDialog from './product-selector-dialog.svelte';
+    import ProductGroupSelectorDialog from './product-group-selector-dialog.svelte';
 
     const dispatch = createEventDispatcher();
 
+    export let products;
+    export let productGroups;
+    export let productSearchTerm;
+    export let productGroupSearchTerm;
+    export let productSortBy;
+    export let productGroupSortBy;
+
     export function open(coupon) {
         modalOpen = true;
-        setFields(coupon);
         editing = isEditing(coupon);
+        if (editing) {
+            setFields(coupon);
+        }
     }
 
     function close() {
@@ -29,6 +42,7 @@
 
     let modalOpen = false;
     let editing = false;
+    let productSelectorDialog, productGroupSelectorDialog;
 
     const schema = yup.object({
         name: yup.string().required(),
@@ -38,7 +52,9 @@
         schema, onSubmit, onError,
         initialValues: {
             eligibleItems: {
-                products: [],
+                products: [
+                    // { id: 1, name: 'test' }
+                ],
                 productGroups: []
             },
             rewards: []
@@ -50,7 +66,14 @@
         { value: 'price', label: 'Price' }
     ];
 
-    const toIndexArray = arr => generate(arr.size, i => i);
+    const onProductAddClick = () => {
+        console.log('click');
+        $data.eligibleItems.products.push({ id: 1, name: 'test' });
+    };
+    const onProductGroupAddClick = () => {};
+    const onRewardAddClick = () => {};
+
+    $: console.log($data);
 </script>
 
 <Modal bind:open={modalOpen} noClickaway>
@@ -71,23 +94,47 @@
             >
                 <RadioChipGroup items={couponTypes} name="type"/>
             </FormField>
+            <Label>Eligible Items</Label>
             <fieldset name="eligibleItems">
-                {#each toIndexArray($data.eligibleItems.products) as index}
-                    <fieldset name="products[{index}]">
-                        a
-                    </fieldset>
-                {/each}
-                {#each toIndexArray($data.eligibleItems.productGroups) as index}
-                    <fieldset name="productGroups[{index}]">
-                        a
-                    </fieldset>
-                {/each}
+                <div class="eligible-products-container">
+                    <div class="item-header">
+                        <Label small>Products</Label>
+                        <IconButton icon={PlusIcon} size="12" on:click={onProductAddClick}/>
+                    </div>
+                    <ArrayField data={$data.eligibleItems?.products}>
+                        <div slot="empty">No eligible products. Add one with the + icon above.</div>
+                        <fieldset slot="row" let:index name="products[{index}]">
+                            <input type="number" name="id">
+                            <TextField name="name"/>
+                        </fieldset>
+                    </ArrayField>
+                </div>
+                <div class="eligible-product-group-container">
+                    <div class="item-header">
+                        <Label small>Product Groups</Label>
+                        <IconButton icon={PlusIcon} size="12"/>
+                    </div>
+                    <ArrayField data={$data.eligibleItems?.productGroups}>
+                        <div slot="empty">No eligible product groups. Add one with the + icon above.</div>
+                        <fieldset slot="row" let:index name="productGroups[{index}]">
+                            a
+                        </fieldset>
+                    </ArrayField>
+                </div>
             </fieldset>
-            {#each toIndexArray($data.rewards) as index}
-                <fieldset name="rewards[{index}]">
-                    a
-                </fieldset>
-            {/each}
+            <div class="item-header">
+                <Label>Rewards</Label>
+                <IconButton icon={PlusIcon} size="12"/>
+            </div>
+            <ArrayField data={$data.rewards}>
+                <div slot="empty">No rewards specified. Add one with the + icon above.</div>
+                <svelte:fragment slot="row" let:index>
+                    <Label small>Reward {index + 1}</Label>
+                    <fieldset name="rewards[{index}]">
+                        a
+                    </fieldset>
+                </svelte:fragment>
+            </ArrayField>
             <div class="button-bar">
                 <Button on:click={close}>Cancel</Button>
                 <Button type="submit">{editing ? 'Update' : 'Add'}</Button>
@@ -96,10 +143,29 @@
     </Dialog>
 </Modal>
 
+<ProductSelectorDialog
+        bind:this={productSelectorDialog}
+        {products}
+        searchTerm={productSearchTerm}
+        sortBy={productSortBy}
+/>
+
+<ProductGroupSelectorDialog
+        bind:this={productGroupSelectorDialog}
+        {productGroups}
+        searchTerm={productGroupSearchTerm}
+        sortBy={productGroupSortBy}
+/>
+
 <style lang="scss">
-    fieldset {
-      border: none;
-      margin: 0;
-      padding: 0;
-    }
+  fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .item-header {
+    display: flex;
+    align-items: center;
+  }
 </style>

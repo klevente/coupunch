@@ -37,10 +37,6 @@ export default class Viewmodel extends BaseViewmodel {
         validateQrCode: action(UserService.validateQrCode, 'Successfully parsed QR code')
     }
 
-    constructor() {
-        super(UserService);
-    }
-
     async get() {
         await this.load({
             action: this.#actions.get

@@ -1,12 +1,13 @@
 import { asArray } from '../util/array';
+import { updateCompanyUrl } from '../services/companyurl';
 
 export default class BaseViewmodel {
 
-    constructor(...services) {
+    constructor() {
         if (new.target === BaseViewmodel) {
             throw new TypeError(`Cannot construct BaseViewmodel instances directly.`);
         }
-        this._initServices(...services);
+        updateCompanyUrl();
     }
 
     get _resource() {
@@ -98,10 +99,6 @@ export default class BaseViewmodel {
 
     _defaultServiceCallback(dataStore = this._resource) {
         return (serverResource) => dataStore.setSuccess(serverResource);
-    }
-
-    _initServices(...services) {
-        services.forEach(service => service.updateCompanyUrl());
     }
 
     _defaultErrorCallback() {
