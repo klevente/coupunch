@@ -15,7 +15,13 @@ let dummyProducts = generate(20, i => ({
         name: 'food'
     }
 }));
-let cnt = 21;
+dummyProducts.push({
+    id: 21,
+    name: 'Product Without Group',
+    price: 123,
+    group: null
+});
+let cnt = 22;
 
 export default class ProductService {
     static async get() {
@@ -28,7 +34,7 @@ export default class ProductService {
         const serverProduct = {
             ...product,
             id: cnt++,
-            group: dummyGroups.find(({ id }) => id === product.group)
+            group: dummyGroups.find(({ id }) => id === product.group) || null
         };
         console.log(serverProduct);
         dummyProducts.push(serverProduct);
@@ -41,7 +47,7 @@ export default class ProductService {
         const idx = dummyProducts.findIndex(({ id }) => id === product.id);
         dummyProducts[idx] = {
             ...product,
-            group: dummyGroups.find(({ id }) => id === product.group)
+            group: dummyGroups.find(({ id }) => id === product.group) || null
         };
         console.log(dummyProducts[idx]);
         ProductService._cb(fetchCallback);

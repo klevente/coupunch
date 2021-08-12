@@ -1,6 +1,7 @@
 import { derived } from 'svelte/store';
 import { isIterable } from '../../util/iterable';
 import { resolve } from '../../util/resolve';
+import { asArray, isArray } from '../../util/array';
 
 function throwIfNotIterable(dataStore) {
     if (!isIterable(dataStore.data)) {
@@ -17,6 +18,42 @@ function hasNoValidData(dataStore) {
     } else {
         return !dataStore.data || dataStore.data === {};
     }
+}
+
+export function addFront({
+                             dataStore,
+                             items
+                         }) {
+    items = asArray(items);
+
+    return derived(dataStore, $dataStore => {
+        if (hasNoValidData($dataStore)) {
+            return $dataStore;
+        }
+        throwIfNotIterable($dataStore);
+
+        const dataStore = $dataStore._clone();
+        dataStore._setSuccess([...items, ...dataStore.data]);
+        return dataStore;
+    });
+}
+
+export function addBack({
+                             dataStore,
+                             items
+                         }) {
+    items = asArray(items);
+
+    return derived(dataStore, $dataStore => {
+        if (hasNoValidData($dataStore)) {
+            return $dataStore;
+        }
+        throwIfNotIterable($dataStore);
+
+        const dataStore = $dataStore._clone();
+        dataStore._setSuccess([...dataStore.data, ...items]);
+        return dataStore;
+    });
 }
 
 export function mapped({
@@ -114,19 +151,21 @@ export function categorized({
                                 dataStore,
                                 selected,
                                 dataProperty = 'path.to.property',
-                                selectedProperty = 'path.to.property'
+                                selectedProperty = 'path.to.property',
+                                selectAllValue = 'all'
                             }) {
     return derived([dataStore, selected], ([$dataStore, $selected]) => {
         if (hasNoValidData($dataStore)) {
             return $dataStore;
         }
 
-        if (!$selected) {
+        const selectedValue = resolve(selectedProperty, $selected);
+
+        if (selectedValue === selectAllValue) {
             return $dataStore;
         }
 
         const dataStore = $dataStore._clone();
-        const selectedValue = resolve(selectedProperty, $selected);
         const filteredData = dataStore.data.filter(element => {
             const elementValue = resolve(dataProperty, element);
             return selectedValue === elementValue;

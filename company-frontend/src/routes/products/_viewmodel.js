@@ -2,7 +2,7 @@ import BaseViewmodel from '../../viewmodel/base-viewmodel';
 import { action, dataStore, stateStore } from '../../viewmodel';
 import ProductService from '../../services/product-service';
 import ProductGroupService from '../../services/product-group-service';
-import { categorized, filtered, sorted, mapped } from '../../viewmodel/transformations';
+import { categorized, filtered, sorted, mapped, addFront } from '../../viewmodel/transformations';
 import { categoryStore, searchStore, sortByStore } from '../../viewmodel/transformations/stores';
 
 export default class Viewmodel extends BaseViewmodel {
@@ -12,7 +12,7 @@ export default class Viewmodel extends BaseViewmodel {
     state = stateStore();
 
     searchTerm = searchStore();
-    selectedProductGroup = categoryStore();
+    selectedProductGroup = categoryStore({ id: 'all' });
     sortBy = sortByStore();
     #filteredProducts = filtered({
         dataStore: this.#products,
@@ -24,15 +24,19 @@ export default class Viewmodel extends BaseViewmodel {
         selected: this.selectedProductGroup,
         dataProperty: 'group.id',
         selectedProperty: 'id',
+        selectAllValue: 'all'
     });
     displayedProducts = sorted({
         dataStore: this.#categorizedProducts,
         sortBy: this.sortBy,
     });
-    productGroupChips = mapped({
-        dataStore: this.productGroups,
-        mapper: ({ id: value, name: label }) => ({ value, label })
-    })
+    productGroupChips = addFront({
+        dataStore: mapped({
+            dataStore: this.productGroups,
+            mapper: ({ id: value, name: label }) => ({ value, label })
+        }),
+        items: { value: 'uncategorized', label: 'Uncategorized' }
+    });
 
     #actions = {
         getProducts: action(ProductService.get),

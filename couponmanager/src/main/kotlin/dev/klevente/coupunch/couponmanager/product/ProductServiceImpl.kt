@@ -22,7 +22,7 @@ class ProductServiceImpl(
     @Transactional
     override fun addProduct(request: ProductCreateRequest): Product {
 
-        val group = productGroupService.getProductGroup(request.group)
+        val group = request.group?.let { productGroupService.getProductGroup(it) }
 
         val product = productRepository.save(
             Product(
@@ -32,19 +32,17 @@ class ProductServiceImpl(
             )
         )
 
-        group.products.add(product)
+        group?.products?.add(product)
 
         return product
     }
-
-    override fun getProductResponse(id: Long) = getProduct(id).toResponse()
 
     @Transactional
     override fun updateProduct(id: Long, request: ProductUpdateRequest) {
         val product = getProduct(id)
 
         val oldGroup = product.group
-        val newGroup = productGroupService.getProductGroup(request.group)
+        val newGroup = request.group?.let { productGroupService.getProductGroup(it) }
 
         product.apply {
             name = request.name
@@ -52,16 +50,20 @@ class ProductServiceImpl(
             group = newGroup
         }
 
-        oldGroup.products.remove(product)
-        newGroup.products.add(product)
+        oldGroup?.products?.remove(product)
+        newGroup?.products?.add(product)
     }
 
     @Transactional
     override fun deleteProduct(id: Long) {
         val product = getProduct(id)
 
-        product.group.products.remove(product)
+        product.group?.products?.remove(product)
 
         productRepository.delete(product)
     }
+
+    override fun getProductResponse(id: Long) = getProduct(id).toResponse()
+
+    override fun getProductsResponse() = productRepository.findAll().toResponse()
 }

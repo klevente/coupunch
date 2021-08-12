@@ -15,5 +15,5 @@ export function generate(size, generator) {
 }
 
 export function asArray(obj) {
-    return isIterable(obj) ? obj : [obj];
+    return isArray(obj) ? obj : [obj];
 }

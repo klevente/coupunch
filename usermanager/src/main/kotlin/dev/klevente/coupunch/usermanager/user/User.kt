@@ -1,14 +1,14 @@
 package dev.klevente.coupunch.usermanager.user
 
+import dev.klevente.coupunch.library.entity.BaseEntity
 import dev.klevente.coupunch.usermanager.security.authorization.Role
 import javax.persistence.*
 
 @Entity
 @Table(name = "app_user")
-data class User(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = -1L,
+class User(
+
+    id: Long = -1L,
 
     @Column(nullable = false)
     var username: String = "",
@@ -25,19 +25,6 @@ data class User(
 
     @Lob
     var qr: ByteArray? = null,
-) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as User
-
-        if (id != other.id) return false
-
-        return true
-    }
-
-    override fun hashCode() = id.hashCode()
-
-    override fun toString() = "User(id=$id, username='$username', email='$email', roles=$roles)"
+) : BaseEntity(id) {
+    override fun toString() = "User($formattedId, username=$username, email=$email, roles=$roles)"
 }

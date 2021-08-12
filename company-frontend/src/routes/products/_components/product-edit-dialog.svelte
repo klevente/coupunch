@@ -15,8 +15,9 @@
         if (editing) {
             product = {
                 ...product,
-                group: product.group.id.toString()
+                group: product.group?.id?.toString() || 'uncategorized'
             };
+            console.log(product);
             setFields(product);
         }
     }
@@ -29,7 +30,7 @@
     function onSubmit(product) {
         product = {
             ...product,
-            group: parseInt(product.group)
+            group:  parseInt(product.group) || null
         }
         dispatch(editing ? 'update' : 'add', product);
         close();

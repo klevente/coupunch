@@ -57,7 +57,7 @@ class UserServiceTest {
         val password = faker.password()
         val hashedPassword = faker.randomChars()
         val userRole = Role(name = "USER")
-        given { userRepository.save(any()) } willAnswer { it.getArgument<User>(0).copy(id = 1L) }
+        given { userRepository.save(any()) } willAnswer { it.getArgument<User>(0).withId(1) }
         given { userRepository.existsByEmail(any()) } willReturn { false }
         given { userRepository.existsByUsername(any()) } willReturn { false }
         given { passwordEncoder.encode(any()) } willReturn { hashedPassword }
@@ -69,8 +69,8 @@ class UserServiceTest {
 
         // then
         then(registeredUser.id).isPositive
-        then(registeredUser.email).isEqualTo(email.toLowerCase())
-        then((registeredUser.username)).isEqualTo(username.toLowerCase())
+        then(registeredUser.email).isEqualTo(email.lowercase())
+        then((registeredUser.username)).isEqualTo(username.lowercase())
         then(registeredUser.password).isEqualTo(hashedPassword)
         then(registeredUser.roles).containsExactly(userRole)
         val savedUser = User(email = email, username = username, password = password, roles = hashSetOf(userRole))
@@ -123,8 +123,8 @@ class UserServiceTest {
         val username = faker.username()
         val userInDb = User(
             id = id,
-            username = username.toLowerCase(),
-            email = faker.email().toLowerCase(),
+            username = username.lowercase(),
+            email = faker.email().lowercase(),
             password = faker.password()
         )
         given { userRepository.findById(any()) } willReturn { Optional.of(userInDb) }
@@ -135,6 +135,8 @@ class UserServiceTest {
         val updatedUser = userService.updateUser(id, request)
 
         // then
-        then(updatedUser.email).isEqualTo(newEmail.toLowerCase())
+        then(updatedUser.email).isEqualTo(newEmail.lowercase())
     }
 }
+
+fun User.withId(id: Long) = User(id, username, email, password, roles, qr)

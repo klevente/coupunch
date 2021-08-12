@@ -15,7 +15,8 @@
     const onDeleteClick = productGroup => dispatch('delete', productGroup);
 
     const isSelected = (selectedProductGroup, productGroup) => selectedProductGroup && selectedProductGroup.id === productGroup.id;
-    const isDefaultSelected = selectedProductGroup => selectedProductGroup === null;
+    const isAllProductsSelected = selectedProductGroup => selectedProductGroup && selectedProductGroup.id === 'all';
+    const isUncategorizedSelected = selectedProductGroup => selectedProductGroup === null;
 </script>
 
 <nav class="desktop">
@@ -24,10 +25,18 @@
     </Button>
     <div class="product-group-item">
         <Button
-                on:click={() => onGroupClick(null)}
-                selected={isDefaultSelected($selectedProductGroup)}
+                on:click={() => onGroupClick({ id: 'all' })}
+                selected={isAllProductsSelected($selectedProductGroup)}
         >
             All products
+        </Button>
+    </div>
+    <div class="product-group-item">
+        <Button
+            on:click={() => onGroupClick(null)}
+            selected={isUncategorizedSelected($selectedProductGroup)}
+        >
+            Uncategorized
         </Button>
     </div>
     <Dynamic data={productGroups} iterate>
