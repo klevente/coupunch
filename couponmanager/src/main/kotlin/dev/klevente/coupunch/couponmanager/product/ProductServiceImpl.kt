@@ -1,5 +1,6 @@
 package dev.klevente.coupunch.couponmanager.product
 
+import dev.klevente.coupunch.couponmanager.coupon.CouponService
 import dev.klevente.coupunch.couponmanager.product.dto.ProductCreateRequest
 import dev.klevente.coupunch.couponmanager.product.dto.ProductUpdateRequest
 import dev.klevente.coupunch.couponmanager.product.dto.toResponse
@@ -15,6 +16,7 @@ class ProductServiceImpl(
     private val log: Logger,
     private val productRepository: ProductRepository,
     private val productGroupService: ProductGroupService,
+    private val couponService: CouponService
 ) : ProductService {
     override fun getProduct(id: Long) =
         productRepository.findByIdOrNull(id) ?: throw EntityNotFoundException.byId(Product::class, id)
@@ -61,6 +63,8 @@ class ProductServiceImpl(
         product.group?.products?.remove(product)
 
         productRepository.delete(product)
+
+
     }
 
     override fun getProductResponse(id: Long) = getProduct(id).toResponse()

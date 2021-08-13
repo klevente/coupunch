@@ -15,11 +15,11 @@ class Coupon(
     id: Long = -1L,
 
     @Column(nullable = false)
-    var name: String,
+    var name: String = "",
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    var type: CouponType,
+    var type: CouponType = CouponType.POINT,
 
     @ElementCollection
     @CollectionTable(name = "app_eligible_product")

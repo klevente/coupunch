@@ -19,6 +19,9 @@ class User(
     @Column(nullable = false)
     var password: String = "",
 
+    @Column(nullable = false, unique = true)
+    var code: String = "",
+
     @ManyToMany
     @JoinTable(name = "app_user_role")
     var roles: MutableSet<Role> = hashSetOf(),

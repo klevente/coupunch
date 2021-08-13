@@ -15,14 +15,14 @@ class Reward(
     id: Long = -1L,
 
     @Column(nullable = false)
-    var threshold: Double,
+    var threshold: Double = 0.0,
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    var discountType: DiscountType,
+    var discountType: DiscountType = DiscountType.FIXED,
 
     @Column(nullable = false)
-    var discount: Double,
+    var discount: Double = 0.0,
 
     @ElementCollection
     @CollectionTable(name = "app_product_reward")

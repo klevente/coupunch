@@ -5,5 +5,5 @@ import dev.klevente.coupunch.couponmanager.checkout.dto.CheckoutResponse
 
 interface CheckoutService {
 
-    fun checkout(request: CheckoutRequest): CheckoutResponse
+    fun checkout(username: String, request: CheckoutRequest): CheckoutResponse
 }

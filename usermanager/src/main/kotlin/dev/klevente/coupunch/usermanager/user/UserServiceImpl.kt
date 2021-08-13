@@ -5,11 +5,13 @@ import dev.klevente.coupunch.library.exception.EntityNotFoundException
 import dev.klevente.coupunch.library.security.AuthenticationFacade
 import dev.klevente.coupunch.usermanager.security.authorization.RoleService
 import dev.klevente.coupunch.usermanager.user.dto.*
+import dev.klevente.coupunch.usermanager.util.uuid
 import org.slf4j.Logger
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 @Service
 @Transactional(readOnly = true)
@@ -45,6 +47,7 @@ class UserServiceImpl(
                 email = emailLowercase,
                 username = usernameLowercase,
                 password = passwordHashed,
+                code = uuid(),
                 roles = hashSetOf(roleService.USER)
             )
         )
