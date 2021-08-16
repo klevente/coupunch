@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 class CheckoutServiceImpl : CheckoutService {
 
-    override fun checkout(request: CheckoutRequest): CheckoutResponse {
+    override fun checkout(username: String, request: CheckoutRequest): CheckoutResponse {
         TODO("Not yet implemented")
     }
 }

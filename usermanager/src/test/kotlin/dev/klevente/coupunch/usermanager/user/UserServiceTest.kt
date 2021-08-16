@@ -139,4 +139,11 @@ class UserServiceTest {
     }
 }
 
-fun User.withId(id: Long) = User(id, username, email, password, roles, qr)
+fun User.withId(id: Long) = User(
+    id = id,
+    username = username,
+    email = email,
+    password = password,
+    roles = roles,
+    qr = qr
+)

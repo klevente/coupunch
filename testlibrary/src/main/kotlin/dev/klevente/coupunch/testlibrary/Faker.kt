@@ -17,8 +17,8 @@ fun Faker.password() = "${dcComics.title()}${lorem.punctuation()}${address.build
 
 fun Faker.randomChars() = device.serial()
 
-fun Faker.randomLong() = random.nextLong(1, 100)
+fun Faker.randomLong() = random.nextLong(100)
 
 fun Faker.randomInt() = random.nextInt(1, 100)
 
-fun Faker.randomDouble() = random.nextDouble(1.0, 1000.0)
+fun Faker.randomDouble() = random.nextDouble()
