@@ -4,7 +4,7 @@ import { throttlePromise } from '../../util/throttle';
 import { action, dataStore, stateStore } from '../../viewmodel';
 import { searchStore, sortByStore } from '../../viewmodel/transformations/stores';
 import { filtered, sorted } from '../../viewmodel/transformations';
-import UserService from '../../services/user-service';
+import CustomerService from '../../services/customer-service';
 
 export default class Viewmodel extends BaseViewmodel {
     #customers = dataStore();
@@ -31,10 +31,10 @@ export default class Viewmodel extends BaseViewmodel {
     });
 
     #actions = {
-        get: action(UserService.get),
-        searchCustomers: action(UserService.searchCustomers),
-        addToCompany: action(UserService.addToCompany, 'Successfully added customer to the company'),
-        validateQrCode: action(UserService.validateQrCode, 'Successfully parsed QR code')
+        get: action(CustomerService.get),
+        searchCustomers: action(CustomerService.searchCustomers),
+        addToCompany: action(CustomerService.addToCompany, 'Successfully added customer to the company'),
+        validateQrCode: action(CustomerService.validateQrCode, 'Successfully parsed QR code')
     }
 
     async get() {

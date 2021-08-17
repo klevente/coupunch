@@ -37,7 +37,7 @@ let dummyExtraCustomers = [
     }
 ]
 
-export default class UserService {
+export default class CustomerService {
     static async get() {
         await sleepRandom();
         return [...dummyCustomers];

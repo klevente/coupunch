@@ -21,9 +21,9 @@
 <article>
     <MenuCard
             icon={AwardIcon}
-            title="Redeem"
-            subtitle="Redeem coupons here"
-            href="./redeem"
+            title="Checkout"
+            subtitle="Check out customers here"
+            href="./checkout"
     />
     <MenuCard
             icon={GiftIcon}

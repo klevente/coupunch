@@ -141,7 +141,7 @@ let dummyUserCoupons =  [
         id: 1,
         name: 'Free Coffee',
         type: 'point',
-        currentStanding: 12,
+        progress: 12,
         redeemable: true,
         redeemLevel: 0,
         rewards: [
@@ -179,7 +179,7 @@ let dummyUserCoupons =  [
         id: 2,
         name: 'Discount Sandwich for Croissants',
         type: 'price',
-        currentStanding: 85,
+        progress: 85,
         redeemable: true,
         redeemLevel: 1,
         rewards: [
