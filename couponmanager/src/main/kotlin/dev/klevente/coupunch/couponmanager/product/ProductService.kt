@@ -8,11 +8,11 @@ import dev.klevente.coupunch.couponmanager.product.dto.ProductsResponse
 interface ProductService {
     fun getProduct(id: Long): Product
 
-    fun addProduct(request: ProductCreateRequest): Product
+    fun addProduct(request: ProductCreateRequest): ProductResponse
 
-    fun updateProduct(id: Long, request: ProductUpdateRequest)
+    fun updateProduct(id: Long, request: ProductUpdateRequest): ProductResponse
 
-    fun deleteProduct(id: Long)
+    fun deleteProduct(id: Long): ProductResponse
 
     fun getProductResponse(id: Long): ProductResponse
 

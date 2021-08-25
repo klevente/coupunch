@@ -23,44 +23,69 @@ class CouponServiceImpl(
         couponRepository.findByIdOrNull(id) ?: throw EntityNotFoundException.byId(Coupon::class, id)
 
     @Transactional
-    override fun addCoupon(request: CouponCreateRequest): Coupon {
+    override fun addCoupon(request: CouponCreateRequest): CouponResponse {
 
         val coupon = couponRepository.save(
-            request.toCouponWithoutRewards()
+            request.toCouponWithoutRewards(
+                getProducts = this::getProductsByIds,
+                getProductGroups = this::getProductGroupsByIds
+            )
         )
         val rewards = rewardRepository.saveAll(
-            request.rewards.map { it.toReward(owner = coupon) }
+            request.rewards.map {
+                it.toReward(
+                    owner = coupon,
+                    getProducts = this::getProductsByIds,
+                    getProductGroups = this::getProductGroupsByIds
+                )
+            }
         )
         coupon.rewards = rewards
 
-        return coupon
+        return coupon.toResponse()
     }
 
     @Transactional
-    override fun updateCoupon(id: Long, request: CouponUpdateRequest) {
+    override fun updateCoupon(id: Long, request: CouponUpdateRequest): CouponResponse {
         val coupon = getCoupon(id)
 
         coupon.apply {
             name = request.name
             type = request.type.toCouponType()
-            eligibleProducts = convertToEligibleProducts(request.eligibleItems.products)
-            eligibleProductGroups = convertToEligibleProductGroups(request.eligibleItems.productGroups)
+            eligibleProducts = request.eligibleItems.products.toDomain(
+                getProducts = this@CouponServiceImpl::getProductsByIds
+            )
+            eligibleProductGroups = request.eligibleItems.productGroups.toDomain(
+                getProductGroups = this@CouponServiceImpl::getProductGroupsByIds
+            )
 
         }
 
         val oldRewards = coupon.rewards
         val newRewards = rewardRepository.saveAll(
-            request.rewards.map { it.toReward(owner = coupon) }
+            request.rewards.map {
+                it.toReward(
+                    owner = coupon,
+                    getProducts = this::getProductsByIds,
+                    getProductGroups = this::getProductGroupsByIds
+                )
+            }
         )
         coupon.rewards = newRewards
 
         rewardRepository.deleteAll(oldRewards)
+
+        return coupon.toResponse()
     }
 
     @Transactional
-    override fun deleteCoupon(id: Long) {
+    override fun deleteCoupon(id: Long): CouponResponse {
         val coupon = getCoupon(id)
+        val ret = coupon.toResponse()
+
         couponRepository.delete(coupon)
+
+        return ret
     }
 
     override fun getCouponResponse(id: Long) = getCoupon(id).toResponse()
@@ -68,8 +93,8 @@ class CouponServiceImpl(
     override fun getCouponsResponse() = couponRepository.findAll().toResponse()
 
     override fun removeDeletedProductFromCoupons(product: Product) {
-        // get coupons which have this product as eligible TODO
-        val couponsWithEligibleProduct = emptyList<Coupon>()
+        // get coupons which have this product as eligible
+        val couponsWithEligibleProduct = couponRepository.findCouponsWithEligibleProduct(product)
         val couponsToDeleteAsNoEligibles = couponsWithEligibleProduct.fold(
             mutableListOf<Coupon>()
         ) { coupons, coupon ->
@@ -78,7 +103,7 @@ class CouponServiceImpl(
                 // if they do, remove the eligible product entry
                 coupon.eligibleProducts.remove(product)
             } else {
-                // if they dont, remove the coupon
+                // if they don't, remove the coupon
                 coupons.add(coupon)
             }
             coupons
@@ -87,8 +112,10 @@ class CouponServiceImpl(
         couponRepository.deleteAll(couponsToDeleteAsNoEligibles)
 
         // get coupons which have this product as a reward
-        val couponsWithRewardProduct = emptyList<Coupon>()
-        val couponsToDeleteAsNoRewards = couponsWithRewardProduct.fold(mutableListOf<Coupon>()) { coupons, coupon ->
+        val couponsWithRewardProduct = couponRepository.findCouponsWithRewardProduct(product)
+        val couponsToDeleteAsNoRewards = couponsWithRewardProduct.fold(
+            mutableListOf<Coupon>()
+        ) { coupons, coupon ->
             val rewardsToDelete = coupon.rewards.fold(
                 mutableListOf<Reward>()
             ) { rewards, reward ->
@@ -97,13 +124,13 @@ class CouponServiceImpl(
                     // if they do, remove the reward product entry
                     reward.products.remove(product)
                 } else {
-                    // if they dont, remove the reward
+                    // if they don't, remove the reward
                     rewards.add(reward)
                 }
                 rewards
             }
 
-            rewardsToDelete.forEach { coupon.rewards.remove(it) }
+            coupon.rewards.removeAll(rewardsToDelete)
 
             // if all rewards have been removed for a coupon, delete it as well
             if (coupon.rewards.isEmpty()) {
@@ -117,9 +144,8 @@ class CouponServiceImpl(
     }
 
     override fun removeDeletedProductGroupFromCoupons(productGroup: ProductGroup) {
-
-        // get coupons which have this product group as eligible TODO
-        val couponsWithEligibleProductGroup = emptyList<Coupon>()
+        // get coupons which have this product group as eligible
+        val couponsWithEligibleProductGroup = couponRepository.findCouponsWithEligibleProductGroup(productGroup)
         val couponsToDeleteAsNoEligibles = couponsWithEligibleProductGroup.fold(
             mutableListOf<Coupon>()
         ) { coupons, coupon ->
@@ -128,7 +154,7 @@ class CouponServiceImpl(
                 // if they do, remove the eligible product group entry
                 coupon.eligibleProductGroups.remove(productGroup)
             } else {
-                // if they dont, remove the coupon
+                // if they don't, remove the coupon
                 coupons.add(coupon)
             }
             coupons
@@ -137,34 +163,41 @@ class CouponServiceImpl(
         couponRepository.deleteAll(couponsToDeleteAsNoEligibles)
 
         // get coupons which have this product group as a reward
-        val couponsWithRewardProductGroup = emptyList<Coupon>()
-        val couponsToDeleteAsNoRewards = couponsWithRewardProductGroup.fold(mutableListOf<Coupon>()) { coupons, coupon ->
-            val rewardsToDelete = coupon.rewards.fold(
-                mutableListOf<Reward>()
-            ) { rewards, reward ->
-                // check if they have other reward entries
-                if (reward.hasMoreRewardProductGroupsOrAnyProducts()) {
-                    // if they do, remove the reward product group entry
-                    reward.productGroups.remove(productGroup)
-                } else {
-                    // if they dont, remove the reward
-                    rewards.add(reward)
+        val couponsWithRewardProductGroup = couponRepository.findCouponsWithRewardProductGroup(productGroup)
+        val couponsToDeleteAsNoRewards =
+            couponsWithRewardProductGroup.fold(
+                mutableListOf<Coupon>()
+            ) { coupons, coupon ->
+                val rewardsToDelete = coupon.rewards.fold(
+                    mutableListOf<Reward>()
+                ) { rewards, reward ->
+                    // check if they have other reward entries
+                    if (reward.hasMoreRewardProductGroupsOrAnyProducts()) {
+                        // if they do, remove the reward product group entry
+                        reward.productGroups.remove(productGroup)
+                    } else {
+                        // if they don't, remove the reward
+                        rewards.add(reward)
+                    }
+                    rewards
                 }
-                rewards
+
+                coupon.rewards.removeAll(rewardsToDelete)
+
+                // if all rewards have been removed for a coupon, delete it as well
+                if (coupon.rewards.isEmpty()) {
+                    coupons.add(coupon)
+                }
+
+                coupons
             }
-
-            rewardsToDelete.forEach { coupon.rewards.remove(it) }
-
-            // if all rewards have been removed for a coupon, delete it as well
-            if (coupon.rewards.isEmpty()) {
-                coupons.add(coupon)
-            }
-
-            coupons
-        }
 
         couponRepository.deleteAll(couponsToDeleteAsNoRewards)
     }
+
+    override fun getRelevantCouponsFor(product: Product) =
+        couponRepository.findCouponsWithEligibleProduct(product) +
+                couponRepository.findCouponsWithEligibleProductInEligibleProductGroups(product)
 
     private fun getProductsByIds(ids: Collection<Long>): List<Product> {
         val products = productRepository.findAllById(ids)
@@ -181,62 +214,4 @@ class CouponServiceImpl(
         }
         return productGroups
     }
-
-    private fun convertToEligibleProducts(
-        eligibleProducts: Array<EligibleProductRequest>
-    ): EligibleProducts {
-        val ids = eligibleProducts.map { it.id }
-        val products = getProductsByIds(ids)
-
-        return products.mapIndexed { index, product ->
-            product to eligibleProducts[index].points
-        }.toMutableMap()
-    }
-
-    private fun convertToEligibleProductGroups(
-        eligibleProductGroups: Array<EligibleProductGroupRequest>
-    ): EligibleProductGroups {
-        val ids = eligibleProductGroups.map { it.id }
-        val productGroups = getProductGroupsByIds(ids)
-
-        return productGroups.mapIndexed { index, productGroup ->
-            productGroup to eligibleProductGroups[index].points
-        }.toMutableMap()
-    }
-
-    private fun convertToProductRewards(
-        productRewards: Array<ProductRewardRequest>
-    ): ProductRewards {
-        val ids = productRewards.map { it.id }
-        val products = getProductsByIds(ids)
-        return products.mapIndexed { index, product ->
-            product to productRewards[index].amount
-        }.toMutableMap()
-    }
-
-    private fun convertToProductGroupRewards(
-        productGroupRewards: Array<ProductGroupRewardRequest>
-    ): ProductGroupRewards {
-        val ids = productGroupRewards.map { it.id }
-        val productGroups = getProductGroupsByIds(ids)
-        return productGroups.mapIndexed { index, productGroup ->
-            productGroup to productGroupRewards[index].amount
-        }.toMutableMap()
-    }
-
-    private fun CouponCreateRequest.toCouponWithoutRewards() = Coupon(
-        name = name,
-        type = type.toCouponType(),
-        eligibleProducts = convertToEligibleProducts(eligibleItems.products),
-        eligibleProductGroups = convertToEligibleProductGroups(eligibleItems.productGroups)
-    )
-
-    private fun RewardRequest.toReward(owner: Coupon) = Reward(
-        threshold = threshold,
-        discountType = discountType.toDiscountType(),
-        discount = discount,
-        products = convertToProductRewards(products),
-        productGroups = convertToProductGroupRewards(productGroups),
-        coupon = owner
-    )
 }

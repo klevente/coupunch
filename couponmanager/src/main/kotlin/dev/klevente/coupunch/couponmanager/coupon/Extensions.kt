@@ -26,6 +26,24 @@ fun Coupon.getRedeemLevel(currentStanding: Double): Int {
     return level
 }
 
+fun Coupon.getMergedEligibleProducts(): Map<Product, Int?> {
+    val res = mutableMapOf<Product, Int?>()
+    eligibleProductGroups.entries.forEach { (key, value) ->
+        key.products.forEach { product -> res[product] = value }
+    }
+    res.putAll(eligibleProducts)
+    return res
+}
+
+fun Coupon.getProgressFor(product: Product): Double {
+    return when (type) {
+        CouponType.POINT -> {
+           getMergedEligibleProducts()[product]!!.toDouble()
+        }
+        CouponType.PRICE -> product.price
+    }
+}
+
 fun Reward.getMergedProducts(): Map<Product, Int> {
     val res = mutableMapOf<Product, Int>()
     productGroups.entries.forEach { (key, value) ->
@@ -34,3 +52,7 @@ fun Reward.getMergedProducts(): Map<Product, Int> {
     res.putAll(products)
     return res
 }
+
+fun Map.Entry<Coupon, Double>.isRedeemable() = key.isRedeemable(value)
+
+fun Map.Entry<Coupon, Double>.getRedeemLevel(): Int = key.getRedeemLevel(value)

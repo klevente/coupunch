@@ -17,30 +17,36 @@ class ProductGroupServiceImpl(
         ?: throw EntityNotFoundException.byId(ProductGroup::class, id)
 
     @Transactional
-    override fun addProductGroup(request: ProductGroupCreateRequest): ProductGroup {
+    override fun addProductGroup(request: ProductGroupCreateRequest): ProductGroupResponse {
         val group = productGroupRepository.save(
             ProductGroup(
                 name = request.name
             )
         )
 
-        return group
+        return group.toResponse()
     }
 
     @Transactional
-    override fun updateProductGroup(id: Long, request: ProductGroupUpdateRequest) {
+    override fun updateProductGroup(id: Long, request: ProductGroupUpdateRequest): ProductGroupResponse {
         val group = getProductGroup(id)
 
         group.apply {
             name = request.name
         }
+
+        return group.toResponse()
     }
 
     @Transactional
-    override fun deleteProductGroup(id: Long) {
+    override fun deleteProductGroup(id: Long): ProductGroupResponse {
         val group = getProductGroup(id)
+        val ret = group.toResponse()
+
         group.products.forEach { it.group = null }
         productGroupRepository.delete(group)
+
+        return ret
     }
 
     override fun getProductGroupResponse(id: Long) = getProductGroup(id).toResponse()

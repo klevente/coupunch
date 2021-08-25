@@ -1,33 +1,35 @@
 package dev.klevente.coupunch.couponmanager.product
 
+import dev.klevente.coupunch.couponmanager.product.dto.ProductGroupCreateRequest
+import dev.klevente.coupunch.couponmanager.product.dto.ProductGroupUpdateRequest
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/product-groups")
-class ProductGroupController {
-
+class ProductGroupController(
+    private val productGroupService: ProductGroupService
+) {
     @GetMapping
-    fun getProductGroups() {
+    fun getProductGroups() = productGroupService.getProductGroupsResponse()
 
-    }
+    @GetMapping("{productGroupId}")
+    fun getProductGroup(
+        @PathVariable productGroupId: Long
+    ) = productGroupService.getProductGroupResponse(productGroupId)
 
     @PostMapping
-    fun addProductGroup() {
+    fun addProductGroup(
+        @RequestBody request: ProductGroupCreateRequest
+    ) = productGroupService.addProductGroup(request)
 
-    }
+    @PutMapping("{productGroupId}")
+    fun updateProductGroup(
+        @PathVariable productGroupId: Long,
+        @RequestBody request: ProductGroupUpdateRequest
+    ) = productGroupService.updateProductGroup(productGroupId, request)
 
-    @GetMapping("{groupId}")
-    fun getProductGroup(@PathVariable groupId: Long) {
-
-    }
-
-    @PutMapping("{groupId}")
-    fun updateProductGroup(@PathVariable groupId: Long) {
-
-    }
-
-    @DeleteMapping("{groupId}")
-    fun deleteProductGroup(@PathVariable groupId: Long) {
-
-    }
+    @DeleteMapping("{productGroupId}")
+    fun deleteProductGroup(
+        @PathVariable productGroupId: Long
+    ) = productGroupService.deleteProductGroup(productGroupId)
 }

@@ -22,7 +22,7 @@ class CustomerServiceImpl(
     override fun getCompanyCustomers() = customerRepository.findAll().toResponse()
 
     @Transactional
-    override fun addCustomer(request: CustomerAddRequest) {
+    override fun addCustomer(request: CustomerCreateRequest): CustomerResponse {
         val customer = customerRepository.save(
             Customer(
                 id = request.id,
@@ -31,10 +31,12 @@ class CustomerServiceImpl(
                 code = request.code
             )
         )
+
+        return customer.toResponse()
     }
 
     @Transactional
-    override fun updateCustomer(id: Long, request: CustomerUpdateRequest) {
+    override fun updateCustomer(id: Long, request: CustomerUpdateRequest): CustomerResponse {
         val customer = getCustomer(id)
 
         customer.apply {
@@ -42,6 +44,8 @@ class CustomerServiceImpl(
             username = request.username
             code = request.code
         }
+
+        return customer.toResponse()
     }
 
     override fun getCouponsForCustomer(username: String) = getCustomerByUsername(username).coupons.toResponse()

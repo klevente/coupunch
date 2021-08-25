@@ -2,6 +2,7 @@ package dev.klevente.coupunch.couponmanager.product
 
 import dev.klevente.coupunch.couponmanager.coupon.CouponService
 import dev.klevente.coupunch.couponmanager.product.dto.ProductCreateRequest
+import dev.klevente.coupunch.couponmanager.product.dto.ProductResponse
 import dev.klevente.coupunch.couponmanager.product.dto.ProductUpdateRequest
 import dev.klevente.coupunch.couponmanager.product.dto.toResponse
 import dev.klevente.coupunch.library.exception.EntityNotFoundException
@@ -22,7 +23,7 @@ class ProductServiceImpl(
         productRepository.findByIdOrNull(id) ?: throw EntityNotFoundException.byId(Product::class, id)
 
     @Transactional
-    override fun addProduct(request: ProductCreateRequest): Product {
+    override fun addProduct(request: ProductCreateRequest): ProductResponse {
 
         val group = request.group?.let { productGroupService.getProductGroup(it) }
 
@@ -36,11 +37,11 @@ class ProductServiceImpl(
 
         group?.products?.add(product)
 
-        return product
+        return product.toResponse()
     }
 
     @Transactional
-    override fun updateProduct(id: Long, request: ProductUpdateRequest) {
+    override fun updateProduct(id: Long, request: ProductUpdateRequest): ProductResponse {
         val product = getProduct(id)
 
         val oldGroup = product.group
@@ -54,17 +55,19 @@ class ProductServiceImpl(
 
         oldGroup?.products?.remove(product)
         newGroup?.products?.add(product)
+
+        return product.toResponse()
     }
 
     @Transactional
-    override fun deleteProduct(id: Long) {
+    override fun deleteProduct(id: Long): ProductResponse {
         val product = getProduct(id)
+        val ret = product.toResponse()
 
         product.group?.products?.remove(product)
-
         productRepository.delete(product)
 
-
+        return ret
     }
 
     override fun getProductResponse(id: Long) = getProduct(id).toResponse()

@@ -1,7 +1,10 @@
 package dev.klevente.coupunch.couponmanager.coupon.dto
 
 import dev.klevente.coupunch.couponmanager.coupon.*
+import dev.klevente.coupunch.couponmanager.product.Product
+import dev.klevente.coupunch.couponmanager.product.ProductGroup
 import dev.klevente.coupunch.library.util.mapToArray
+import dev.klevente.coupunch.library.util.toMutableMap
 
 fun Collection<Coupon>.toResponse() = CouponsResponse(
     coupons = mapToArray { it.toResponse() }
@@ -61,3 +64,66 @@ fun ProductGroupRewards.toResponse() = mapToArray { (key, value) ->
         amount = value
     )
 }
+
+fun Array<EligibleProductRequest>.toDomain(
+    getProducts: (ids: List<Long>) -> List<Product>
+): EligibleProducts {
+    val ids = map { it.id }
+    val products = getProducts(ids)
+    return products.mapIndexed { index, product ->
+        product to this[index].points
+    }.toMutableMap()
+}
+
+fun Array<EligibleProductGroupRequest>.toDomain(
+    getProductGroups: (ids: List<Long>) -> List<ProductGroup>
+): EligibleProductGroups {
+    val ids = map { it.id }
+    val productGroups = getProductGroups(ids)
+    return productGroups.mapIndexed { index, productGroup ->
+        productGroup to this[index].points
+    }.toMutableMap()
+}
+
+fun Array<ProductRewardRequest>.toDomain(
+    getProducts: (ids: List<Long>) -> List<Product>
+): ProductRewards {
+    val ids = map { it.id }
+    val products = getProducts(ids)
+    return products.mapIndexed { index, product ->
+        product to this[index].amount
+    }.toMutableMap()
+}
+
+fun Array<ProductGroupRewardRequest>.toDomain(
+    getProductGroups: (ids: List<Long>) -> List<ProductGroup>
+): ProductGroupRewards {
+    val ids = map { it.id }
+    val productGroups = getProductGroups(ids)
+    return productGroups.mapIndexed { index, productGroup ->
+        productGroup to this[index].amount
+    }.toMutableMap()
+}
+
+fun CouponCreateRequest.toCouponWithoutRewards(
+    getProducts: (ids: List<Long>) -> List<Product>,
+    getProductGroups: (ids: List<Long>) -> List<ProductGroup>
+) = Coupon(
+    name = name,
+    type = type.toCouponType(),
+    eligibleProducts = eligibleItems.products.toDomain(getProducts),
+    eligibleProductGroups = eligibleItems.productGroups.toDomain(getProductGroups)
+)
+
+fun RewardRequest.toReward(
+    owner: Coupon,
+    getProducts: (ids: List<Long>) -> List<Product>,
+    getProductGroups: (ids: List<Long>) -> List<ProductGroup>
+) = Reward(
+    threshold = threshold,
+    discountType = discountType.toDiscountType(),
+    discount = discount,
+    products = products.toDomain(getProducts),
+    productGroups = productGroups.toDomain(getProductGroups),
+    coupon = owner
+)

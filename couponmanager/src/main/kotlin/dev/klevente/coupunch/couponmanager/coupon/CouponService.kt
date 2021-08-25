@@ -10,11 +10,11 @@ import dev.klevente.coupunch.couponmanager.product.ProductGroup
 interface CouponService {
     fun getCoupon(id: Long): Coupon
 
-    fun addCoupon(request: CouponCreateRequest): Coupon
+    fun addCoupon(request: CouponCreateRequest): CouponResponse
 
-    fun updateCoupon(id: Long, request: CouponUpdateRequest)
+    fun updateCoupon(id: Long, request: CouponUpdateRequest): CouponResponse
 
-    fun deleteCoupon(id: Long)
+    fun deleteCoupon(id: Long): CouponResponse
 
     fun getCouponResponse(id: Long): CouponResponse
 
@@ -23,4 +23,6 @@ interface CouponService {
     fun removeDeletedProductFromCoupons(product: Product)
 
     fun removeDeletedProductGroupFromCoupons(productGroup: ProductGroup)
+
+    fun getRelevantCouponsFor(product: Product): Set<Coupon>
 }

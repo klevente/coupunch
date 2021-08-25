@@ -10,9 +10,9 @@ interface CustomerService {
 
     fun getCompanyCustomers(): CustomersResponse
 
-    fun addCustomer(request: CustomerAddRequest)
+    fun addCustomer(request: CustomerCreateRequest): CustomerResponse
 
-    fun updateCustomer(id: Long, request: CustomerUpdateRequest)
+    fun updateCustomer(id: Long, request: CustomerUpdateRequest): CustomerResponse
 
     fun getCouponsForCustomer(username: String): CustomerCouponsResponse
 
