@@ -7,29 +7,29 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/products")
 class ProductController(
-    private val productService: ProductService
+    private val productActions: ProductActions
 ) {
     @GetMapping
-    fun getProducts() = productService.getProductsResponse()
+    fun getProducts() = productActions.getProductsResponse()
 
     @GetMapping("{productId}")
     fun getProduct(
         @PathVariable productId: Long
-    ) = productService.getProductResponse(productId)
+    ) = productActions.getProductResponse(productId)
 
     @PostMapping
     fun addProduct(
         @RequestBody request: ProductCreateRequest
-    ) = productService.addProduct(request)
+    ) = productActions.addProduct(request)
 
     @PutMapping("{productId}")
     fun updateProduct(
         @PathVariable productId: Long,
         @RequestBody request: ProductUpdateRequest
-    ) = productService.updateProduct(productId, request)
+    ) = productActions.updateProduct(productId, request)
 
     @DeleteMapping("{productId}")
     fun deleteProduct(
         @PathVariable productId: Long
-    ) = productService.deleteProduct(productId)
+    ) = productActions.deleteProduct(productId)
 }

@@ -19,7 +19,7 @@ class CheckoutServiceImpl(
     private val customerService: CustomerService,
     private val productService: ProductService,
     private val couponService: CouponService
-) : CheckoutService {
+) : CheckoutActions {
 
     @Transactional
     override fun checkout(username: String, request: CheckoutRequest): CheckoutResponse {

@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("checkout")
 class CheckoutController(
-    private val checkoutService: CheckoutService
+    private val checkoutActions: CheckoutActions
 ) {
     @PostMapping("{username}")
     fun checkout(
         @PathVariable username: String,
         @RequestBody request: CheckoutRequest
-    ) = checkoutService.checkout(username, request)
+    ) = checkoutActions.checkout(username, request)
 }

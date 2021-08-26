@@ -18,7 +18,7 @@ class ProductServiceImpl(
     private val productRepository: ProductRepository,
     private val productGroupService: ProductGroupService,
     private val couponService: CouponService
-) : ProductService {
+) : ProductActions, ProductService {
     override fun getProduct(id: Long) =
         productRepository.findByIdOrNull(id) ?: throw EntityNotFoundException.byId(Product::class, id)
 
@@ -63,6 +63,8 @@ class ProductServiceImpl(
     override fun deleteProduct(id: Long): ProductResponse {
         val product = getProduct(id)
         val ret = product.toResponse()
+
+        couponService.removeDeletedProductFromCoupons(product)
 
         product.group?.products?.remove(product)
         productRepository.delete(product)

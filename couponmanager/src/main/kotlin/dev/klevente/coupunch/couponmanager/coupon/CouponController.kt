@@ -7,29 +7,29 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/coupons")
 class CouponController(
-    private val couponService: CouponService
+    private val couponActions: CouponActions
 ) {
     @GetMapping
-    fun getCoupons() = couponService.getCouponsResponse()
+    fun getCoupons() = couponActions.getCouponsResponse()
 
     @GetMapping("{couponId}")
     fun getCoupon(
         @PathVariable couponId: Long
-    ) = couponService.getCouponResponse(couponId)
+    ) = couponActions.getCouponResponse(couponId)
 
     @PostMapping
     fun addCoupon(
         @RequestBody request: CouponCreateRequest
-    ) = couponService.addCoupon(request)
+    ) = couponActions.addCoupon(request)
 
     @PutMapping("{couponId}")
     fun updateCoupon(
         @PathVariable couponId: Long,
         @RequestBody request: CouponUpdateRequest
-    ) = couponService.updateCoupon(couponId, request)
+    ) = couponActions.updateCoupon(couponId, request)
 
     @DeleteMapping("{couponId}")
     fun deleteCoupon(
         @PathVariable couponId: Long
-    ) = couponService.deleteCoupon(couponId)
+    ) = couponActions.deleteCoupon(couponId)
 }

@@ -1,5 +1,6 @@
 package dev.klevente.coupunch.couponmanager.product
 
+import dev.klevente.coupunch.couponmanager.coupon.CouponService
 import dev.klevente.coupunch.couponmanager.product.dto.*
 import dev.klevente.coupunch.library.exception.EntityNotFoundException
 import org.slf4j.Logger
@@ -11,40 +12,43 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 class ProductGroupServiceImpl(
     private val log: Logger,
-    private val productGroupRepository: ProductGroupRepository
-) : ProductGroupService {
+    private val productGroupRepository: ProductGroupRepository,
+    private val couponService: CouponService
+) : ProductGroupActions, ProductGroupService {
     override fun getProductGroup(id: Long) = productGroupRepository.findByIdOrNull(id)
         ?: throw EntityNotFoundException.byId(ProductGroup::class, id)
 
     @Transactional
     override fun addProductGroup(request: ProductGroupCreateRequest): ProductGroupResponse {
-        val group = productGroupRepository.save(
+        val productGroup = productGroupRepository.save(
             ProductGroup(
                 name = request.name
             )
         )
 
-        return group.toResponse()
+        return productGroup.toResponse()
     }
 
     @Transactional
     override fun updateProductGroup(id: Long, request: ProductGroupUpdateRequest): ProductGroupResponse {
-        val group = getProductGroup(id)
+        val productGroup = getProductGroup(id)
 
-        group.apply {
+        productGroup.apply {
             name = request.name
         }
 
-        return group.toResponse()
+        return productGroup.toResponse()
     }
 
     @Transactional
     override fun deleteProductGroup(id: Long): ProductGroupResponse {
-        val group = getProductGroup(id)
-        val ret = group.toResponse()
+        val productGroup = getProductGroup(id)
+        val ret = productGroup.toResponse()
 
-        group.products.forEach { it.group = null }
-        productGroupRepository.delete(group)
+        couponService.removeDeletedProductGroupFromCoupons(productGroup)
+
+        productGroup.products.forEach { it.group = null }
+        productGroupRepository.delete(productGroup)
 
         return ret
     }

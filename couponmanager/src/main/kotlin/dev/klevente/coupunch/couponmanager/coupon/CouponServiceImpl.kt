@@ -17,7 +17,7 @@ class CouponServiceImpl(
     private val rewardRepository: RewardRepository,
     private val productRepository: ProductRepository,
     private val productGroupRepository: ProductGroupRepository
-) : CouponService {
+) : CouponActions, CouponService {
 
     override fun getCoupon(id: Long) =
         couponRepository.findByIdOrNull(id) ?: throw EntityNotFoundException.byId(Coupon::class, id)

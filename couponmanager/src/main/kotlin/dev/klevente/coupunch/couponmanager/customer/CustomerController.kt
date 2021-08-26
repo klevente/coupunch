@@ -7,29 +7,29 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/customers")
 class CustomerController(
-    private val customerService: CustomerService
+    private val customerActions: CustomerActions
 ) {
     @GetMapping
-    fun getCustomers() = customerService.getCompanyCustomers()
+    fun getCustomers() = customerActions.getCompanyCustomers()
 
     @PostMapping
     fun addCustomer(
         @RequestBody request: CustomerCreateRequest
-    ) = customerService.addCustomer(request)
+    ) = customerActions.addCustomer(request)
 
     @PutMapping("{customerId}")
     fun updateCustomer(
         @PathVariable customerId: Long,
         @RequestBody request: CustomerUpdateRequest
-    ) = customerService.updateCustomer(customerId, request)
+    ) = customerActions.updateCustomer(customerId, request)
 
     @GetMapping("qr/{code}")
     fun getCustomerFromQrCode(
         @PathVariable code: String
-    ) = customerService.getCustomerFromQrCode(code)
+    ) = customerActions.getCustomerFromQrCode(code)
 
     @GetMapping("{username}/coupons")
     fun getCustomerCoupons(
         @PathVariable username: String
-    ) = customerService.getCouponsForCustomer(username)
+    ) = customerActions.getCouponsForCustomer(username)
 }

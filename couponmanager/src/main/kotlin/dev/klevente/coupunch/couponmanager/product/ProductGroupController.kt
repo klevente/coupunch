@@ -7,29 +7,29 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/product-groups")
 class ProductGroupController(
-    private val productGroupService: ProductGroupService
+    private val productGroupActions: ProductGroupActions
 ) {
     @GetMapping
-    fun getProductGroups() = productGroupService.getProductGroupsResponse()
+    fun getProductGroups() = productGroupActions.getProductGroupsResponse()
 
     @GetMapping("{productGroupId}")
     fun getProductGroup(
         @PathVariable productGroupId: Long
-    ) = productGroupService.getProductGroupResponse(productGroupId)
+    ) = productGroupActions.getProductGroupResponse(productGroupId)
 
     @PostMapping
     fun addProductGroup(
         @RequestBody request: ProductGroupCreateRequest
-    ) = productGroupService.addProductGroup(request)
+    ) = productGroupActions.addProductGroup(request)
 
     @PutMapping("{productGroupId}")
     fun updateProductGroup(
         @PathVariable productGroupId: Long,
         @RequestBody request: ProductGroupUpdateRequest
-    ) = productGroupService.updateProductGroup(productGroupId, request)
+    ) = productGroupActions.updateProductGroup(productGroupId, request)
 
     @DeleteMapping("{productGroupId}")
     fun deleteProductGroup(
         @PathVariable productGroupId: Long
-    ) = productGroupService.deleteProductGroup(productGroupId)
+    ) = productGroupActions.deleteProductGroup(productGroupId)
 }

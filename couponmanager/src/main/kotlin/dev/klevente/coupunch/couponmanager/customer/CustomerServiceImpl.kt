@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 class CustomerServiceImpl(
     private val log: Logger,
     private val customerRepository: CustomerRepository
-) : CustomerService {
+) : CustomerActions, CustomerService {
     override fun getCustomer(id: Long) =
         customerRepository.findByIdOrNull(id) ?: throw EntityNotFoundException.byId(Customer::class, id)
 
