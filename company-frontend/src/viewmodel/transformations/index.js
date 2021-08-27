@@ -1,12 +1,16 @@
 import { derived } from 'svelte/store';
 import { isIterable } from '../../util/iterable';
 import { resolve } from '../../util/resolve';
-import { asArray, isArray } from '../../util/array';
+import { asArray } from '../../util/array';
 
 function throwIfNotIterable(dataStore) {
     if (!isIterable(dataStore.data)) {
         throw new TypeError('Supplied data store does not contain an iterable resource.');
     }
+}
+
+function notSuccess(dataStore) {
+    return !dataStore.success;
 }
 
 function hasNoValidData(dataStore) {
@@ -27,7 +31,7 @@ export function addFront({
     items = asArray(items);
 
     return derived(dataStore, $dataStore => {
-        if (hasNoValidData($dataStore)) {
+        if (notSuccess($dataStore)) {
             return $dataStore;
         }
         throwIfNotIterable($dataStore);
@@ -45,7 +49,7 @@ export function addBack({
     items = asArray(items);
 
     return derived(dataStore, $dataStore => {
-        if (hasNoValidData($dataStore)) {
+        if (notSuccess($dataStore)) {
             return $dataStore;
         }
         throwIfNotIterable($dataStore);

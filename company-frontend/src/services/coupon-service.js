@@ -1,18 +1,15 @@
-import { create } from '@beyonk/sapper-httpclient';
 import { company } from './companyurl';
-import { isFunction } from '../util/function';
+import BaseService from './base-service';
 
-const api = create();
-
-export default class CouponService {
+export default class CouponService extends BaseService {
     static async get() {
-        return await api
+        return await CouponService.api
             .endpoint(company(`coupons`))
-            .get(json => json.coupons);
+            .get(({ coupons }) => coupons);
     }
 
     static async add(coupon, fetchCallback) {
-        const newCoupon = await api
+        const newCoupon = await CouponService.api
             .endpoint(company(`coupons`))
             .payload(coupon)
             .post();
@@ -21,7 +18,7 @@ export default class CouponService {
     }
 
     static async update(coupon, fetchCallback) {
-        const updatedCoupon = await api
+        const updatedCoupon = await CouponService.api
             .endpoint(company(`coupons/${coupon.id}`))
             .payload(coupon)
             .put();
@@ -30,14 +27,12 @@ export default class CouponService {
     }
 
     static async delete(coupon, fetchCallback) {
-        const deleteCoupon = await api
+        const deleteCoupon = await CouponService.api
             .endpoint(company(`coupons/${coupon.id}`))
             .del();
         CouponService._cb(fetchCallback);
         return deleteCoupon;
     }
 
-    static _cb(fetchCallback) {
-        CouponService.get().then(fetchCallback);
-    }
+    static _cb = CouponService._createCallback(CouponService.get);
 }

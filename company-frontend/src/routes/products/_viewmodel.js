@@ -2,6 +2,8 @@ import BaseViewmodel from '../../viewmodel/base-viewmodel';
 import { action, dataStore, stateStore } from '../../viewmodel';
 import ProductService from '../../services/mock/product-service';
 import ProductGroupService from '../../services/mock/product-group-service';
+/*import ProductService from '../../services/product-service';
+import ProductGroupService from '../../services/product-group-service';*/
 import { categorized, filtered, sorted, mapped, addFront } from '../../viewmodel/transformations';
 import { categoryStore, searchStore, sortByStore } from '../../viewmodel/transformations/stores';
 

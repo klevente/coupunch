@@ -1,11 +1,10 @@
-import { goto } from '@sapper/app';
 import Api from '@beyonk/sapper-httpclient';
 
 export function initApi() {
     Api.configure({
         baseUrl: '/api',
         parseErrors: false,
-        handlers: {
+        /*handlers: {
             accessDenied: error => {
                 console.error(error);
                 goto('/logout');
@@ -13,6 +12,6 @@ export function initApi() {
             default: error => {
                 console.error(error);
             }
-        }
+        }*/
     });
 }

@@ -1,18 +1,15 @@
-import { create } from '@beyonk/sapper-httpclient';
 import { company } from './companyurl';
-import { isFunction } from '../util/function';
+import BaseService from './base-service';
 
-const api = create();
-
-export default class ProductGroupService {
+export default class ProductGroupService extends BaseService {
     static async get() {
-        return await api
+        return await ProductGroupService.api
             .endpoint(company(`product-groups`))
-            .get(json => json.productGroups)
+            .get(({ productGroups }) => productGroups)
     }
 
     static async add(productGroup, fetchCallback) {
-        const newProductGroup = await api
+        const newProductGroup = await ProductGroupService.api
             .endpoint(company(`product-groups`))
             .payload(productGroup)
             .post();
@@ -21,7 +18,7 @@ export default class ProductGroupService {
     }
 
     static async update(productGroup, fetchCallback) {
-        const updatedProductGroup = await api
+        const updatedProductGroup = await ProductGroupService.api
             .endpoint(company(`product-groups/${productGroup.id}`))
             .payload(productGroup)
             .put();
@@ -30,7 +27,7 @@ export default class ProductGroupService {
     }
 
     static async delete(productGroup, fetchCallback) {
-        const deletedProductGroup = await api
+        const deletedProductGroup = await ProductGroupService.api
             .endpoint(company(`product-groups/${productGroup.id}`))
             .payload(productGroup)
             .del();
@@ -38,7 +35,9 @@ export default class ProductGroupService {
         return deletedProductGroup;
     }
 
-    static _cb(fetchCallback) {
+    /*static _cb(fetchCallback) {
         ProductGroupService.get().then(fetchCallback);
-    }
+    }*/
+
+    static _cb = ProductGroupService._createCallback(ProductGroupService.get);
 }

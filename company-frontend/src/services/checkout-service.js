@@ -1,12 +1,10 @@
-import { create } from '@beyonk/sapper-httpclient';
 import { company } from './companyurl';
+import BaseService from './base-service';
 
-const api = create();
-
-export default class CheckoutService {
+export default class CheckoutService extends BaseService {
     static async checkout(username, basket) {
         // TODO: handle errors
-        await api
+        await CheckoutService.api
             .endpoint(company(`checkout/${username}`))
             .payload(basket)
             .post();
