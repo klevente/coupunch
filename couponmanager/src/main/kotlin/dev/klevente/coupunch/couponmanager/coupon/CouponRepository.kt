@@ -23,8 +23,7 @@ interface CouponRepository : JpaRepository<Coupon, Long> {
             "where ?1 in (key(g))")
     fun findCouponsWithRewardProductGroup(productGroup: ProductGroup): Set<Coupon>
 
-    /*@Query("select c from Coupon c join c.eligibleProductGroups g join (key(g)).products p " +
-            "where ?1 = p")*/
-    /*@Query("select c from Coupon c join c.eligibleProductGroups g join  ")*/
-    // fun findCouponsWithEligibleProductInEligibleProductGroups(product: Product): Set<Coupon>
+    @Query("select c from Coupon c join c.eligibleProductGroups g join Product p on key(g) = p " +
+            "where ?1 = p")
+    fun findCouponsWithEligibleProductInEligibleProductGroups(product: Product): Set<Coupon>
 }

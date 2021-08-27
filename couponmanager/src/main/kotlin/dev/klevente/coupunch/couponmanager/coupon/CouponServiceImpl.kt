@@ -196,8 +196,8 @@ class CouponServiceImpl(
     }
 
     override fun getRelevantCouponsFor(product: Product) =
-        couponRepository.findCouponsWithEligibleProduct(product) // +
-                // couponRepository.findCouponsWithEligibleProductInEligibleProductGroups(product)
+        couponRepository.findCouponsWithEligibleProduct(product) +
+                couponRepository.findCouponsWithEligibleProductInEligibleProductGroups(product)
 
     private fun getProductsByIds(ids: Collection<Long>): List<Product> {
         val products = productRepository.findAllById(ids)
