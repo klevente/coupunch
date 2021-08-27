@@ -1,6 +1,7 @@
 package dev.klevente.coupunch.couponmanager.product
 
 import dev.klevente.coupunch.couponmanager.product.dto.ProductCreateRequest
+import dev.klevente.coupunch.couponmanager.product.dto.ProductResponse
 import dev.klevente.coupunch.couponmanager.product.dto.ProductUpdateRequest
 import org.springframework.web.bind.annotation.*
 

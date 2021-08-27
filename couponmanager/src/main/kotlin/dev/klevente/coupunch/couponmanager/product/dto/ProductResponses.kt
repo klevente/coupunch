@@ -1,7 +1,7 @@
 package dev.klevente.coupunch.couponmanager.product.dto
 
 class ProductsResponse(
-    products: Array<ProductResponse>
+    val products: Array<ProductResponse>
 )
 
 class ProductResponse(

@@ -1,10 +1,7 @@
 package dev.klevente.coupunch.couponmanager.product
 
 import dev.klevente.coupunch.couponmanager.coupon.CouponService
-import dev.klevente.coupunch.couponmanager.product.dto.ProductCreateRequest
-import dev.klevente.coupunch.couponmanager.product.dto.ProductResponse
-import dev.klevente.coupunch.couponmanager.product.dto.ProductUpdateRequest
-import dev.klevente.coupunch.couponmanager.product.dto.toResponse
+import dev.klevente.coupunch.couponmanager.product.dto.*
 import dev.klevente.coupunch.library.exception.EntityNotFoundException
 import org.slf4j.Logger
 import org.springframework.data.repository.findByIdOrNull
