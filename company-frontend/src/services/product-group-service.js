@@ -1,50 +1,41 @@
-import { sleepRandom } from '../util/sleep';
-import { companyUrl } from './companyurl';
+import { create } from '@beyonk/sapper-httpclient';
+import { company } from './companyurl';
+import { isFunction } from '../util/function';
 
-export let dummyGroups = [
-    {
-        id: 1,
-        name: 'coffee',
-    },
-    {
-        id: 2,
-        name: 'food',
-    }
-];
-let cnt = 3;
+const api = create();
 
 export default class ProductGroupService {
-
     static async get() {
-        await sleepRandom();
-        return [...dummyGroups];
+        return await api
+            .endpoint(company(`product-groups`))
+            .get(json => json.productGroups)
     }
 
     static async add(productGroup, fetchCallback) {
-        await sleepRandom();
-        const serverProductGroup = {
-            id: cnt++,
-            ...productGroup
-        };
-        dummyGroups.push(serverProductGroup);
+        const newProductGroup = await api
+            .endpoint(company(`product-groups`))
+            .payload(productGroup)
+            .post();
         ProductGroupService._cb(fetchCallback);
-        return serverProductGroup;
+        return newProductGroup;
     }
 
     static async update(productGroup, fetchCallback) {
-        await sleepRandom();
-        const idx = dummyGroups.findIndex(({ id }) => id === productGroup.id);
-        dummyGroups[idx] = productGroup;
+        const updatedProductGroup = await api
+            .endpoint(company(`product-groups/${productGroup.id}`))
+            .payload(productGroup)
+            .put();
         ProductGroupService._cb(fetchCallback);
-        return productGroup;
+        return updatedProductGroup;
     }
 
     static async delete(productGroup, fetchCallback) {
-        await sleepRandom();
-        const idToDelete = productGroup.id;
-        dummyGroups = dummyGroups.filter(({ id }) => id !== idToDelete);
+        const deletedProductGroup = await api
+            .endpoint(company(`product-groups/${productGroup.id}`))
+            .payload(productGroup)
+            .del();
         ProductGroupService._cb(fetchCallback);
-        return productGroup;
+        return deletedProductGroup;
     }
 
     static _cb(fetchCallback) {

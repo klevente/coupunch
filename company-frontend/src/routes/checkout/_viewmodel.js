@@ -4,7 +4,7 @@ import { throttlePromise } from '../../util/throttle';
 import { action, dataStore, stateStore } from '../../viewmodel';
 import { searchStore, sortByStore } from '../../viewmodel/transformations/stores';
 import { filtered, sorted } from '../../viewmodel/transformations';
-import CustomerService from '../../services/customer-service';
+import CustomerService from '../../services/mock/customer-service';
 
 export default class Viewmodel extends BaseViewmodel {
     #customers = dataStore();

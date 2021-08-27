@@ -12,3 +12,7 @@ export function updateCompanyUrl() {
 export function companyUrl() {
     return _companyUrl;
 }
+
+export function company(endpoint) {
+    return `${companyUrl()}/${endpoint}`;
+}

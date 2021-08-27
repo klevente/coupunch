@@ -2,8 +2,8 @@ import { writable, get } from 'svelte/store';
 import BaseViewmodel from '../../../viewmodel/base-viewmodel';
 import { action, dataStore, stateStore } from '../../../viewmodel';
 import { searchStore, sortByStore } from '../../../viewmodel/transformations/stores';
-import ProductService from '../../../services/product-service';
-import CouponService from '../../../services/coupon-service';
+import ProductService from '../../../services/mock/product-service';
+import CouponService from '../../../services/mock/coupon-service';
 import { filteredAndSorted } from '../../../viewmodel/transformations';
 
 export default class Viewmodel extends BaseViewmodel {
