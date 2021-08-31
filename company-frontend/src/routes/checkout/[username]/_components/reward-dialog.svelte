@@ -25,7 +25,7 @@
 
 <Modal bind:open={modalOpen} noClickaway>
     {#if !!coupon}
-        <Dialog title={`Choose Reward for '${coupon.name}' - Level ${coupon.redeemLevel + 1}`}>
+        <Dialog title={`Choose Reward for '${coupon.name}' - Level ${coupon.redeemLevelToDisplay}`}>
             {#each coupon.rewards[coupon.redeemLevel].products as reward}
                 <div on:click={() => onRewardClick(reward)}>
                     {reward.name} {reward.amount} <s>${reward.originalPrice}</s> ${reward.discountedPrice}

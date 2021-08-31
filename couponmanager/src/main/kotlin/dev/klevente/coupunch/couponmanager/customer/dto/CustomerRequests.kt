@@ -8,19 +8,19 @@ class CustomerCreateRequest(
 
     @Positive
     @JsonProperty("id")
-    val _id: Long?,
+    private val _id: Long?,
 
     @NotBlank
     @JsonProperty("username")
-    val _username: String?,
+    private val _username: String?,
 
     @NotBlank
     @JsonProperty("name")
-    val _name: String?,
+    private val _name: String?,
 
     @NotBlank
     @JsonProperty("code")
-    val _code: String?
+    private val _code: String?
 ) {
     val id get() = _id!!
     val username get() = _username!!
@@ -31,15 +31,15 @@ class CustomerCreateRequest(
 class CustomerUpdateRequest(
     @NotBlank
     @JsonProperty("username")
-    val _username: String?,
+    private val _username: String?,
 
     @NotBlank
     @JsonProperty("name")
-    val _name: String?,
+    private val _name: String?,
 
     @NotBlank
     @JsonProperty("code")
-    val _code: String?
+    private val _code: String?
 ) {
     val username get() = _username!!
     val name get() = _name!!

@@ -55,7 +55,7 @@ class CouponRedeemResponse(
     val id: Long,
     val name: String,
     val type: String,
-    val currentStanding: Double,
+    val progress: Double,
     val redeemable: Boolean,
     val redeemLevel: Int,
     val rewards: Array<RewardRedeemResponse>

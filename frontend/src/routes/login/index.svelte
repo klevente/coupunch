@@ -14,7 +14,7 @@
     });
 
     const { form } = createForm({
-        extend: [validator, reporter],
+        extend: [validator, reporter()],
         validateSchema: schema,
         onSubmit: values => {
             console.log(values);

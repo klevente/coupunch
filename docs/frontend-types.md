@@ -97,7 +97,7 @@ Below are the types required for handling coupons during redeeming.
         id: number;
         name: string;
         type: CouponType;
-        currentStanding: number; // stores the accumulated points or price the customer has acquired up to this point
+        progress: number; // stores the accumulated points or price the customer has acquired up to this point
         redeemable: boolean; // true if the coupon can be redeemed at any level
         redeemLevel: number; // stores the current reward level that can be redeemed, -1 if not redeemable
         rewards: Reward[]; // ordered list of reward levels: the thresholds must be increasing throughout

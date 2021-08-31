@@ -27,14 +27,14 @@ export default class CustomerService extends BaseService {
     static async getCustomerByQrCode(uuid) {
         // TODO: handle error when customer is not found
         let customer = await CustomerService.api
-            .endpoint(company(`customers/${uuid}`))
+            .endpoint(company(`customers/qr/${uuid}`))
             .get();
 
         let newlyAdded = false;
         if (!customer) {
             // TODO: handle error when customer is not found globally
             customer = await CustomerService.api
-                .endpoint(`users/code/${uuid}`)
+                .endpoint(`users/qr/${uuid}`)
                 .get();
             newlyAdded = true;
         }

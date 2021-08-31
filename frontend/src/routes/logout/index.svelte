@@ -3,13 +3,14 @@
     export async function preload(page, session) {
         const api = create();
         await api
-            .transport(this.fetch)
+            .context(this)
             .endpoint('users/logout')
             .post();
     }
 </script>
 
 <script>
+    import { onMount } from 'svelte';
     import { goto, stores } from '@sapper/app';
 
     const { session } = stores();
@@ -19,6 +20,10 @@
             scope: [],
         }
     });
-    goto('/');
+
+    // goto('/');
+    onMount(() => {
+        window.location.href = '/';
+    });
 
 </script>

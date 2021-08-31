@@ -1,8 +1,8 @@
-diff --git a/node_modules/@beyonk/sapper-httpclient/lib/api/api.js b/node_modules/@beyonk/sapper-httpclient/lib/api/api.js
-index 886091f..ede436b 100644
---- a/node_modules/@beyonk/sapper-httpclient/lib/api/api.js
-+++ b/node_modules/@beyonk/sapper-httpclient/lib/api/api.js
-@@ -20,6 +20,7 @@ class ApiBase {
+diff --git a/node_modules/@beyonk/sapper-httpclient/lib/api/index.js b/node_modules/@beyonk/sapper-httpclient/lib/api/index.js
+index a64a0e7..f719aeb 100644
+--- a/node_modules/@beyonk/sapper-httpclient/lib/api/index.js
++++ b/node_modules/@beyonk/sapper-httpclient/lib/api/index.js
+@@ -47,6 +47,7 @@ class Api extends Behaviours {
      this.config = {
        endpoint: null,
        method: 'get',
@@ -10,7 +10,7 @@ index 886091f..ede436b 100644
        payload: null,
        query: null,
        headers: {},
-@@ -54,11 +55,11 @@ class ApiBase {
+@@ -81,11 +82,11 @@ class Api extends Behaviours {
          credentials: 'include',
          headers: Object.assign(
            { Accept: 'application/json' },
@@ -24,11 +24,11 @@ index 886091f..ede436b 100644
        this.config.overrides
      )
  
-@@ -125,6 +126,17 @@ class ApiBase {
+@@ -152,6 +153,17 @@ class Api extends Behaviours {
      }
    }
  
-+  _formatPayload() {
++  _formatPayload () {
 +    switch (this.config.contentType) {
 +      case 'application/json':
 +        return JSON.stringify(this.config.payload)
@@ -39,10 +39,10 @@ index 886091f..ede436b 100644
 +    }
 +  }
 +
-   transport (client) {
-     this.client = client
-     return this
-@@ -140,6 +152,16 @@ class ApiBase {
+   context (ctx) {
+     if (ctx.fetch) {
+       this.client = ctx.fetch
+@@ -160,6 +172,16 @@ class Api extends Behaviours {
      return this
    }
  
@@ -56,6 +56,19 @@ index 886091f..ede436b 100644
 +    return this
 +  }
 +
-   async get (fn) {
-     this.config.method = 'get'
-     return this.send(fn)
+   override (override) {
+     this.config.overrides = override
+     return this
+diff --git a/node_modules/@beyonk/sapper-httpclient/lib/entrypoint.js b/node_modules/@beyonk/sapper-httpclient/lib/entrypoint.js
+index dfc7f7d..7eb6306 100644
+--- a/node_modules/@beyonk/sapper-httpclient/lib/entrypoint.js
++++ b/node_modules/@beyonk/sapper-httpclient/lib/entrypoint.js
+@@ -7,7 +7,7 @@ function configure (options) {
+   config = options
+ }
+ 
+-function create () {
++export function create () {
+   if (!config) { throw new Error('Api client must be configured') }
+   return new Api(config)
+ }

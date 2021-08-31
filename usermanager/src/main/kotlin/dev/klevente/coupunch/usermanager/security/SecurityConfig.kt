@@ -4,13 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import dev.klevente.coupunch.library.security.AuthUser
 import dev.klevente.coupunch.library.util.Status
 import dev.klevente.coupunch.usermanager.security.authentication.UserAuthenticationService
-import dev.klevente.coupunch.usermanager.user.UserRepository
-import dev.klevente.coupunch.usermanager.user.UserService
-import dev.klevente.coupunch.usermanager.user.dto.toResponse
+import dev.klevente.coupunch.usermanager.user.UserActions
 import org.slf4j.Logger
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpMethod.POST
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.*
@@ -40,7 +37,7 @@ class SecurityConfig(
     private val log: Logger,
     private val passwordEncoder: PasswordEncoder,
     private val userAuthenticationService: UserAuthenticationService,
-    private val userService: UserService
+    private val userActions: UserActions
 ) : WebSecurityConfigurerAdapter() {
 
     private val objectMapper = ObjectMapper()
@@ -61,7 +58,7 @@ class SecurityConfig(
                 // defaultSuccessUrl(redirectUrl, true)
                 authenticationSuccessHandler = AuthenticationSuccessHandler { request, response, authentication ->
                     val authUser = authentication.principal as AuthUser
-                    val user = userService.getUserResponse(authUser.getId())
+                    val user = userActions.getUserResponse(authUser.getId())
                     response.writeJson(OK, user)
                 }
                 authenticationFailureHandler = AuthenticationFailureHandler { request, response, exception ->

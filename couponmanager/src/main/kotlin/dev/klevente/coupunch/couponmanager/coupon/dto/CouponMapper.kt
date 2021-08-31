@@ -14,14 +14,14 @@ fun Coupon.toResponse() = CouponResponse(
     id = id,
     name = name,
     eligibleItems = EligibleItemsResponse(
-        products = eligibleProducts.toResponse(),
-        productGroups = eligibleProductGroups.toResponse()
+        products = eligibleProducts.toEligibleResponse(),
+        productGroups = eligibleProductGroups.toEligibleResponse()
     ),
     type = type.toString(),
     rewards = rewards.toResponse()
 )
 
-fun EligibleProducts.toResponse() = mapToArray { (key, value) ->
+fun EligibleProducts.toEligibleResponse() = mapToArray { (key, value) ->
     EligibleProductResponse(
         id = key.id,
         name = key.name,
@@ -30,7 +30,7 @@ fun EligibleProducts.toResponse() = mapToArray { (key, value) ->
     )
 }
 
-fun EligibleProductGroups.toResponse() = mapToArray { (key, value) ->
+fun EligibleProductGroups.toEligibleResponse() = mapToArray { (key, value) ->
     EligibleProductGroupResponse(
         id = key.id,
         name = key.name,
@@ -44,11 +44,11 @@ fun Reward.toResponse() = RewardResponse(
     threshold = threshold,
     discountType = discountType.toString(),
     discount = discount,
-    products = products.toResponse(),
-    productGroups = productGroups.toResponse()
+    products = products.toRewardResponse(),
+    productGroups = productGroups.toRewardResponse()
 )
 
-fun ProductRewards.toResponse() = mapToArray { (key, value) ->
+fun ProductRewards.toRewardResponse() = mapToArray { (key, value) ->
     ProductRewardResponse(
         id = key.id,
         name = key.name,
@@ -57,7 +57,7 @@ fun ProductRewards.toResponse() = mapToArray { (key, value) ->
     )
 }
 
-fun ProductGroupRewards.toResponse() = mapToArray { (key, value) ->
+fun ProductGroupRewards.toRewardResponse() = mapToArray { (key, value) ->
     ProductGroupRewardResponse(
         id = key.id,
         name = key.name,
@@ -71,7 +71,7 @@ fun Array<EligibleProductRequest>.toDomain(
     val ids = map { it.id }
     val products = getProducts(ids)
     return products.mapIndexed { index, product ->
-        product to this[index].points
+        product to (this[index].points ?: -1)
     }.toMutableMap()
 }
 
@@ -81,7 +81,7 @@ fun Array<EligibleProductGroupRequest>.toDomain(
     val ids = map { it.id }
     val productGroups = getProductGroups(ids)
     return productGroups.mapIndexed { index, productGroup ->
-        productGroup to this[index].points
+        productGroup to (this[index].points ?: -1)
     }.toMutableMap()
 }
 

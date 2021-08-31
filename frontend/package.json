@@ -10,10 +10,10 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "@felte/reporter-tippy": "^0.1.13",
-    "@felte/validator-yup": "^0.1.1",
+    "@felte/reporter-tippy": "^0.3.6",
+    "@felte/validator-yup": "0.2.7",
     "compression": "^1.7.1",
-    "felte": "^0.5.7",
+    "felte": "^0.7.13",
     "polka": "next",
     "sirv": "^1.0.0",
     "tippy.js": "^6.3.1",
@@ -25,7 +25,7 @@
     "@babel/plugin-transform-runtime": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/runtime": "^7.0.0",
-    "@beyonk/sapper-httpclient": "^7.4.0",
+    "@beyonk/sapper-httpclient": "^10.0.1",
     "@beyonk/sapper-rbac": "^0.0.3",
     "@rollup/plugin-babel": "^5.0.0",
     "@rollup/plugin-commonjs": "^14.0.0",
@@ -38,7 +38,7 @@
     "rollup": "^2.3.4",
     "rollup-plugin-svelte": "^7.0.0",
     "rollup-plugin-terser": "^7.0.0",
-    "sapper": "^0.28.0",
-    "svelte": "^3.17.3"
+    "sapper": "^0.29.1",
+    "svelte": "^3.38.3"
   }
 }

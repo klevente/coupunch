@@ -3,7 +3,7 @@ package dev.klevente.coupunch.usermanager.user
 import dev.klevente.coupunch.library.exception.BadRequestException
 import dev.klevente.coupunch.library.exception.EntityNotFoundException
 import dev.klevente.coupunch.library.security.AuthenticationFacade
-import dev.klevente.coupunch.usermanager.security.authorization.RoleService
+import dev.klevente.coupunch.usermanager.security.authorization.Role
 import dev.klevente.coupunch.usermanager.user.dto.*
 import dev.klevente.coupunch.usermanager.util.uuid
 import org.slf4j.Logger
@@ -11,7 +11,6 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
 
 @Service
 @Transactional(readOnly = true)
@@ -19,9 +18,8 @@ class UserServiceImpl(
     private val log: Logger,
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
-    private val roleService: RoleService,
     private val authenticationFacade: AuthenticationFacade
-) : UserService {
+) : UserActions, UserService {
 
     override fun getUser(id: Long) =
         userRepository.findByIdOrNull(id) ?: throw EntityNotFoundException.byId(User::class, id)
@@ -31,12 +29,12 @@ class UserServiceImpl(
     }
 
     @Transactional
-    override fun register(request: UserAddRequest): User {
+    override fun register(request: UserAddRequest): UserResponse {
         log.info("Registering ${request.username}: ${request.email} (${authenticationFacade
             .remoteAddress})")
 
-        val emailLowercase = request.email.toLowerCase()
-        val usernameLowercase = request.username.toLowerCase()
+        val emailLowercase = request.email.lowercase()
+        val usernameLowercase = request.username.lowercase()
 
         checkUserExistsAndThrow(emailLowercase, usernameLowercase)
 
@@ -48,13 +46,13 @@ class UserServiceImpl(
                 username = usernameLowercase,
                 password = passwordHashed,
                 code = uuid(),
-                roles = hashSetOf(roleService.USER)
+                roles = hashSetOf(Role.USER)
             )
         )
 
         log.info("Registration successful for $usernameLowercase")
 
-        return user
+        return user.toResponse()
     }
 
     override fun getUserResponse(id: Long) = getUser(id).toResponse()
@@ -62,13 +60,13 @@ class UserServiceImpl(
     override fun getCurrentUserResponse() = getCurrentUser().toResponse()
 
     @Transactional
-    override fun updateUser(id: Long, request: UserUpdateRequest): User {
+    override fun updateUser(id: Long, request: UserUpdateRequest): UserResponse {
         log.info("Updating User #$id (${authenticationFacade.authInfo})")
 
         val user = getUser(id)
 
-        val emailLowercase = request.email.toLowerCase()
-        val usernameLowercase = request.username.toLowerCase()
+        val emailLowercase = request.email.lowercase()
+        val usernameLowercase = request.username.lowercase()
 
         checkUserExistsAndThrow(emailLowercase, usernameLowercase, user)
 
@@ -77,11 +75,22 @@ class UserServiceImpl(
             username = usernameLowercase
         }
 
-        return user
+        return user.toResponse()
     }
 
     override fun updatePassword(id: Long, request: UserPasswordUpdateRequest) {
         TODO("Not yet implemented")
+    }
+
+    override fun searchUserByUsername(keyword: String): UsersForCompanyResponse {
+        val formattedKeyword = keyword.trim().lowercase()
+        return userRepository.findByUsernameContaining(formattedKeyword).toCompanyResponse()
+    }
+
+    override fun getUserByCode(code: String): UserForCompanyResponse {
+        val user = userRepository.findFirstByCode(code)
+            ?: throw EntityNotFoundException(User::class, "code", code)
+        return user.toCompanyResponse()
     }
 
     private fun checkUserExistsAndThrow(email: String, username: String, user: User? = null) {

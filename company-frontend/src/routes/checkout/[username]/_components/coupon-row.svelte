@@ -18,7 +18,7 @@
     <Column>{coupon.name}</Column>
     <Column>{coupon.type}</Column>
     <Column>
-        Redeem level: {coupon.redeemLevel + 1}
+        Redeem level: {coupon.redeemLevelToDisplay}
         {#if coupon.redeemable}
             <Dot success />
         {/if}

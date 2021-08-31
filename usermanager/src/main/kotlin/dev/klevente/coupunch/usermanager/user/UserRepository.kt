@@ -12,6 +12,10 @@ interface UserRepository : JpaRepository<User, Long> {
     fun existsByEmail(email: String): Boolean
 
     fun existsByUsername(username: String): Boolean
+
+    fun findByUsernameContaining(username: String): List<User>
+
+    fun findFirstByCode(code: String): User?
 }
 
 fun UserRepository.findFirstByUsernameOrEmail(userOrEmail: String) = findFirstByUsernameOrEmail(userOrEmail,

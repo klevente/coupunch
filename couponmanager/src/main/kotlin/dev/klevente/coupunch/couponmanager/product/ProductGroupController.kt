@@ -2,6 +2,7 @@ package dev.klevente.coupunch.couponmanager.product
 
 import dev.klevente.coupunch.couponmanager.product.dto.ProductGroupCreateRequest
 import dev.klevente.coupunch.couponmanager.product.dto.ProductGroupUpdateRequest
+import org.springframework.http.ResponseEntity.ok
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -10,26 +11,26 @@ class ProductGroupController(
     private val productGroupActions: ProductGroupActions
 ) {
     @GetMapping
-    fun getProductGroups() = productGroupActions.getProductGroupsResponse()
+    fun getProductGroups() = ok(productGroupActions.getProductGroupsResponse())
 
     @GetMapping("{productGroupId}")
     fun getProductGroup(
         @PathVariable productGroupId: Long
-    ) = productGroupActions.getProductGroupResponse(productGroupId)
+    ) = ok(productGroupActions.getProductGroupResponse(productGroupId))
 
     @PostMapping
     fun addProductGroup(
         @RequestBody request: ProductGroupCreateRequest
-    ) = productGroupActions.addProductGroup(request)
+    ) = ok(productGroupActions.addProductGroup(request))
 
     @PutMapping("{productGroupId}")
     fun updateProductGroup(
         @PathVariable productGroupId: Long,
         @RequestBody request: ProductGroupUpdateRequest
-    ) = productGroupActions.updateProductGroup(productGroupId, request)
+    ) = ok(productGroupActions.updateProductGroup(productGroupId, request))
 
     @DeleteMapping("{productGroupId}")
     fun deleteProductGroup(
         @PathVariable productGroupId: Long
-    ) = productGroupActions.deleteProductGroup(productGroupId)
+    ) = ok(productGroupActions.deleteProductGroup(productGroupId))
 }

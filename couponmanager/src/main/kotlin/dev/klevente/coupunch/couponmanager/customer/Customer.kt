@@ -25,5 +25,5 @@ class Customer(
     @CollectionTable(name = "app_user_coupons")
     var coupons: CustomerCoupons = mutableMapOf()
 ) : BaseEntityWithSuppliedId(id) {
-    override fun toString() = "Customer($formattedId)"
+    override fun toString() = "Customer($formattedId, name=$name, username=$username)"
 }

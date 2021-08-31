@@ -5,8 +5,8 @@ import dev.klevente.coupunch.couponmanager.product.ProductGroup
 import dev.klevente.coupunch.library.entity.BaseEntity
 import javax.persistence.*
 
-typealias EligibleProducts = MutableMap<Product, Int?>
-typealias EligibleProductGroups = MutableMap<ProductGroup, Int?>
+typealias EligibleProducts = MutableMap<Product, Int>
+typealias EligibleProductGroups = MutableMap<ProductGroup, Int>
 
 @Entity
 @Table(name = "app_coupon")

@@ -6,7 +6,6 @@ import dev.klevente.coupunch.library.security.AuthenticationFacade
 import dev.klevente.coupunch.testlibrary.*
 import dev.klevente.coupunch.testlibrary.any
 import dev.klevente.coupunch.usermanager.security.authorization.Role
-import dev.klevente.coupunch.usermanager.security.authorization.RoleService
 import dev.klevente.coupunch.usermanager.user.dto.UserAddRequest
 import dev.klevente.coupunch.usermanager.user.dto.UserUpdateRequest
 import io.github.serpro69.kfaker.Faker
@@ -24,7 +23,7 @@ import java.util.*
 @ExtendWith(MockitoExtension::class)
 class UserServiceTest {
 
-    private lateinit var userService: UserService
+    private lateinit var userService: UserActions
 
     @Mock
     private lateinit var log: Logger
@@ -36,17 +35,13 @@ class UserServiceTest {
     private lateinit var passwordEncoder: PasswordEncoder
 
     @Mock
-    private lateinit var roleService: RoleService
-
-    @Mock
     private lateinit var authenticationFacade: AuthenticationFacade
 
     private val faker = Faker()
 
     @BeforeEach
     fun setup() {
-        userService = UserServiceImpl(log, userRepository, passwordEncoder, roleService,
-            authenticationFacade)
+        userService = UserServiceImpl(log, userRepository, passwordEncoder, authenticationFacade)
     }
 
     @Test
@@ -56,12 +51,11 @@ class UserServiceTest {
         val username = faker.username()
         val password = faker.password()
         val hashedPassword = faker.randomChars()
-        val userRole = Role(name = "USER")
+
         given { userRepository.save(any()) } willAnswer { it.getArgument<User>(0).withId(1) }
         given { userRepository.existsByEmail(any()) } willReturn { false }
         given { userRepository.existsByUsername(any()) } willReturn { false }
         given { passwordEncoder.encode(any()) } willReturn { hashedPassword }
-        given { roleService.USER } willReturn { userRole }
 
         // when
         val request = UserAddRequest(email, username, password)
@@ -71,9 +65,7 @@ class UserServiceTest {
         then(registeredUser.id).isPositive
         then(registeredUser.email).isEqualTo(email.lowercase())
         then((registeredUser.username)).isEqualTo(username.lowercase())
-        then(registeredUser.password).isEqualTo(hashedPassword)
-        then(registeredUser.roles).containsExactly(userRole)
-        val savedUser = User(email = email, username = username, password = password, roles = hashSetOf(userRole))
+        val savedUser = User(email = email, username = username, password = password, roles = hashSetOf(Role.USER))
         verify(userRepository).save(savedUser)
     }
 

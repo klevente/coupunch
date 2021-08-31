@@ -45,7 +45,7 @@
     const onProductRemoveClick = ({ detail }) => viewmodel.removeProductFromBasket(detail);
     const onRewardRemoveClick = ({ detail }) => viewmodel.removeRewardFromBasket(detail);
     const openFinishDialog = (discountedProducts) => finishDialog.open(discountedProducts);
-    const onCheckoutClick = () => viewmodel.checkout(openFinishDialog);
+    const onCheckoutClick = () => viewmodel.checkout(username, openFinishDialog);
     const onFinish = () => goto('/');
 
     $: console.log($basket);

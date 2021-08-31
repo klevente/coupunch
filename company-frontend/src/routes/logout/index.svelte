@@ -24,5 +24,5 @@
     // window.location.href = '/';
     onMount(() => {
         window.location.href = '/';
-    })
+    });
 </script>

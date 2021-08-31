@@ -1,9 +1,6 @@
 package dev.klevente.coupunch.couponmanager.customer.dto
 
-import dev.klevente.coupunch.couponmanager.coupon.Reward
-import dev.klevente.coupunch.couponmanager.coupon.getMergedProducts
-import dev.klevente.coupunch.couponmanager.coupon.getRedeemLevel
-import dev.klevente.coupunch.couponmanager.coupon.isRedeemable
+import dev.klevente.coupunch.couponmanager.coupon.*
 import dev.klevente.coupunch.couponmanager.customer.Customer
 import dev.klevente.coupunch.couponmanager.customer.CustomerCoupons
 import dev.klevente.coupunch.library.util.mapToArray
@@ -42,7 +39,7 @@ fun Reward.toResponse() = CustomerCouponReward(
             name = key.name,
             amount = value,
             originalPrice = key.price,
-            discountedPrice = key.price // TODO
+            discountedPrice = key.calculateDiscountedPrice(discountType, discount)
         )
     }
 )

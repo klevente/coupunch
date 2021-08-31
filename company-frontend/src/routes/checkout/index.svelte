@@ -30,7 +30,7 @@
     let qrDialog;
     let foundCustomerDialog;
 
-    const navigateToRedeemPage = ({ username }) => goto(`redeem/${username}`);
+    const navigateToRedeemPage = ({ username }) => goto(`checkout/${username}`);
 
     const onCustomerClick = (detail) => navigateToRedeemPage(detail);
     const onNewCustomerClick = () => customerAddDialog.open();
@@ -46,7 +46,7 @@
 </script>
 
 <svelte:head>
-    <title>Redeem</title>
+    <title>Checkout</title>
 </svelte:head>
 
 <H1>Select User</H1>

@@ -2,9 +2,12 @@ import { writable, get } from 'svelte/store';
 import BaseViewmodel from '../../../viewmodel/base-viewmodel';
 import { action, dataStore, stateStore } from '../../../viewmodel';
 import { searchStore, sortByStore } from '../../../viewmodel/transformations/stores';
-import ProductService from '../../../services/mock/product-service';
-import CouponService from '../../../services/mock/coupon-service';
 import { filteredAndSorted } from '../../../viewmodel/transformations';
+/*import ProductService from '../../../services/mock/product-service';
+import CouponService from '../../../services/mock/coupon-service';*/
+import ProductService from '../../../services/product-service';
+import CustomerService from '../../../services/customer-service';
+import CheckoutService from '../../../services/checkout-service';
 
 export default class Viewmodel extends BaseViewmodel {
 
@@ -33,8 +36,8 @@ export default class Viewmodel extends BaseViewmodel {
 
     #actions = {
         getProducts: action(ProductService.get),
-        getCoupons: action(CouponService.getForUser),
-        checkout: action(CouponService.checkout, 'Successfully checked out items'),
+        getCoupons: action(CustomerService.getCustomerCoupons),
+        checkout: action(CheckoutService.checkout, 'Successfully checked out items'),
     }
 
     async getAll(username) {
@@ -57,7 +60,7 @@ export default class Viewmodel extends BaseViewmodel {
         this._addExtraCouponProperties()
     }
 
-    async checkout(callback) {
+    async checkout(username, callback) {
         const basket = get(this.basket);
         const basketRequest = basket.reduce(({ products, coupons }, item) => {
             const { type } = item;
@@ -85,7 +88,7 @@ export default class Viewmodel extends BaseViewmodel {
         });
         await this.executeCustom({
             action: this.#actions.checkout,
-            serviceParams: basketRequest,
+            serviceParams: [username, basketRequest],
             successCallback: () => {
                 const discountedProducts = basket
                     .filter(({ type }) => type === 'reward')
@@ -130,6 +133,7 @@ export default class Viewmodel extends BaseViewmodel {
     _addExtraCouponProperties() {
         this.#userCoupons.updateData(coupons => coupons.map(coupon => ({
             ...coupon,
+            redeemLevelToDisplay: coupon.redeemLevel + 1,
             redeemed: false
         })));
     }

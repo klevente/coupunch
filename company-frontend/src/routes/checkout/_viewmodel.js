@@ -3,8 +3,9 @@ import { debouncePromise } from '../../util/debounce';
 import { throttlePromise } from '../../util/throttle';
 import { action, dataStore, stateStore } from '../../viewmodel';
 import { searchStore, sortByStore } from '../../viewmodel/transformations/stores';
-import { filtered, sorted } from '../../viewmodel/transformations';
-import CustomerService from '../../services/mock/customer-service';
+import { filtered, notIn, sorted } from '../../viewmodel/transformations';
+/*import CustomerService from '../../services/mock/customer-service';*/
+import CustomerService from '../../services/customer-service';
 
 export default class Viewmodel extends BaseViewmodel {
     #customers = dataStore();
@@ -24,9 +25,14 @@ export default class Viewmodel extends BaseViewmodel {
     });
 
     #foundCustomers = dataStore([]);
+    #foundCustomersWithoutCompanyCustomers = notIn({
+        dataStore: this.#foundCustomers,
+        otherStore: this.#customers,
+        dataProperty: 'id'
+    })
     foundCustomersSortBy = sortByStore();
     displayedFoundCustomers = sorted({
-        dataStore: this.#foundCustomers,
+        dataStore: this.#foundCustomersWithoutCompanyCustomers,
         sortBy: this.foundCustomersSortBy
     });
 
@@ -34,7 +40,7 @@ export default class Viewmodel extends BaseViewmodel {
         get: action(CustomerService.get),
         searchCustomers: action(CustomerService.searchCustomers),
         addToCompany: action(CustomerService.addToCompany, 'Successfully added customer to the company'),
-        validateQrCode: action(CustomerService.validateQrCode, 'Successfully parsed QR code')
+        validateQrCode: action(CustomerService.getCustomerByQrCode, 'Successfully parsed QR code')
     }
 
     async get() {

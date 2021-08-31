@@ -10,8 +10,11 @@ class User(
 
     id: Long = -1L,
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     var username: String = "",
+
+    @Column(nullable = false)
+    var name: String = "",
 
     @Column(nullable = false, unique = true)
     var email: String = "",
@@ -22,9 +25,10 @@ class User(
     @Column(nullable = false, unique = true)
     var code: String = "",
 
-    @ManyToMany
-    @JoinTable(name = "app_user_role")
-    var roles: MutableSet<Role> = hashSetOf(),
+    @ElementCollection(targetClass = Role::class)
+    @CollectionTable
+    @Enumerated(EnumType.STRING)
+    var roles: MutableSet<Role> = mutableSetOf(Role.USER),
 
     @Lob
     var qr: ByteArray? = null,
