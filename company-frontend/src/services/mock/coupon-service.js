@@ -1,4 +1,4 @@
-import { sleepRandom } from '../../util/sleep';
+import { sleepRandom } from 'frontend-library/util/sleep';
 
 let cnt = 3;
 

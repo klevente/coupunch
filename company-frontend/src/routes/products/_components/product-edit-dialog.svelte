@@ -1,8 +1,8 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import { Modal, Dialog, FormField, TextField, Button, RadioChipGroup } from 'attractions';
-    import { isEditing, createForm } from '../../../util/form';
     import Dynamic from 'frontend-library/components/dynamic.svelte';
+    import { isEditing, createForm } from 'frontend-library/util/form';
     import * as yup from 'yup';
 
     const dispatch = createEventDispatcher();

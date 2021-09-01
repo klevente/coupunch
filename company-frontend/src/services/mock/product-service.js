@@ -1,5 +1,5 @@
-import { sleepRandom } from '../../util/sleep';
-import { generate } from '../../util/array';
+import { sleepRandom } from 'frontend-library/util/sleep';
+import { generate } from 'frontend-library/util/array';
 import { dummyGroups } from './product-group-service';
 
 let dummyProducts = generate(20, i => ({

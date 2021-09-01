@@ -6,8 +6,7 @@
     import IconButton from 'frontend-library/components/icon-button.svelte';
     import ProductSelectorDialog from './product-selector-dialog.svelte';
     import ProductGroupSelectorDialog from './product-group-selector-dialog.svelte';
-
-    import { isEditing, createForm } from '../../../util/form';
+    import { isEditing, createForm } from 'frontend-library/util/form';
     import * as yup from 'yup';
 
     const dispatch = createEventDispatcher();

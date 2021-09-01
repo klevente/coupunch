@@ -1,7 +1,7 @@
-import BaseViewmodel from '../../viewmodel/base-viewmodel';
-import { action, dataStore, stateStore } from '../../viewmodel';
-import { searchStore, sortByStore } from '../../viewmodel/transformations/stores';
-import { filteredAndSorted } from '../../viewmodel/transformations';
+import CompanyViewmodel from '../../viewmodel/company-viewmodel';
+import { action, dataStore, stateStore } from 'frontend-library/viewmodel';
+import { searchStore, sortByStore } from 'frontend-library/viewmodel/transformations/stores';
+import { filteredAndSorted } from 'frontend-library/viewmodel/transformations';
 /*import ProductService from '../../services/mock/product-service';
 import ProductGroupService from '../../services/mock/product-group-service';
 import CouponService from '../../services/mock/coupon-service';*/
@@ -9,7 +9,7 @@ import ProductService from '../../services/product-service';
 import ProductGroupService from '../../services/product-group-service';
 import CouponService from '../../services/coupon-service';
 
-export default class Viewmodel extends BaseViewmodel {
+export default class Viewmodel extends CompanyViewmodel {
     #coupons = dataStore();
     state = stateStore();
 

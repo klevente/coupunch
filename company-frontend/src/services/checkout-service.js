@@ -1,7 +1,7 @@
 import { company } from './companyurl';
-import BaseService from './base-service';
+import CompanyService from './company-service';
 
-export default class CheckoutService extends BaseService {
+export default class CheckoutService extends CompanyService {
     static async checkout(username, basket) {
         // TODO: handle errors
         await CheckoutService.api

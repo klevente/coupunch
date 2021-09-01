@@ -1,7 +1,7 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import { Modal, Dialog, FormField, TextField, Button } from 'attractions';
-    import { isEditing, createForm } from '../../../util/form';
+    import { isEditing, createForm } from 'frontend-library/util/form';
     import * as yup from 'yup';
 
     const dispatch = createEventDispatcher();

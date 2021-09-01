@@ -1,15 +1,15 @@
 import { writable, get } from 'svelte/store';
-import BaseViewmodel from '../../../viewmodel/base-viewmodel';
-import { action, dataStore, stateStore } from '../../../viewmodel';
-import { searchStore, sortByStore } from '../../../viewmodel/transformations/stores';
-import { filteredAndSorted } from '../../../viewmodel/transformations';
+import CompanyViewmodel from '../../../viewmodel/company-viewmodel';
+import { action, dataStore, stateStore } from 'frontend-library/viewmodel';
+import { searchStore, sortByStore } from 'frontend-library/viewmodel/transformations/stores';
+import { filteredAndSorted } from 'frontend-library/viewmodel/transformations';
 /*import ProductService from '../../../services/mock/product-service';
 import CouponService from '../../../services/mock/coupon-service';*/
 import ProductService from '../../../services/product-service';
 import CustomerService from '../../../services/customer-service';
 import CheckoutService from '../../../services/checkout-service';
 
-export default class Viewmodel extends BaseViewmodel {
+export default class Viewmodel extends CompanyViewmodel {
 
     state = stateStore();
 

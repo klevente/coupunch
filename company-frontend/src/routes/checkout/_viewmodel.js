@@ -1,13 +1,13 @@
-import BaseViewmodel from '../../viewmodel/base-viewmodel';
-import { debouncePromise } from '../../util/debounce';
-import { throttlePromise } from '../../util/throttle';
-import { action, dataStore, stateStore } from '../../viewmodel';
-import { searchStore, sortByStore } from '../../viewmodel/transformations/stores';
-import { filtered, notIn, sorted } from '../../viewmodel/transformations';
+import CompanyViewmodel from '../../viewmodel/company-viewmodel';
+import { debouncePromise } from 'frontend-library/util/debounce';
+import { throttlePromise } from 'frontend-library/util/throttle';
+import { action, dataStore, stateStore } from 'frontend-library/viewmodel';
+import { searchStore, sortByStore } from 'frontend-library/viewmodel/transformations/stores';
+import { filtered, notIn, sorted } from 'frontend-library/viewmodel/transformations';
 /*import CustomerService from '../../services/mock/customer-service';*/
 import CustomerService from '../../services/customer-service';
 
-export default class Viewmodel extends BaseViewmodel {
+export default class Viewmodel extends CompanyViewmodel {
     #customers = dataStore();
     state = stateStore();
 

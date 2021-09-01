@@ -1,7 +1,7 @@
 import { company } from './companyurl';
-import BaseService from './base-service';
+import CompanyService from './company-service';
 
-export default class CouponService extends BaseService {
+export default class CouponService extends CompanyService {
     static async get() {
         return await CouponService.api
             .endpoint(company(`coupons`))
