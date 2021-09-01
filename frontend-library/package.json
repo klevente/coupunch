@@ -1,0 +1,17 @@
+{
+  "name": "frontend-library",
+  "description": "Viewmodel and service architecture for frontend projects",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "svelte": "^3.42.4"
+  },
+  "dependencies": {
+    "@felte/reporter-tippy": "^0.3.7",
+    "@felte/validator-yup": "^0.2.8",
+    "felte": "^0.8.0"
+  }
+}
