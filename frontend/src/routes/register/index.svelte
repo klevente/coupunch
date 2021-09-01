@@ -47,7 +47,7 @@
     <input type="submit" value="Create Account">
 </form>
 
-<style>
+<style lang="scss">
 
 </style>
 

@@ -54,7 +54,7 @@
     <title>Company Login</title>
 </svelte:head>
 
-<h1> Company Login</h1>
+<h1>Company Login</h1>
 <form use:form>
     <!--<label for="company">Company:</label>
     <input id="company" name="company">

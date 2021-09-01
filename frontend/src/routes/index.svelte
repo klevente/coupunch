@@ -11,7 +11,7 @@
 
 </script>
 
-<style>
+<style lang="scss">
 	h1, figure, p {
 		text-align: center;
 		margin: 0 auto;

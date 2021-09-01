@@ -56,7 +56,7 @@
     <input type="submit" value="Login">
 </form>
 
-<style>
+<style lang="scss">
 
 </style>
 

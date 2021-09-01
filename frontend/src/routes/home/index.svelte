@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
     import { goto, stores } from '@sapper/app';
     import { create } from '@beyonk/sapper-httpclient';
+    import { Button, Headline, Subhead } from 'attractions';
 
     const { session } = stores();
 
@@ -30,7 +31,10 @@
     <title>Home With Login</title>
 </svelte:head>
 
-<h1>Coupunch logged in home page</h1>
+<header>
+    <Headline>Welcome to Coupunch!</Headline>
+    <Subhead>You are logged in as ...</Subhead>
+</header>
 <div>
     You are logged in!
 </div>
@@ -38,6 +42,10 @@
     {userData}
 </div>
 
-<button on:click={clickForUserData}>Get User Data</button>
+<Button on:click={clickForUserData}>Get User Data</Button>
 
 <img src="api/users/current/qr" alt="current user qr code">
+
+<style lang="scss">
+
+</style>

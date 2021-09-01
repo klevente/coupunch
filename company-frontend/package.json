@@ -39,15 +39,15 @@
     "cookie-parser": "^1.4.5",
     "http-proxy-middleware": "^1.1.0",
     "patch-package": "^6.4.7",
-    "postcss": "^8.3.5",
+    "postcss": "^8.3.6",
     "rollup": "^2.3.4",
     "rollup-plugin-svelte": "^7.0.0",
     "rollup-plugin-terser": "^7.0.0",
     "rollup-plugin-web-worker-loader": "^1.6.1",
     "sapper": "^0.29.1",
-    "sass": "^1.33.0",
+    "sass": "^1.38.2",
     "svelte": "^3.42.4",
     "svelte-feather-icons": "^3.5.0",
-    "svelte-preprocess": "^4.7.3"
+    "svelte-preprocess": "^4.8.0"
   }
 }
