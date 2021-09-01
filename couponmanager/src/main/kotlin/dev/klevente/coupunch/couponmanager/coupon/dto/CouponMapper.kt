@@ -26,7 +26,7 @@ fun EligibleProducts.toEligibleResponse() = mapToArray { (key, value) ->
         id = key.id,
         name = key.name,
         price = key.price,
-        points = value
+        points = value.toPointsResponse()
     )
 }
 
@@ -34,9 +34,11 @@ fun EligibleProductGroups.toEligibleResponse() = mapToArray { (key, value) ->
     EligibleProductGroupResponse(
         id = key.id,
         name = key.name,
-        points = value
+        points = value.toPointsResponse()
     )
 }
+
+fun Int.toPointsResponse() = if (this < 0) null else this
 
 fun Collection<Reward>.toResponse() = mapToArray { it.toResponse() }
 

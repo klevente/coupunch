@@ -9,33 +9,33 @@ class CouponResponse(
     val name: String,
     val type: String,
     val eligibleItems: EligibleItemsResponse,
-    rewards: Array<RewardResponse>
+    val rewards: Array<RewardResponse>
 )
 
 class EligibleItemsResponse(
-    products: Array<EligibleProductResponse>,
-    productGroups: Array<EligibleProductGroupResponse>
+    val products: Array<EligibleProductResponse>,
+    val productGroups: Array<EligibleProductGroupResponse>
 )
 
 class EligibleProductResponse(
-    id: Long,
-    name: String,
-    price: Double,
-    points: Int?
+    val id: Long,
+    val name: String,
+    val price: Double,
+    val points: Int?
 )
 
 class EligibleProductGroupResponse(
-    id: Long,
-    name: String,
-    points: Int?
+    val id: Long,
+    val name: String,
+    val points: Int?
 )
 
 class RewardResponse(
-    threshold: Double,
-    discountType: String,
-    discount: Double,
-    products: Array<ProductRewardResponse>,
-    productGroups: Array<ProductGroupRewardResponse>
+    val threshold: Double,
+    val discountType: String,
+    val discount: Double,
+    val products: Array<ProductRewardResponse>,
+    val productGroups: Array<ProductGroupRewardResponse>
 )
 
 class ProductRewardResponse(
