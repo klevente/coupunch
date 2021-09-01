@@ -54,13 +54,12 @@
         { name: 'Reward Levels' },
         { name: 'Actions' }
     ]}>
-        <svelte:fragment slot="row" let:row>
-            <CouponRow
-                    coupon={row}
-                    on:edit={openEditDialog}
-                    on:delete={openDeleteDialog}
-            />
-        </svelte:fragment>
+        <CouponRow
+                slot="row" let:row
+                coupon={row}
+                on:edit={openEditDialog}
+                on:delete={openDeleteDialog}
+        />
         <svelte:fragment slot="empty">
             No coupons match the selected search query.
         </svelte:fragment>

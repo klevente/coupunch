@@ -20,9 +20,11 @@
         { name: 'Type', property: 'type' },
         { name: 'Progress' }
     ]}>
-        <svelte:fragment slot="row" let:row>
-            <CouponRow coupon={row} on:click={() => onCouponClick(row)} />
-        </svelte:fragment>
+        <CouponRow
+                slot="row" let:row
+                coupon={row}
+                on:click={() => onCouponClick(row)}
+        />
     </DynamicTable>
 </div>
 

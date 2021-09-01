@@ -37,9 +37,11 @@
             { name: 'Name', property: 'name' },
             { name: 'Username', property: 'username' }
         ]}>
-                <svelte:fragment slot="row" let:row>
-                    <CustomerRow customer={row} on:click={() => onCustomerClick(row)}/>
-                </svelte:fragment>
+                <CustomerRow
+                        slot="row" let:row
+                        customer={row}
+                        on:click={() => onCustomerClick(row)}
+                />
                 <svelte:fragment slot="empty">
                     No data can be found using this query.
                 </svelte:fragment>

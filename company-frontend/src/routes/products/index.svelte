@@ -77,13 +77,12 @@
             { name: 'Price', property: 'price' },
             { name: 'Actions' }
         ]}>
-            <svelte:fragment slot="row" let:row>
-                <ProductRow
-                        product={row}
-                        on:edit={openProductEditDialog}
-                        on:delete={openProductDeleteDialog}
-                />
-            </svelte:fragment>
+            <ProductRow
+                    slot="row" let:row
+                    product={row}
+                    on:edit={openProductEditDialog}
+                    on:delete={openProductDeleteDialog}
+            />
             <svelte:fragment slot="empty">
                 No products match the selected search query.
             </svelte:fragment>

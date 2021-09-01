@@ -19,12 +19,14 @@
         { name: 'Name', property: 'name' },
         { name: 'Price', property: 'price' }
     ]}>
-        <svelte:fragment slot="row" let:row>
-            <Row clickable on:click={() => onProductClick(row)}>
-                <Column>{row.name}</Column>
-                <Column>${row.price}</Column>
-            </Row>
-        </svelte:fragment>
+        <Row
+                slot="row" let:row
+                clickable
+                on:click={() => onProductClick(row)}
+        >
+            <Column>{row.name}</Column>
+            <Column>${row.price}</Column>
+        </Row>
     </DynamicTable>
 </div>
 

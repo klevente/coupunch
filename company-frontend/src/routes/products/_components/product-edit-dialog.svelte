@@ -30,7 +30,7 @@
     function onSubmit(product) {
         product = {
             ...product,
-            group:  parseInt(product.group) || null
+            group: parseInt(product.group) || null
         }
         dispatch(editing ? 'update' : 'add', product);
         close();
@@ -75,14 +75,15 @@
                 </TextField>
             </FormField>
             <FormField
-                name="Product Group"
-                help="Product Group the Product is a part of"
-                required
+                    name="Product Group"
+                    help="Product Group the Product is a part of"
+                    required
             >
                 <Dynamic data={productGroups}>
-                    <svelte:fragment slot="data" let:data>
-                        <RadioChipGroup items={data} name="group" />
-                    </svelte:fragment>
+                    <RadioChipGroup
+                            slot="data" let:data
+                            items={data} name="group"
+                    />
                 </Dynamic>
             </FormField>
             <div class="button-bar">

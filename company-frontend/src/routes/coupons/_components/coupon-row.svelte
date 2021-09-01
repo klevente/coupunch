@@ -10,14 +10,16 @@
 
     const onEditClick = () => dispatch('edit', coupon);
     const onDeleteClick = () => dispatch('delete', coupon);
+
+    $: console.log(coupon);
 </script>
 
 <Row>
     <Column>{coupon.name}</Column>
     <Column>
-        {#if coupon.type === 'point'}
+        {#if coupon.type === 'POINT'}
             <AwardIcon size="24"/>
-        {:else if coupon.type === 'price'}
+        {:else if coupon.type === 'PRICE'}
             <DollarSignIcon size="24"/>
         {:else}
             Unknown coupon type!
