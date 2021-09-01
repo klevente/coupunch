@@ -14,6 +14,9 @@
                     .accessDenied(e => {
                         this.redirect(302, '/logout');
                     })
+                    .forbidden(e => {
+                        this.redirect(302, '/logout');
+                    })
                     .get();
 
                 return { currentUser };

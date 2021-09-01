@@ -1,8 +1,8 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import { XIcon } from 'svelte-feather-icons';
-    import { Row, Column } from '../../../../../components/table';
-    import IconButton from '../../../../../components/icon-button.svelte';
+    import { Row, Column } from 'frontend-library/components/table';
+    import IconButton from 'frontend-library/components/icon-button.svelte';
 
     const dispatch = createEventDispatcher();
 

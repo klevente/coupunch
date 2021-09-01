@@ -1,7 +1,7 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import { Dialog, Modal, Button, TextField } from 'attractions';
-    import DynamicTable from '../../../components/dynamic-table.svelte';
+    import DynamicTable from 'frontend-library/components/dynamic-table.svelte';
     import CustomerRow from './customer-row.svelte';
 
     const dispatch = createEventDispatcher();

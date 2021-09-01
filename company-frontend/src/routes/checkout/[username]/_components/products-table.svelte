@@ -1,8 +1,8 @@
 <script>
     import { createEventDispatcher } from 'svelte';
-    import DynamicTable from '../../../../components/dynamic-table.svelte';
-    import { Row, Column } from '../../../../components/table';
-    import SearchField from '../../../../components/search-field.svelte';
+    import DynamicTable from 'frontend-library/components/dynamic-table.svelte';
+    import { Row, Column } from 'frontend-library/components/table';
+    import SearchField from 'frontend-library/components/search-field.svelte';
 
     const dispatch = createEventDispatcher();
 

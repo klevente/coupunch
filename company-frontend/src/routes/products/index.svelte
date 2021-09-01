@@ -1,14 +1,12 @@
 <script>
     import { onMount } from 'svelte';
     import { stores } from '@sapper/app';
-    import { Button, H1, TextField } from 'attractions';
-    import Dynamic from '../../components/dynamic.svelte';
-    import State from '../../components/state.svelte';
-    import SearchField from '../../components/search-field.svelte';
-    import DynamicTable from '../../components/dynamic-table.svelte';
-    import { Table, Header, Body, Row, Column } from '../../components/table';
+    import { Button, H1 } from 'attractions';
+    import State from 'frontend-library/components/state.svelte';
+    import SearchField from 'frontend-library/components/search-field.svelte';
+    import DynamicTable from 'frontend-library/components/dynamic-table.svelte';
+    import ConfirmDialog from 'frontend-library/components/confirm-dialog.svelte';
     import ProductRow from './_components/product-row.svelte';
-    import ConfirmDialog from './../../components/confirm-dialog.svelte';
     import ProductEditDialog from './_components/product-edit-dialog.svelte';
     import ProductGroupEditDialog from './_components/product-group-edit-dialog.svelte';
     import ProductGroupList from './_components/product-group-list.svelte'

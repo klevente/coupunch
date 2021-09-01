@@ -1,5 +1,5 @@
 <script>
-    import { EasyTable } from '../../../../../components/table';
+    import { EasyTable } from 'frontend-library/components/table';
     import ProductRow from './product-row.svelte';
     import RewardRow from './reward-row.svelte';
 

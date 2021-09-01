@@ -1,5 +1,5 @@
 <script>
-    import { Row, Column } from '../../../components/table';
+    import { Row, Column } from 'frontend-library/components/table';
 
     export let customer;
 </script>

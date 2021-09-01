@@ -1,7 +1,7 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import { Dot } from 'attractions';
-    import { Row, Column } from '../../../../components/table';
+    import { Row, Column } from 'frontend-library/components/table';
 
     const dispatch = createEventDispatcher();
 

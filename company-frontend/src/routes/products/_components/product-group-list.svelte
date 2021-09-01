@@ -2,7 +2,7 @@
     import { createEventDispatcher } from 'svelte';
     import { Button } from 'attractions';
     import { XIcon, EditIcon } from 'svelte-feather-icons';
-    import Dynamic from '../../../components/dynamic.svelte';
+    import Dynamic from 'frontend-library/components/dynamic.svelte';
 
     const dispatch = createEventDispatcher();
 

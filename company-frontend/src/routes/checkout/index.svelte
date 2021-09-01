@@ -2,9 +2,9 @@
     import { onMount } from 'svelte';
     import { goto } from '@sapper/app';
     import { Button, H1, H2 } from 'attractions';
-    import SearchField from '../../components/search-field.svelte';
-    import State from '../../components/state.svelte';
-    import DynamicTable from '../../components/dynamic-table.svelte';
+    import SearchField from 'frontend-library/components/search-field.svelte';
+    import State from 'frontend-library/components/state.svelte';
+    import DynamicTable from 'frontend-library/components/dynamic-table.svelte';
     import CustomerRow from './_components/customer-row.svelte';
     import CustomerAddDialog from './_components/customer-add-dialog.svelte';
     import QrDialog from './_components/qr-dialog.svelte';

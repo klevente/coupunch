@@ -2,12 +2,13 @@
     import { createEventDispatcher } from 'svelte';
     import { Modal, Dialog, FormField, TextField, Button, RadioChipGroup, Label, Autocomplete } from 'attractions';
     import { PlusIcon, XIcon } from 'svelte-feather-icons';
-    import { ArrayField } from '../../../components/form';
-    import IconButton from '../../../components/icon-button.svelte';
-    import { isEditing, createForm } from '../../../util/form';
-    import * as yup from 'yup';
+    import { ArrayField } from 'frontend-library/components/form';
+    import IconButton from 'frontend-library/components/icon-button.svelte';
     import ProductSelectorDialog from './product-selector-dialog.svelte';
     import ProductGroupSelectorDialog from './product-group-selector-dialog.svelte';
+
+    import { isEditing, createForm } from '../../../util/form';
+    import * as yup from 'yup';
 
     const dispatch = createEventDispatcher();
 

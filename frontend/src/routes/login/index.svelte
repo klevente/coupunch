@@ -1,8 +1,6 @@
 <script>
     import { stores, goto } from '@sapper/app';
-    import { createForm } from 'felte';
-    import reporter from '@felte/reporter-tippy';
-    import { validator } from '@felte/validator-yup';
+    import { createForm } from 'frontend-library/util/form';
     import { create } from '@beyonk/sapper-httpclient';
     import * as yup from 'yup';
 
@@ -13,17 +11,7 @@
         password: yup.string().required(),
     });
 
-    const { form } = createForm({
-        extend: [validator, reporter()],
-        validateSchema: schema,
-        onSubmit: values => {
-            console.log(values);
-            login(values);
-        },
-        onError: errors => console.error(errors),
-    });
-
-    async function login(request) {
+    async function onSubmit(request) {
         const api = create();
         const currentUser = await api
             .endpoint('users/login')
@@ -45,6 +33,13 @@
         // goto('home');
         window.location.href = 'home';
     }
+
+    function onError(errors) {
+        console.error(errors);
+    }
+
+
+    const { form } = createForm({ schema, onSubmit, onError });
 </script>
 
 <svelte:head>

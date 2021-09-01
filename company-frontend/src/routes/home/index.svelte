@@ -1,8 +1,8 @@
 <script>
     import { stores } from '@sapper/app';
     import { Headline, Subhead } from 'attractions';
-    import MenuCard from '../../components/menu-card.svelte';
     import { AwardIcon, GiftIcon, CreditCardIcon, BarChartIcon } from 'svelte-feather-icons';
+    import MenuCard from '../../components/menu-card.svelte';
 
     const { session } = stores();
 

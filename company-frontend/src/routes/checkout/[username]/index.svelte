@@ -8,7 +8,7 @@
     import { onMount } from 'svelte';
     import { goto } from '@sapper/app';
     import { Tabs, H2, Button } from 'attractions';
-    import State from '../../../components/state.svelte';
+    import State from 'frontend-library/components/state.svelte';
     import Basket from './_components/basket/basket.svelte';
     import ProductsTable from './_components/products-table.svelte';
     import CouponsTable from './_components/coupons-table.svelte';

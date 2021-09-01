@@ -10,6 +10,7 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "frontend-library": "file:../frontend-library",
     "@felte/reporter-tippy": "^0.3.7",
     "@felte/validator-yup": "^0.2.8",
     "compression": "^1.7.1",

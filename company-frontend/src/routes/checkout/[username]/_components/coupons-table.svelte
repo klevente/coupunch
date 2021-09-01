@@ -1,7 +1,7 @@
 <script>
     import { createEventDispatcher } from 'svelte';
-    import DynamicTable from '../../../../components/dynamic-table.svelte';
-    import SearchField from '../../../../components/search-field.svelte';
+    import DynamicTable from 'frontend-library/components/dynamic-table.svelte';
+    import SearchField from 'frontend-library/components/search-field.svelte';
     import CouponRow from './coupon-row.svelte';
 
     const dispatch = createEventDispatcher();
