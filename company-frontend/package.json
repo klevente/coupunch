@@ -10,11 +10,11 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "@felte/reporter-tippy": "^0.3.6",
-    "@felte/validator-yup": "^0.2.7",
+    "@felte/reporter-tippy": "^0.3.7",
+    "@felte/validator-yup": "^0.2.8",
     "apexcharts": "^3.27.3",
     "compression": "^1.7.1",
-    "felte": "^0.7.13",
+    "felte": "^0.8.0",
     "polka": "next",
     "qr-scanner": "^1.2.0",
     "sirv": "^1.0.0",
