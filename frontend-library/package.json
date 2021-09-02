@@ -12,7 +12,6 @@
     "svelte-feather-icons": "^3.5.0",
     "attractions": "^3.3.0",
     "svelte": "^3.42.4",
-    "@felte/reporter-tippy": "^0.3.7",
     "@felte/validator-yup": "^0.2.8",
     "felte": "^0.8.0"
   }

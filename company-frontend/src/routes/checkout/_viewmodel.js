@@ -41,7 +41,7 @@ export default class Viewmodel extends CompanyViewmodel {
         searchCustomers: action(CustomerService.searchCustomers),
         addToCompany: action(CustomerService.addToCompany, 'Successfully added customer to the company'),
         validateQrCode: action(CustomerService.getCustomerByQrCode, 'Successfully parsed QR code')
-    }
+    };
 
     async get() {
         await this.load({

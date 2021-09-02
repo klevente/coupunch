@@ -7,9 +7,11 @@ import dev.klevente.coupunch.usermanager.user.User
 import dev.klevente.coupunch.usermanager.user.UserRepository
 import dev.klevente.coupunch.usermanager.user.findFirstByUsernameOrEmail
 import org.slf4j.Logger
+import org.springframework.security.authentication.AuthenticationServiceException
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -22,8 +24,8 @@ class UserAuthenticationService(
     @Transactional
     override fun loadUserByUsername(usernameOrEmail: String): UserDetails {
         val usernameOrEmailLowercase = usernameOrEmail.lowercase()
-        val user = userRepository.findFirstByUsernameOrEmail(usernameOrEmailLowercase) ?: throw
-        EntityNotFoundException(User::class, "usernameOrEmail", usernameOrEmail)
+        val user = userRepository.findFirstByUsernameOrEmail(usernameOrEmailLowercase)
+            ?: throw UsernameNotFoundException("User $usernameOrEmail not found!")
         log.info("Login request for $usernameOrEmailLowercase")
 
         return AuthUser.fromUser(user)

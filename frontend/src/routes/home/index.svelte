@@ -10,8 +10,7 @@
 
     });
 
-    $: userData = JSON.stringify($session.user);
-    $: console.log(userData);
+    $: console.log($session.user);
 
     async function clickForUserData() {
         const api = create();
@@ -33,13 +32,13 @@
 
 <header>
     <Headline>Welcome to Coupunch!</Headline>
-    <Subhead>You are logged in as ...</Subhead>
+    <Subhead>You are logged in as {$session.user.username}</Subhead>
 </header>
 <div>
     You are logged in!
 </div>
 <div>
-    {userData}
+    {$session.user.username} {$session.user.email}
 </div>
 
 <Button on:click={clickForUserData}>Get User Data</Button>

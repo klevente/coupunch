@@ -1,10 +1,15 @@
 <script>
-    import { stores, goto } from '@sapper/app';
+    import { FormField, TextField, Button } from 'attractions';
+    import State from 'frontend-library/components/state.svelte';
+    import { stores } from '@sapper/app';
     import { createForm } from 'frontend-library/util/form';
-    import { create } from '@beyonk/sapper-httpclient';
+    import Viewmodel from './_viewmodel';
     import * as yup from 'yup';
 
     const { session } = stores();
+
+    const viewmodel = new Viewmodel();
+    const { state } = viewmodel;
 
     const schema = yup.object({
         username: yup.string().required(),
@@ -12,34 +17,17 @@
     });
 
     async function onSubmit(request) {
-        const api = create();
-        const currentUser = await api
-            .endpoint('users/login')
-            .formEncoded()
-            .payload(request)
-            .forbidden((e) => {
-                throw new Error("Password is incorrect");
-            })
-            .default(e => {
-                throw new Error(e);
-            })
-            .post();
-
-        $session.user = {
-            authenticated: true,
-            scope: ['user'],
-            ...currentUser
-        };
-        // goto('home');
-        window.location.href = 'home';
+        await viewmodel.login(request, session);
     }
 
     function onError(errors) {
-        console.error(errors);
+        return {
+            username: 'Username or password is incorrect!',
+            password: 'Username or password is incorrect!'
+        };
     }
 
-
-    const { form } = createForm({ schema, onSubmit, onError });
+    const { form, errors } = createForm({ schema, onSubmit, onError });
 </script>
 
 <svelte:head>
@@ -48,13 +36,26 @@
 
 <h1>Login</h1>
 <form use:form>
-    <label for="username">Username or email:</label>
-    <input id="username" name="username">
-    <label for="password">Password:</label>
-    <input id="password" name="password" type="password">
-
-    <input type="submit" value="Login">
+    <FormField
+            name="Username or Email"
+            help="Your Coupunch username or email"
+            required
+            errors={[$errors.username]}
+    >
+        <TextField name="username"/>
+    </FormField>
+    <FormField
+            name="Password"
+            help="Your password"
+            required
+            errors="{[$errors.password]}"
+    >
+        <TextField name="password" type="password"/>
+    </FormField>
+    <Button type="submit" outline>Login</Button>
 </form>
+
+<State {state}/>
 
 <style lang="scss">
 

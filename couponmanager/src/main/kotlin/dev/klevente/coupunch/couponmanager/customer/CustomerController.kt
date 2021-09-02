@@ -27,7 +27,7 @@ class CustomerController(
     @GetMapping("qr/{code}")
     fun getCustomerFromQrCode(
         @PathVariable code: String
-    ) = ok(customerActions.getCustomerFromQrCode(code))
+    ) = ok(customerActions.getCustomerByCode(code))
 
     @GetMapping("{username}/coupons")
     fun getCustomerCoupons(

@@ -10,14 +10,12 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "@felte/reporter-tippy": "^0.3.7",
     "@felte/validator-yup": "^0.2.8",
     "compression": "^1.7.1",
     "felte": "^0.8.0",
     "frontend-library": "file:../frontend-library",
     "polka": "next",
     "sirv": "^1.0.0",
-    "tippy.js": "^6.3.1",
     "yup": "^0.32.9"
   },
   "devDependencies": {

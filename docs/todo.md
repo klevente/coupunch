@@ -13,28 +13,28 @@
   - [x] Create finalising modal detailing redeemed rewards
   - [x] Redesign basket as per wireframe
 - [ ] Implement Product handling on backend
-  - [ ] Review entity class
+  - [x] Review entity class
   - [ ] Write tests
-  - [ ] Implement the service layer
-  - [ ] Implement the controller layer
-  - [ ] Wire up endpoints to frontend
+  - [x] Implement the service layer
+  - [x] Implement the controller layer
+  - [x] Wire up endpoints to frontend
 - [ ] Implement Product Group handling on backend
-  - [ ] Review entity class
+  - [x] Review entity class
   - [ ] Write tests
-  - [ ] Implement the service layer
-  - [ ] Implement the controller layer
-  - [ ] Wire up endpoints to frontend
+  - [x] Implement the service layer
+  - [x] Implement the controller layer
+  - [x] Wire up endpoints to frontend
 - [ ] Implement User search
-  - [ ] Create new User search modal on frontend
-  - [ ] Implement new User search on backend (usermanager)
-  - [ ] Implement existing user search on backend (couponmanager)
+  - [x] Create new User search modal on frontend
+  - [x] Implement new User search on backend (usermanager)
+  - [x] Implement existing user search on backend (couponmanager)
 - [ ] Implement QR search
   - [x] Implement QR-code scanning on frontend
-  - [ ] Implement search by QR on backend
+  - [x] Implement search by QR on backend
   - [x] Come up with better QR-generation logic (generating UUID for each user, can be regenerated)
 - [ ] Finish Products Page
   - [ ] Add an optional Product Icon
-  - [ ] Add a selector for choosing a Product Group for a Product
+  - [x] Add a selector for choosing a Product Group for a Product
   - [ ] Redesign Product and Product Group rows as per wireframe
 - [ ] Create Reports Page
   - [ ] Find library for managing charts

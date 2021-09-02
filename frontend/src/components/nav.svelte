@@ -1,4 +1,5 @@
 <script>
+	import { H1 } from 'attractions';
 	import { stores } from '@sapper/app';
 
 	export let segment;
@@ -7,6 +8,7 @@
 </script>
 
 <nav>
+	<H1>Coupunch</H1>
 	<ul>
 		{#if $session.user.authenticated}
 			<li><a aria-current="{segment === 'home' ? 'page' : undefined}" href="home">home</a></li>
@@ -20,11 +22,19 @@
 	</ul>
 </nav>
 
-<style>
+<style lang="scss">
+	@use 'theme' as vars;
+
 	nav {
+		display: flex;
+		align-items: center;
 		border-bottom: 1px solid rgba(255,62,0,0.1);
 		font-weight: 300;
 		padding: 0 1em;
+	}
+
+	:global(h1) {
+		margin: 0 !important;
 	}
 
 	ul {
@@ -54,7 +64,7 @@
 		content: '';
 		width: calc(100% - 1em);
 		height: 2px;
-		background-color: rgb(255,62,0);
+		background-color: vars.$main;
 		display: block;
 		bottom: -1px;
 	}

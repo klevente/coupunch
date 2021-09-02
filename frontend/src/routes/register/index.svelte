@@ -1,10 +1,13 @@
 <script>
-    import { createForm } from 'felte';
-    import reporter from '@felte/reporter-tippy';
-    import { validator } from '@felte/validator-yup';
+    import { FormField, TextField, Button } from 'attractions';
+    import State from 'frontend-library/components/state.svelte';
+    import { createForm } from 'frontend-library/util/form';
     import * as yup from 'yup';
-    import { create } from '@beyonk/sapper-httpclient';
     import { goto } from '@sapper/app';
+    import Viewmodel from './_viewmodel';
+
+    const viewmodel = new Viewmodel();
+    const { state } = viewmodel;
 
     const schema = yup.object({
         email: yup.string().email().required(),
@@ -12,23 +15,17 @@
         password: yup.string().required(),
     });
 
-    const { form } = createForm({
-        extend: [validator, reporter],
-        validateSchema: schema,
-        onSubmit: async values => {
-            console.log(values);
-            const api = create();
-            await api
-                .endpoint('users')
-                .payload(values)
-                .default(e => {
-                    console.error(e);
-                })
-                .post();
+    async function onSubmit(request) {
+        console.log(request);
+        await viewmodel.register(request, goto);
+    }
 
-            goto('login');
-        },
-    });
+    function onError(errors) {
+        console.error(errors);
+    }
+
+    const { form, errors } = createForm({ schema, onSubmit, onError });
+
 </script>
 
 <svelte:head>
@@ -37,15 +34,34 @@
 
 <h1>Register</h1>
 <form use:form>
-    <label for="email">Email:</label>
-    <input id="email" name="email" type="email">
-    <label for="username">Username:</label>
-    <input id="username" name="username">
-    <label for="password">Password:</label>
-    <input id="password" name="password" type="password">
-
-    <input type="submit" value="Create Account">
+    <FormField
+            name="Email"
+            help="Your email"
+            required
+            errors={[$errors.email]}
+    >
+        <TextField name="email"/>
+    </FormField>
+    <FormField
+            name="Username"
+            help="Your chosen username"
+            required
+            errors={[$errors.username]}
+    >
+        <TextField name="username"/>
+    </FormField>
+    <FormField
+            name="Password"
+            help="Your password"
+            required
+            errors="{[$errors.password]}"
+    >
+        <TextField name="password" type="password"/>
+    </FormField>
+    <Button type="submit" outline>Create Account</Button>
 </form>
+
+<State {state}/>
 
 <style lang="scss">
 

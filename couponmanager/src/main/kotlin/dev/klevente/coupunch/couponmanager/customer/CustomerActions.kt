@@ -9,7 +9,7 @@ interface CustomerActions {
 
     fun updateCustomer(id: Long, request: CustomerUpdateRequest): CustomerResponse
 
-    fun getCustomerFromQrCode(code: String): CustomerResponse
+    fun getCustomerByCode(code: String): CustomerResponse
 
     fun getCouponsForCustomer(username: String): CustomerCouponsResponse
 }

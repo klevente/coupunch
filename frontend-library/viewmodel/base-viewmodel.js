@@ -41,20 +41,21 @@ export default class BaseViewmodel {
                       errorCallback = this._defaultErrorCallback(),
                   }) {
         try {
-            stateStore.emitLoading();
+            stateStore || console.warn('No supplied state store found.');
+            stateStore && stateStore.emitLoading();
             let shouldUpdateLocally = true;
             serviceParams = asArray(serviceParams);
             const resource = await action.serviceCall(...serviceParams, (...args) => {
                 serviceCallback(...args);
                 shouldUpdateLocally = false;
             });
-            stateStore.emitSuccess(action.successText);
+            stateStore && stateStore.emitSuccess(action.successText);
             if (shouldUpdateLocally) {
                 localCallback(resource);
             }
         } catch (e) {
             console.error(e);
-            stateStore.emitFailure(e);
+            stateStore && stateStore.emitFailure(e);
             errorCallback(e);
         }
     }
@@ -67,14 +68,15 @@ export default class BaseViewmodel {
                             errorCallback = this._defaultErrorCallback(),
                         }) {
         try {
-            stateStore.emitLoading();
+            stateStore || console.warn('No supplied state store found.');
+            stateStore && stateStore.emitLoading();
             serviceParams = asArray(serviceParams);
             const result = await action.serviceCall(...serviceParams);
-            stateStore.emitSuccess(action.successText);
+            stateStore && stateStore.emitSuccess(action.successText);
             successCallback(result);
         } catch (e) {
             console.error(e);
-            stateStore.emitFailure(e);
+            stateStore && stateStore.emitFailure(e);
             errorCallback(e);
         }
     }
@@ -101,5 +103,9 @@ export default class BaseViewmodel {
 
     _defaultErrorCallback() {
         return (error) => {};
+    }
+
+    _throwingErrorCallback() {
+        return error => { throw error; };
     }
 }

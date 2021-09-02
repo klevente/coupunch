@@ -10,6 +10,7 @@ import org.slf4j.Logger
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -22,8 +23,8 @@ class UserAuthenticationService(
     @Transactional
     override fun loadUserByUsername(username: String): UserDetails {
         val usernameLowercase = username.toLowerCase()
-        val user = companyUserRepository.findFirstByUsername(usernameLowercase) ?:
-            throw EntityNotFoundException(CompanyUser::class, "username", username)
+        val user = companyUserRepository.findFirstByUsername(usernameLowercase)
+            ?: throw UsernameNotFoundException("User not found!")
         log.info("Login request for $username")
 
         return AuthUser.fromUser(user)

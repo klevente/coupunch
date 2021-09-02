@@ -50,7 +50,7 @@ class CustomerServiceImpl(
 
     override fun getCouponsForCustomer(username: String) = getCustomerByUsername(username).coupons.toResponse()
 
-    override fun getCustomerFromQrCode(code: String): CustomerResponse {
+    override fun getCustomerByCode(code: String): CustomerResponse {
         val customer = customerRepository.findByCode(code) ?: throw EntityNotFoundException(Customer::class, "code", code)
         return customer.toResponse()
     }

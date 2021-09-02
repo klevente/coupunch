@@ -1,5 +1,4 @@
 import { createForm as felteCreateForm } from 'felte';
-import reporter from '@felte/reporter-tippy';
 import { validator } from '@felte/validator-yup';
 import { generate } from './array';
 
@@ -14,7 +13,7 @@ export function createForm({
                                ...rest
                            }) {
     return felteCreateForm({
-        extend: [validator, reporter()],
+        extend: [validator],
         validateSchema: schema,
         onSubmit,
         onError,
