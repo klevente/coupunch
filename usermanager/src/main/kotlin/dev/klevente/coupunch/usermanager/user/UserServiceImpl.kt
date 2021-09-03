@@ -61,25 +61,29 @@ class UserServiceImpl(
 
     @Transactional
     override fun updateUser(id: Long, request: UserUpdateRequest): UserResponse {
-        log.info("Updating User #$id (${authenticationFacade.authInfo})")
-
         val user = getUser(id)
+        return updateUser(user, request)
+    }
 
-        val emailLowercase = request.email.lowercase()
-        val usernameLowercase = request.username.lowercase()
-
-        checkUserExistsAndThrow(emailLowercase, usernameLowercase, user)
-
-        user.apply {
-            email = emailLowercase
-            username = usernameLowercase
-        }
-
-        return user.toResponse()
+    @Transactional
+    override fun updateCurrentUser(request: UserUpdateRequest): UserResponse {
+        val user = getCurrentUser()
+        return updateUser(user, request)
     }
 
     override fun updatePassword(id: Long, request: UserPasswordUpdateRequest) {
         TODO("Not yet implemented")
+    }
+
+    @Transactional
+    override fun updateCurrentUserPassword(request: UserPasswordUpdateRequest): UserResponse {
+        val user = getCurrentUser()
+        val passwordHashed = passwordEncoder.encode(request.password)
+        user.apply {
+            password = passwordHashed
+        }
+
+        return user.toResponse()
     }
 
     override fun searchUserByUsername(keyword: String): UsersForCompanyResponse {
@@ -102,5 +106,21 @@ class UserServiceImpl(
                 throw BadRequestException("This username is already taken!")
             }
         }
+    }
+
+    private fun updateUser(user: User, request: UserUpdateRequest): UserResponse {
+        log.info("Updating User #${user.id} (${authenticationFacade.authInfo})")
+
+        val emailLowercase = request.email.lowercase()
+        val usernameLowercase = request.username.lowercase()
+
+        checkUserExistsAndThrow(emailLowercase, usernameLowercase, user)
+
+        user.apply {
+            email = emailLowercase
+            username = usernameLowercase
+        }
+
+        return user.toResponse()
     }
 }

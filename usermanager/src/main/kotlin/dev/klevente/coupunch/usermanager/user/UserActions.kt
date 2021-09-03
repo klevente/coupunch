@@ -11,6 +11,10 @@ interface UserActions {
 
     fun updateUser(id: Long, request: UserUpdateRequest): UserResponse
 
+    fun updateCurrentUser(request: UserUpdateRequest): UserResponse
+
+    fun updateCurrentUserPassword(request: UserPasswordUpdateRequest): UserResponse
+
     fun updatePassword(id: Long, request: UserPasswordUpdateRequest)
 
     fun searchUserByUsername(keyword: String): UsersForCompanyResponse
