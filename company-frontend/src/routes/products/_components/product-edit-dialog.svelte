@@ -22,7 +22,7 @@
         }
     }
 
-    function close() {
+    export function close() {
         modalOpen = false;
         reset();
     }
@@ -33,7 +33,6 @@
             group: parseInt(product.group) || null
         }
         dispatch(editing ? 'update' : 'add', product);
-        close();
     }
 
     function onError(errors) {
@@ -49,7 +48,7 @@
         group: yup.string().required()
     });
 
-    const { form, setFields, reset } = createForm({ schema, onSubmit, onError });
+    const { form, errors, setFields, reset } = createForm({ schema, onSubmit, onError });
 </script>
 
 <Modal bind:open={modalOpen} noClickaway>
@@ -62,6 +61,7 @@
                     name="Name"
                     help="Name of the product"
                     required
+                    errors={[$errors.name]}
             >
                 <TextField name="name"/>
             </FormField>
@@ -69,6 +69,7 @@
                     name="Price"
                     help="Unit price of the product"
                     required
+                    errors={[$errors.price]}
             >
                 <TextField name="price" withItem itemRight type="number" min="0.01" step="0.01">
                     <span class="item currency">$</span>
@@ -78,6 +79,7 @@
                     name="Product Group"
                     help="Product Group the Product is a part of"
                     required
+                    errors={[$errors.group]}
             >
                 <Dynamic data={productGroups}>
                     <RadioChipGroup

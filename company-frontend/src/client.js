@@ -1,6 +1,5 @@
 import * as sapper from '@sapper/app';
 import * as yup from 'yup';
-import 'tippy.js/dist/tippy.css';
 import { initApi } from './services/api';
 
 yup.setLocale({

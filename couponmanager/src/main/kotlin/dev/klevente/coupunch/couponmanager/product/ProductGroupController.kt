@@ -4,6 +4,7 @@ import dev.klevente.coupunch.couponmanager.product.dto.ProductGroupCreateRequest
 import dev.klevente.coupunch.couponmanager.product.dto.ProductGroupUpdateRequest
 import org.springframework.http.ResponseEntity.ok
 import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/product-groups")
@@ -20,13 +21,13 @@ class ProductGroupController(
 
     @PostMapping
     fun addProductGroup(
-        @RequestBody request: ProductGroupCreateRequest
+        @RequestBody @Valid request: ProductGroupCreateRequest
     ) = ok(productGroupActions.addProductGroup(request))
 
     @PutMapping("{productGroupId}")
     fun updateProductGroup(
         @PathVariable productGroupId: Long,
-        @RequestBody request: ProductGroupUpdateRequest
+        @RequestBody @Valid request: ProductGroupUpdateRequest
     ) = ok(productGroupActions.updateProductGroup(productGroupId, request))
 
     @DeleteMapping("{productGroupId}")

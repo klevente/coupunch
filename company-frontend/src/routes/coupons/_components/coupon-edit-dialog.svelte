@@ -48,7 +48,7 @@
         name: yup.string().required(),
     });
 
-    const { form, data, setFields, reset } = createForm({
+    const { form, data, errors, setFields, reset } = createForm({
         schema, onSubmit, onError,
         initialValues: {
             eligibleItems: {
@@ -84,6 +84,7 @@
                     name="Name"
                     help="Name of the coupon"
                     required
+                    errors={[$errors.name]}
             >
                 <TextField name="name"/>
             </FormField>
@@ -91,6 +92,7 @@
                     name="Type"
                     help="Type of the coupon"
                     required
+                    errors={[$errors.type]}
             >
                 <RadioChipGroup items={couponTypes} name="type"/>
             </FormField>

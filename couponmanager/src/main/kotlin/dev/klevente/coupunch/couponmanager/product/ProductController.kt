@@ -4,6 +4,7 @@ import dev.klevente.coupunch.couponmanager.product.dto.ProductCreateRequest
 import dev.klevente.coupunch.couponmanager.product.dto.ProductUpdateRequest
 import org.springframework.http.ResponseEntity.ok
 import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/products")
@@ -20,13 +21,13 @@ class ProductController(
 
     @PostMapping
     fun addProduct(
-        @RequestBody request: ProductCreateRequest
+        @RequestBody @Valid request: ProductCreateRequest
     ) = ok(productActions.addProduct(request))
 
     @PutMapping("{productId}")
     fun updateProduct(
         @PathVariable productId: Long,
-        @RequestBody request: ProductUpdateRequest
+        @RequestBody @Valid request: ProductUpdateRequest
     ) = ok(productActions.updateProduct(productId, request))
 
     @DeleteMapping("{productId}")

@@ -72,3 +72,51 @@ index dfc7f7d..7eb6306 100644
    if (!config) { throw new Error('Api client must be configured') }
    return new Api(config)
  }
+diff --git a/node_modules/@beyonk/sapper-httpclient/lib/error-handlers/bad-request.js b/node_modules/@beyonk/sapper-httpclient/lib/error-handlers/bad-request.js
+new file mode 100644
+index 0000000..c51d0a6
+--- /dev/null
++++ b/node_modules/@beyonk/sapper-httpclient/lib/error-handlers/bad-request.js
+@@ -0,0 +1,12 @@
++import {
++    BadRequestError
++} from '../errors.js'
++
++const BadRequestMixin = superclass => class BadRequest extends superclass {
++    badRequest (fn) {
++        this.handlers[BadRequestError.name] = fn
++        return this
++    }
++}
++
++export { BadRequestMixin }
+diff --git a/node_modules/@beyonk/sapper-httpclient/lib/errors.js b/node_modules/@beyonk/sapper-httpclient/lib/errors.js
+index b32a47c..3f38a4b 100644
+--- a/node_modules/@beyonk/sapper-httpclient/lib/errors.js
++++ b/node_modules/@beyonk/sapper-httpclient/lib/errors.js
+@@ -5,6 +5,9 @@ class HttpError extends Error {
+   }
+ }
+ 
++class BadRequestError extends HttpError {
++}
++
+ class AccessDeniedError extends HttpError {
+ }
+ 
+@@ -36,6 +39,7 @@ class TooManyRequestsError extends HttpError {
+ }
+ 
+ const mapping = {
++  400: BadRequestError,
+   401: AccessDeniedError,
+   402: PaymentRequiredError,
+   403: ForbiddenError,
+@@ -54,6 +58,7 @@ function byCode (code) {
+ 
+ export {
+   byCode,
++  BadRequestError,
+   AccessDeniedError,
+   PaymentRequiredError,
+   ForbiddenError,

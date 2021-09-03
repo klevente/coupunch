@@ -1,50 +1,31 @@
 <script>
-    import { onMount } from 'svelte';
-    import { goto, stores } from '@sapper/app';
-    import { create } from '@beyonk/sapper-httpclient';
-    import { Button, Headline, Subhead } from 'attractions';
+    import { stores } from '@sapper/app';
+    import { Headline, Subhead } from 'attractions';
 
     const { session } = stores();
-
-    onMount(async () => {
-
-    });
-
-    $: console.log($session.user);
-
-    async function clickForUserData() {
-        const api = create();
-        const res = await api
-            .endpoint('users/current')
-            .accessDenied(e => {
-                goto('/logout');
-            })
-            .get();
-
-        console.log(res);
-    }
 
 </script>
 
 <svelte:head>
-    <title>Home With Login</title>
+    <title>Home</title>
 </svelte:head>
 
 <header>
-    <Headline>Welcome to Coupunch!</Headline>
-    <Subhead>You are logged in as {$session.user.username}</Subhead>
+    <Headline>Hello {$session.user.username}!</Headline>
+    <Subhead>Show this QR-code to the cashier at supported businesses.</Subhead>
 </header>
-<div>
-    You are logged in!
-</div>
-<div>
-    {$session.user.username} {$session.user.email}
-</div>
-
-<Button on:click={clickForUserData}>Get User Data</Button>
-
-<img src="api/users/current/qr" alt="current user qr code">
+<section>
+    <img src="api/users/current/qr" alt="current user qr code">
+</section>
 
 <style lang="scss">
+  @use 'theme' as vars;
 
+  img {
+    margin: 10px auto 20px;
+    display: block;
+    padding: 5px;
+    border: vars.$main solid 3px;
+    border-radius: vars.$snackbar-radius;
+  }
 </style>

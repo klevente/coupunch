@@ -1,6 +1,6 @@
 import * as sapper from '@sapper/app';
 import * as yup from 'yup';
-import Api from "@beyonk/sapper-httpclient";
+import { initApi } from './services/api';
 
 yup.setLocale({
 	mixed: {
@@ -13,7 +13,7 @@ yup.setLocale({
 	}
 });
 
-Api.configure({ baseUrl: '/api', parseErrors: false });
+initApi();
 
 sapper.start({
 	target: document.querySelector('#sapper')

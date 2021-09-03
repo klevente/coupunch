@@ -4,15 +4,15 @@ import compression from 'compression';
 import * as sapper from '@sapper/server';
 import { createProxyMiddleware, Filter, Options, RequestHandler } from 'http-proxy-middleware';
 import cookieParser from 'cookie-parser';
-import Api from '@beyonk/sapper-httpclient'
 import routes from './routes';
 import { guard } from "@beyonk/sapper-rbac";
+import { initApi } from './services/api';
 
 
 const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === 'development';
 
-Api.configure({ baseUrl: '/api', parseErrors: false });
+initApi()
 
 polka() // You can also use Express
     .use('/api', createProxyMiddleware({ target: 'http://localhost:8000/' }))

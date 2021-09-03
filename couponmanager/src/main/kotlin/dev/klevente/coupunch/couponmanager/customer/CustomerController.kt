@@ -4,6 +4,7 @@ import dev.klevente.coupunch.couponmanager.customer.dto.CustomerCreateRequest
 import dev.klevente.coupunch.couponmanager.customer.dto.CustomerUpdateRequest
 import org.springframework.http.ResponseEntity.ok
 import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/customers")
@@ -15,13 +16,13 @@ class CustomerController(
 
     @PostMapping
     fun addCustomer(
-        @RequestBody request: CustomerCreateRequest
+        @RequestBody @Valid request: CustomerCreateRequest
     ) = ok(customerActions.addCustomer(request))
 
     @PutMapping("{customerId}")
     fun updateCustomer(
         @PathVariable customerId: Long,
-        @RequestBody request: CustomerUpdateRequest
+        @RequestBody @Valid request: CustomerUpdateRequest
     ) = ok(customerActions.updateCustomer(customerId, request))
 
     @GetMapping("qr/{code}")

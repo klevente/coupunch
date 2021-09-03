@@ -4,13 +4,13 @@ import { action, dataStore, stateStore } from 'frontend-library/viewmodel';
 import ProductGroupService from '../../services/mock/product-group-service';*/
 import ProductService from '../../services/product-service';
 import ProductGroupService from '../../services/product-group-service';
-import { categorized, filtered, sorted, mapped, addFront } from 'frontend-library/viewmodel/transformations';
+import { categorized, filtered, sorted, sortedSimple, mapped, addFront } from 'frontend-library/viewmodel/transformations';
 import { categoryStore, searchStore, sortByStore } from 'frontend-library/viewmodel/transformations/stores';
 
 export default class Viewmodel extends CompanyViewmodel {
 
     #products = dataStore();
-    productGroups = dataStore();
+    #productGroups = dataStore();
     state = stateStore();
 
     searchTerm = searchStore();
@@ -32,9 +32,13 @@ export default class Viewmodel extends CompanyViewmodel {
         dataStore: this.#categorizedProducts,
         sortBy: this.sortBy,
     });
+    displayedProductGroups = sortedSimple({
+        dataStore: this.#productGroups,
+        sortProperty: 'name'
+    });
     productGroupChips = addFront({
         dataStore: mapped({
-            dataStore: this.productGroups,
+            dataStore: this.#productGroups,
             mapper: ({ id: value, name: label }) => ({ value, label })
         }),
         items: { value: 'uncategorized', label: 'Uncategorized' }
@@ -62,21 +66,23 @@ export default class Viewmodel extends CompanyViewmodel {
         });
     }
 
-    async addProduct(product) {
+    async addProduct(product, successCallback) {
         await this.execute({
             action: this.#actions.addProduct,
             serviceParams: product,
             serviceCallback: this._defaultServiceCallback(this.#products),
-            localCallback: this._defaultOperations(this.#products).array.add
+            localCallback: this._defaultOperations(this.#products).array.add,
+            successCallback
         });
     }
 
-    async updateProduct(product) {
+    async updateProduct(product, successCallback) {
         await this.execute({
             action: this.#actions.updateProduct,
             serviceParams: product,
             serviceCallback: this._defaultServiceCallback(this.#products),
-            localCallback: this._defaultOperations(this.#products).array.update
+            localCallback: this._defaultOperations(this.#products).array.update,
+            successCallback
         });
     }
 
@@ -91,26 +97,28 @@ export default class Viewmodel extends CompanyViewmodel {
 
     async getProductGroups() {
         await this.load({
-            dataStore: this.productGroups,
+            dataStore: this.#productGroups,
             action: this.#actions.getProductGroups
         });
     }
 
-    async addProductGroup(productGroup) {
+    async addProductGroup(productGroup, successCallback) {
         await this.execute({
             action: this.#actions.addProductGroup,
             serviceParams: productGroup,
-            serviceCallback: this._defaultServiceCallback(this.productGroups),
-            localCallback: this._defaultOperations(this.productGroups).array.add
+            serviceCallback: this._defaultServiceCallback(this.#productGroups),
+            localCallback: this._defaultOperations(this.#productGroups).array.add,
+            successCallback
         });
     }
 
-    async updateProductGroup(productGroup) {
+    async updateProductGroup(productGroup, successCallback) {
         await this.execute({
             action: this.#actions.updateProductGroup,
             serviceParams: productGroup,
-            serviceCallback: this._defaultServiceCallback(this.productGroups),
-            localCallback: this._defaultOperations(this.productGroups).array.update
+            serviceCallback: this._defaultServiceCallback(this.#productGroups),
+            localCallback: this._defaultOperations(this.#productGroups).array.update,
+            successCallback
         });
     }
 
@@ -118,8 +126,8 @@ export default class Viewmodel extends CompanyViewmodel {
         await this.execute({
             action: this.#actions.deleteProductGroup,
             serviceParams: productGroup,
-            serviceCallback: this._defaultServiceCallback(this.productGroups),
-            localCallback: this._defaultOperations(this.productGroups).array.delete
+            serviceCallback: this._defaultServiceCallback(this.#productGroups),
+            localCallback: this._defaultOperations(this.#productGroups).array.delete
         });
     }
 

@@ -4,7 +4,7 @@ import { get } from 'svelte/store';
 let _companyUrl = null;
 
 export function updateCompanyUrl() {
-    const { session } = stores();
+    const { page, session } = stores();
     const { user: { companyUrl: url } } = get(session);
     _companyUrl = url;
 }

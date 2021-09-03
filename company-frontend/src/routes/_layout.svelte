@@ -1,5 +1,5 @@
 <script context="module">
-    import { create } from '@beyonk/sapper-httpclient';
+    import UserService from '../services/user-service';
 
     export async function preload(page, session) {
         if (page.path === '/logout') {
@@ -7,18 +7,7 @@
         }
         if (session.user.authenticated && !session.user.id) {
             try {
-                const api = create();
-                const currentUser = await api
-                    .context(this)
-                    .endpoint('couponmanager/users/current')
-                    .accessDenied(e => {
-                        this.redirect(302, '/logout');
-                    })
-                    .forbidden(e => {
-                        this.redirect(302, '/logout');
-                    })
-                    .get();
-
+                const currentUser = await UserService.getCurrent(session.user.companyUrl, this);
                 return { currentUser };
             } catch (e) {
                 console.error(e);

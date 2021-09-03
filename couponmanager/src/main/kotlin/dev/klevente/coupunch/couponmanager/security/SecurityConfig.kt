@@ -6,9 +6,7 @@ import dev.klevente.coupunch.couponmanager.user.CompanyUserService
 import dev.klevente.coupunch.library.security.AuthUser
 import dev.klevente.coupunch.library.util.Status
 import org.slf4j.Logger
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Conditional
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.*
@@ -30,6 +28,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 import org.springframework.session.web.context.AbstractHttpSessionApplicationInitializer
 import org.springframework.session.web.http.DefaultCookieSerializer
 import javax.annotation.PostConstruct
+import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletResponse
 
 @Configuration
@@ -61,6 +60,12 @@ class SecurityConfig(
                 authenticationSuccessHandler = AuthenticationSuccessHandler { request, response, authentication ->
                     val authUser = authentication.principal as AuthUser
                     val user = companyUserService.getUserResponse(authUser.getId())
+                    val companyUrlCookie = Cookie("COMPANYURL", user.companyUrl).apply {
+                        isHttpOnly = true
+                        domain = "localhost"
+                        path = "/"
+                    }
+                    response.addCookie(companyUrlCookie)
                     response.writeJson(OK, user)
                 }
                 authenticationFailureHandler = AuthenticationFailureHandler { request, response, exception ->
@@ -72,7 +77,7 @@ class SecurityConfig(
                 logoutUrl = "/users/logout"
                 clearAuthentication = true
                 invalidateHttpSession = true
-                deleteCookies("SESSION, XSRF-TOKEN")
+                deleteCookies("SESSION, XSRF-TOKEN", "COMPANYURL")
                 logoutSuccessHandler = LogoutSuccessHandler { request, response, authentication ->
                     response.writeJson(OK, Status("Logout successful!"))
                 }

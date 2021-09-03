@@ -22,10 +22,12 @@ polka() // You can also use Express
 		cookieParser(),
 		(req, res, next) => {
 			const sessionCookie = req.cookies['SESSION'];
+			const companyUrl = req.cookies['COMPANYURL'];
 			const authenticated = !!sessionCookie;
 			const user = {
 				authenticated,
 				scope: authenticated ? ['COMPANY_USER'] : [],
+				companyUrl: companyUrl ? companyUrl : null,
 				id: null,
 				username: null,
 				email: null,

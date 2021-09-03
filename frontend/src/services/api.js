@@ -4,7 +4,7 @@ import { goto } from '@sapper/app';
 export function initApi() {
     Api.configure({
         baseUrl: '/api',
-        parseErrors: false,
+        parseErrors: true,
         handlers: {
             accessDenied: async error => {
                 console.error('access denied', error);
@@ -16,7 +16,6 @@ export function initApi() {
             },
             badRequest: error => {
                 console.error('bad request', error);
-                console.log(error.body);
                 throw error;
             }
         }

@@ -21,6 +21,7 @@
     }
 
     function onError(errors) {
+        console.warn('error in login', errors);
         return {
             username: 'Username or password is incorrect!',
             password: 'Username or password is incorrect!'

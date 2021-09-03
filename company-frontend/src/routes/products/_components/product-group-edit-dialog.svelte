@@ -32,7 +32,7 @@
         name: yup.string().required(),
     });
 
-    const { form, setFields } = createForm({ schema, onSubmit, onError });
+    const { form, errors, setFields } = createForm({ schema, onSubmit, onError });
 </script>
 
 <Modal bind:open={modalOpen} noClickaway>
@@ -45,6 +45,7 @@
                     name="Name"
                     help="Name of the product group"
                     required
+                    errors={[$errors.name]}
             >
                 <TextField name="name" />
             </FormField>

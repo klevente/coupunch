@@ -55,3 +55,23 @@ export function sorted({
         return dataStore;
     });
 }
+
+export function sortedSimple({
+                                 dataStore,
+                                 sortProperty,
+                                 order = 'asc'
+                             }) {
+    return derived(dataStore, $dataStore => {
+        if (hasNoValidData($dataStore)) {
+            return $dataStore;
+        }
+
+        const dataStore = $dataStore._clone();
+        const sortedArray = [...dataStore.data];
+        const type = typeof resolve(sortProperty, sortedArray[0]);
+        throwIfNotSupportedSortingStrategy(type, order);
+        sortedArray.sort(sortingStrategies[type][order](sortProperty));
+        dataStore._setSuccess(sortedArray);
+        return dataStore;
+    });
+}

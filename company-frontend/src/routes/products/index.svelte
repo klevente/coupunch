@@ -16,7 +16,7 @@
     const viewmodel = new Viewmodel();
     const {
         displayedProducts,
-        productGroups,
+        displayedProductGroups,
         productGroupChips,
         state,
         searchTerm,
@@ -37,15 +37,17 @@
     let productGroupDeleteDialog;
 
     const openProductEditDialog = ({ detail }) => productEditDialog.open(detail);
+    const closeProductEditDialog = () => productEditDialog.close();
     const openProductDeleteDialog = ({ detail }) => productDeleteDialog.open(detail);
-    const addProduct = ({ detail }) => viewmodel.addProduct(detail);
-    const updateProduct = ({ detail }) => viewmodel.updateProduct(detail);
+    const addProduct = ({ detail }) => viewmodel.addProduct(detail, closeProductEditDialog);
+    const updateProduct = ({ detail }) => viewmodel.updateProduct(detail, closeProductEditDialog);
     const deleteProduct = ({ detail }) => viewmodel.deleteProduct(detail);
 
     const openProductGroupEditDialog = ({ detail }) => productGroupEditDialog.open(detail);
+    const closeProductGroupEditDialog = () => productGroupEditDialog.close();
     const openProductGroupDeleteDialog = ({ detail }) => productGroupDeleteDialog.open(detail);
-    const addProductGroup = ({ detail }) => viewmodel.addProductGroup(detail);
-    const updateProductGroup = ({ detail }) => viewmodel.updateProductGroup(detail);
+    const addProductGroup = ({ detail }) => viewmodel.addProductGroup(detail, closeProductGroupEditDialog);
+    const updateProductGroup = ({ detail }) => viewmodel.updateProductGroup(detail, closeProductGroupEditDialog);
     const deleteProductGroup = ({ detail }) => viewmodel.deleteProductGroup(detail);
 </script>
 
@@ -56,7 +58,7 @@
 <H1>Products</H1>
 <section>
     <ProductGroupList
-            {productGroups}
+            {displayedProductGroups}
             {selectedProductGroup}
             on:add={openProductGroupEditDialog}
             on:edit={openProductGroupEditDialog}

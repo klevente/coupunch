@@ -37,8 +37,9 @@ export default class BaseViewmodel {
                       action,
                       serviceParams,
                       serviceCallback = this._defaultServiceCallback(),
-                      localCallback,
+                      localCallback = this._defaultOperations().nop,
                       errorCallback = this._defaultErrorCallback(),
+                      successCallback = () => {}
                   }) {
         try {
             stateStore || console.warn('No supplied state store found.');
@@ -53,6 +54,7 @@ export default class BaseViewmodel {
             if (shouldUpdateLocally) {
                 localCallback(resource);
             }
+            successCallback();
         } catch (e) {
             console.error(e);
             stateStore && stateStore.emitFailure(e);

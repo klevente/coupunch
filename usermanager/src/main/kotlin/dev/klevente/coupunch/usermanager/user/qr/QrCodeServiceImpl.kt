@@ -12,6 +12,8 @@ import org.slf4j.Logger
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.awt.image.BufferedImage
+import java.io.ByteArrayInputStream
+import javax.servlet.http.HttpServletResponse
 
 @Service
 @Transactional(readOnly = true)
@@ -29,23 +31,44 @@ class QrCodeServiceImpl(
         getQrImageAndGenerateIfNotExists(userService.getCurrentUser())
 
     @Transactional
-    override fun updateQrCodeFor(userId: Long): BufferedImage {
-        log.info("Updating unique code for User $userId")
-
+    override fun updateQrCodeFor(userId: Long) {
         val user = userService.getUser(userId)
-        user.code = uuid()
+        updateQrCodeFor(user)
+    }
 
-        return generateQrCodeFor(user)
+    @Transactional
+    override fun updateQrCodeForCurrentUser() {
+        val currentUser = userService.getCurrentUser()
+        updateQrCodeFor(currentUser)
+    }
+
+    override fun exportQrForCurrentUser(response: HttpServletResponse) {
+        val user = userService.getCurrentUser()
+        val qrImage = getQrImageAndGenerateIfNotExists(user)
+
+        response.setHeader("Content-Disposition", "attachment; filename=\"coupunch_${user.username}_qr.png\"")
+        qrImage
+            .toByteArray()
+            .run { ByteArrayInputStream(this) }
+            .copyTo(response.outputStream)
     }
 
     private fun getQrImageAndGenerateIfNotExists(user: User) =
         user.qr?.toBufferedImage() ?: generateQrCodeFor(user)
 
+    private fun updateQrCodeFor(user: User) {
+        log.info("Updating unique code for User ${user.id}")
+
+        user.code = uuid()
+
+        generateQrCodeFor(user)
+    }
+
     private fun generateQrCodeFor(user: User): BufferedImage {
         log.info("Generating QR code for User $user.userId")
 
         val writer = QRCodeWriter()
-        val matrix = writer.encode(user.code, BarcodeFormat.QR_CODE, 200, 200)
+        val matrix = writer.encode(user.code, BarcodeFormat.QR_CODE, 300, 300)
         val image =  MatrixToImageWriter.toBufferedImage(matrix)
 
         user.qr = image.toByteArray()
