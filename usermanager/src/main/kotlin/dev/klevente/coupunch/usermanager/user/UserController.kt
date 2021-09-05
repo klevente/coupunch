@@ -39,17 +39,17 @@ class UserController(
 
     @PutMapping("{id}")
     fun updateUser(
-        @PathVariable id: Long, @Valid @RequestBody request: UserUpdateRequest
+        @PathVariable id: Long, @RequestBody @Valid request: UserUpdateRequest
     ) = ok(userActions.updateUser(id, request))
 
     @PutMapping("current")
     fun updateCurrentUser(
-        @Valid @RequestBody request: UserUpdateRequest
+        @RequestBody @Valid request: UserUpdateRequest
     ) = ok(userActions.updateCurrentUser(request))
 
     @PutMapping("current/password")
     fun updateCurrentUserPassword(
-        @Valid @RequestBody request: UserPasswordUpdateRequest
+        @RequestBody @Valid request: UserPasswordUpdateRequest
     ) = ok(userActions.updateCurrentUserPassword(request))
 
     @GetMapping("qr/{code}")
@@ -65,12 +65,12 @@ class UserController(
     @GetMapping("current/qr", produces = [MediaType.IMAGE_PNG_VALUE])
     fun getQrForCurrentUser() = ok(qrActions.getQrCodeAsImageForCurrentUser())
 
-    @PutMapping("{id}/qr/update", produces = [MediaType.IMAGE_PNG_VALUE])
+    @PutMapping("{id}/qr")
     fun updateQr(
         @PathVariable id: Long
     ) = ok(qrActions.updateQrCodeFor(id))
 
-    @PutMapping("current/qr/update", produces = [MediaType.IMAGE_PNG_VALUE])
+    @PutMapping("current/qr")
     fun updateQrForCurrentUser() = ok(qrActions.updateQrCodeForCurrentUser())
 
     @GetMapping("current/qr/export")

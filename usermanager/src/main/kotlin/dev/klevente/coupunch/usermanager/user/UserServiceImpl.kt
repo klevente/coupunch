@@ -71,19 +71,16 @@ class UserServiceImpl(
         return updateUser(user, request)
     }
 
-    override fun updatePassword(id: Long, request: UserPasswordUpdateRequest) {
-        TODO("Not yet implemented")
+    @Transactional
+    override fun updatePassword(id: Long, request: UserPasswordUpdateRequest): UserResponse {
+        val user = getUser(id)
+        return updatePassword(user, request)
     }
 
     @Transactional
     override fun updateCurrentUserPassword(request: UserPasswordUpdateRequest): UserResponse {
         val user = getCurrentUser()
-        val passwordHashed = passwordEncoder.encode(request.password)
-        user.apply {
-            password = passwordHashed
-        }
-
-        return user.toResponse()
+        return updatePassword(user, request)
     }
 
     override fun searchUserByUsername(keyword: String): UsersForCompanyResponse {
@@ -119,6 +116,15 @@ class UserServiceImpl(
         user.apply {
             email = emailLowercase
             username = usernameLowercase
+        }
+
+        return user.toResponse()
+    }
+
+    private fun updatePassword(user: User, request: UserPasswordUpdateRequest): UserResponse {
+        val passwordHashed = passwordEncoder.encode(request.password)
+        user.apply {
+            password = passwordHashed
         }
 
         return user.toResponse()

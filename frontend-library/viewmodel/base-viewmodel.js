@@ -75,7 +75,7 @@ export default class BaseViewmodel {
             serviceParams = asArray(serviceParams);
             const result = await action.serviceCall(...serviceParams);
             stateStore && stateStore.emitSuccess(action.successText);
-            successCallback(result);
+            successCallback && successCallback(result);
         } catch (e) {
             console.error(e);
             stateStore && stateStore.emitFailure(e);
@@ -87,12 +87,14 @@ export default class BaseViewmodel {
                    dataStore = this._resource,
                    action,
                    serviceParams = [],
+                   successCallback
                }) {
         try {
             dataStore.setLoading();
             serviceParams = asArray(serviceParams);
             const resource = await action.serviceCall(...serviceParams);
             dataStore.setSuccess(resource);
+            successCallback && successCallback(resource);
         } catch (e) {
             console.error(e);
             dataStore.setFailure(e);

@@ -2,15 +2,15 @@ import FrontendService from './frontend-service';
 import { userId } from './current-user';
 
 export default class CouponService extends FrontendService {
-    static async getCompanyCouponsForUser(companyUrl) {
+    static async getCompanyCouponsForUser(session, companyUrl) {
         return await CouponService.api
-            .endpoint(`${companyUrl}/${userId()}/coupons`)
+            .endpoint(`${companyUrl}/${userId(session)}/coupons`)
             .get(({ coupons }) => coupons);
     }
 
-    static async getCompanyCouponForUser(companyUrl, couponId) {
+    static async getCompanyCouponForUser(session, companyUrl, couponId) {
         return await CouponService.api
-            .endpoint(`${companyUrl}/${userId()}/coupons/${couponId}`)
+            .endpoint(`${companyUrl}/${userId(session)}/coupons/${couponId}`)
             .get();
     }
 }

@@ -27,6 +27,7 @@
     import { tick } from 'svelte';
     import routes from '../routes';
     import { guard } from "@beyonk/sapper-rbac";
+    import { updateCurrentUser } from '../services/current-user';
 
     export let segment;
     export let currentUser;
@@ -34,10 +35,7 @@
     const { page, session } = stores();
 
     if (currentUser) {
-        session.update(session => {
-            session.user = { ...session.user, ...currentUser };
-            return session;
-        });
+        updateCurrentUser(session, currentUser);
     }
 
     const options = {

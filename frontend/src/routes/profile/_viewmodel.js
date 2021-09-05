@@ -15,24 +15,26 @@ export default class Viewmodel extends BaseViewmodel {
 
     async get() {
         await this.load({
-            action: this.#actions.get
+            action: this.#actions.get,
         });
     }
 
-    async updateCredentials(credentials) {
+    async updateCredentials(credentials, successCallback, errorCallback) {
         await this.execute({
             action: this.#actions.update,
             serviceParams: credentials,
             localCallback: this._defaultOperations().single.update,
-            successCallback: () => console.warn('todo force update of session store')
+            successCallback,
+            errorCallback
         });
     }
 
-    async updatePassword(password) {
+    async updatePassword(password, successCallback) {
         await this.execute({
             action: this.#actions.updatePassword,
-            serviceParams: password,
-            localCallback: this._defaultOperations().single.update
+            serviceParams: { password },
+            localCallback: this._defaultOperations().single.update,
+            successCallback
         });
     }
 

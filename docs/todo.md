@@ -12,23 +12,21 @@
   - [x] Create Product selector modal for reward selection
   - [x] Create finalising modal detailing redeemed rewards
   - [x] Redesign basket as per wireframe
-- [ ] Implement Product handling on backend
+- [x] Implement Product handling on backend
   - [x] Review entity class
-  - [ ] Write tests
   - [x] Implement the service layer
   - [x] Implement the controller layer
   - [x] Wire up endpoints to frontend
-- [ ] Implement Product Group handling on backend
+- [x] Implement Product Group handling on backend
   - [x] Review entity class
-  - [ ] Write tests
   - [x] Implement the service layer
   - [x] Implement the controller layer
   - [x] Wire up endpoints to frontend
-- [ ] Implement User search
+- [x] Implement User search
   - [x] Create new User search modal on frontend
   - [x] Implement new User search on backend (usermanager)
   - [x] Implement existing user search on backend (couponmanager)
-- [ ] Implement QR search
+- [x] Implement QR search
   - [x] Implement QR-code scanning on frontend
   - [x] Implement search by QR on backend
   - [x] Come up with better QR-generation logic (generating UUID for each user, can be regenerated)
@@ -40,12 +38,22 @@
   - [ ] Find library for managing charts
   - [ ] Find a solution for aggregating data in a separate service
 - [ ] Create Customer UI
-  - [ ] Add Company list page
+  - [x] Add Company list page
   - [ ] Add Company detail page
   - [ ] Add Company Coupons page
   - [ ] Add Coupon detail page
-  - [ ] Add Profile page (QR-generation)
-  - [ ] Add QR-export page
+  - [ ] Design Progress Indicator
+  - [x] Add Profile page (QR-generation)
+  - [x] Add QR-export page
+- [ ] Create Customer backend functionality
+  - [ ] Implement fetching of company list
+  - [ ] Implement fetching of company coupons
+  - [ ] Implement fetching of a company coupon
+- [ ] Implement inter-service communication
+  - [ ] Notify the User's Companies when their data (username, qr-code) is updated
+  - [ ] Notify the User's Company list if the User is added to that company
+  - [ ] Notify the Reports service of each new transaction, so it can add data to the data lake
+  - [ ] Create update forcer buttons and logic for each action so that they can be manually retried in case of a failure
 - [ ] Handle deployment
   - [ ] Come up with creating Docker images easily
   - [ ] Implement startup logic for new instances

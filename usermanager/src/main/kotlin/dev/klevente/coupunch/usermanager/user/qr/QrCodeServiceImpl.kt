@@ -49,7 +49,7 @@ class QrCodeServiceImpl(
         response.setHeader("Content-Disposition", "attachment; filename=\"coupunch_${user.username}_qr.png\"")
         qrImage
             .toByteArray()
-            .run { ByteArrayInputStream(this) }
+            .let { ByteArrayInputStream(it) }
             .copyTo(response.outputStream)
     }
 
