@@ -1,18 +1,19 @@
 <script>
+    import CouponTypeChoice from './coupon-type-choice.svelte';
     import { s } from 'attractions/utils';
     export let progress;
     export let type;
 
-    const typeLowercase = type.toLowerCase();
 </script>
 
-{#if typeLowercase === 'point'}
-    {progress} point{s(progress)}
-{:else if typeLowercase === 'price'}
-    ${progress}
-{:else}
-    unknown coupon type!
-{/if}
+<CouponTypeChoice {type}>
+    <svelte:fragment slot="point">
+        {progress} point{s(progress)}
+    </svelte:fragment>
+    <svelte:fragment slot="price">
+        ${progress}
+    </svelte:fragment>
+</CouponTypeChoice>
 
 <style lang="scss">
 

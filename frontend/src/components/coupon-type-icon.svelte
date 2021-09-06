@@ -1,19 +1,16 @@
 <script>
     import { AwardIcon, DollarSignIcon, XCircleIcon } from 'svelte-feather-icons';
+    import CouponTypeChoice from './coupon-type-choice.svelte';
 
     export let type;
-
-    const typeLowercase = type.toLowerCase();
 </script>
 
 <div class="icon">
-    {#if type === 'point'}
-        <AwardIcon size="24"/>
-    {:else if type === 'price'}
-        <DollarSignIcon size="24"/>
-    {:else}
-        <XCircleIcon size="24"/>
-    {/if}
+    <CouponTypeChoice {type}>
+        <AwardIcon slot="point" size="24"/>
+        <DollarSignIcon slot="price" size="24"/>
+        <XCircleIcon slot="unknown" size="24"/>
+    </CouponTypeChoice>
 </div>
 
 <style lang="scss">

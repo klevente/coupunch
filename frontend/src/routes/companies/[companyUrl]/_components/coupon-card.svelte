@@ -1,7 +1,7 @@
 <script>
     import { Card } from 'attractions';
     import ProgressIndicator from '../../../../components/progress-indicator.svelte';
-    import CouponType from '../../../../components/coupon-type.svelte'
+    import CouponTypeIcon from '../../../../components/coupon-type-icon.svelte'
     import CouponProgress from '../../../../components/coupon-progress.svelte';
 
     export let coupon;
@@ -18,7 +18,7 @@
 <div class="coupon-card" on:click>
     <Card outline>
         <div class="info">
-            <CouponType type={coupon.type}/>
+            <CouponTypeIcon type={coupon.type}/>
             <div class="title">{coupon.name}</div>
             <div class="subtitle">
                 Level: {coupon.redeemLevelToDisplay},
