@@ -153,6 +153,7 @@ let dummyUserCoupons =  [
                     {
                         id: 1,
                         name: 'coffee',
+                        amount: 1,
                         products: [
                             {
                                 id: 10,
@@ -187,6 +188,7 @@ let dummyUserCoupons =  [
                     {
                         id: 1,
                         name: 'coffee',
+                        amount: 3,
                         products: [
                             {
                                 id: 10,

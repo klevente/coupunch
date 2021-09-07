@@ -22,15 +22,16 @@
     const { session } = stores();
 
     const viewmodel = new Viewmodel(companyUrl, couponId, session);
-    const { coupon } = viewmodel;
+    const { displayedCoupon } = viewmodel;
 
     onMount(async () => {
         await viewmodel.get(couponId);
     });
+
 </script>
 
 <section>
-    <Dynamic data={coupon}>
+    <Dynamic data={displayedCoupon}>
         <svelte:fragment slot="data" let:data>
             <div class="header">
                 <div>
@@ -41,9 +42,19 @@
                 </div>
                 <CouponTypeIcon type={data.type}/>
             </div>
-            <ProgressIndicator value={data.progress} levels={data.rewards.map(({ threshold }) => threshold)}/>
-            <EligibleItemsDisplay type={data.type} eligibleItems={data.eligibleItems}/>
-            <RewardsDisplay redeemLevel={data.redeemLevel} type={data.type} rewards={data.rewards}/>
+            <ProgressIndicator
+                    value={data.progress}
+                    levels={data.rewards.map(({ threshold }) => threshold)}
+            />
+            <EligibleItemsDisplay
+                    type={data.type}
+                    eligibleItems={data.eligibleItems}
+            />
+            <RewardsDisplay
+                    redeemLevel={data.redeemLevel}
+                    type={data.type}
+                    rewards={data.rewards}
+            />
         </svelte:fragment>
     </Dynamic>
 </section>

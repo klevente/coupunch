@@ -1,5 +1,5 @@
 import { resolve } from '../../util/resolve';
-import { derived } from 'svelte/store';
+import { derived, get } from 'svelte/store';
 import { hasNoValidData } from './_helpers';
 
 const sortingStrategies = {
@@ -74,4 +74,19 @@ export function sortedSimple({
         dataStore._setSuccess(sortedArray);
         return dataStore;
     });
+}
+
+export function sortedReactive({
+                                   array,
+                                   sortBy
+                               }) {
+    if (array.length === 0) {
+        return [];
+    }
+    const sortedArray = [...array];
+    const { property, order } = sortBy;
+    const type = typeof resolve(property, sortedArray[0]);
+    throwIfNotSupportedSortingStrategy(type, order);
+    sortedArray.sort(sortingStrategies[type][order](property));
+    return sortedArray;
 }

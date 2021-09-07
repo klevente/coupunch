@@ -22,16 +22,13 @@
     {#each indices as index}
         <AccordionSection on:panel-open={closeOtherPanels} let:toggle>
             <div slot="handle">
-                <Button on:click={toggle}>
-                    {#if redeemLevel === index}
-                        <Dot success class="mr"/>
-                    {/if}
+                <Button on:click={toggle} outline={redeemLevel === index}>
+                    <ChevronDownIcon size="20" class="mr accordion-chevron"/>
                     Level {index + 1} at
                     <CouponProgress {type} progress={rewards[index].threshold}/>,
                     <DiscountDisplay
                             discountType={rewards[index].discountType}
                             discount={rewards[index].discount}/>
-                    <ChevronDownIcon size="20" class="ml accordion-chevron"/>
                 </Button>
             </div>
             <RewardTable
