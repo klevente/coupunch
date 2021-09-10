@@ -64,6 +64,8 @@ class QrCodeServiceImpl(
         val coupons = request.redeemedCoupons.map(RedeemedCouponRequest::id)
         val rewards = request.redeemedCoupons.map(RedeemedCouponRequest::productId)
 
+        // TODO: instead of this, do it like this: rewards=1,2&rewards=2,2
+        // where the first is the redeemed coupon, the second is the product's id
         val couponsParam = coupons.joinToString(separator = ",", prefix = "coupons=", postfix = "&")
         val rewardsParam = rewards.joinToString(separator = ",", prefix = "rewards=")
 
