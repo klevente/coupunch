@@ -33,15 +33,13 @@
                 {sortBy}
                 columns={[
                     { name: 'Name', property: 'name' },
-                    { name: 'Price', property: 'originalPride' },
-                    { name: 'Discounted Price', property: 'discountedPrice' }
+                    { name: 'Price', property: 'originalPrice' },
                 ]}
                 items={sortedProducts}
         >
             <Row slot="row" let:row>
                 <Column>{row.name}</Column>
-                <Column><s>${row.originalPrice}</s></Column>
-                <Column>${row.discountedPrice}</Column>
+                <Column><s>${row.originalPrice}</s> ${row.discountedPrice}</Column>
             </Row>
         </EasyTable>
     </Dialog>

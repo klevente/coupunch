@@ -26,4 +26,6 @@ interface CouponRepository : JpaRepository<Coupon, Long> {
     @Query("select c from Coupon c join c.eligibleProductGroups g join Product p on key(g) = p " +
             "where ?1 = p")
     fun findCouponsWithEligibleProductInEligibleProductGroups(product: Product): Set<Coupon>
+
+    fun findByIdNotIn(idList: Collection<Long>): List<Coupon>
 }

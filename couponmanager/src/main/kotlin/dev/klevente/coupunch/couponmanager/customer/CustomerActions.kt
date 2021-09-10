@@ -12,4 +12,8 @@ interface CustomerActions {
     fun getCustomerByCode(code: String): CustomerResponse
 
     fun getCouponsForCustomer(username: String): CustomerCouponsResponse
+
+    fun getCouponsForUser(userId: Long): UserCouponsResponse
+
+    fun getCouponForUser(userId: Long, couponId: Long): UserCouponResponse
 }

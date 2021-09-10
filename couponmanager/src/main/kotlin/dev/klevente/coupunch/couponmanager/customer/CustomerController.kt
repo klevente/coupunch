@@ -30,8 +30,19 @@ class CustomerController(
         @PathVariable code: String
     ) = ok(customerActions.getCustomerByCode(code))
 
-    @GetMapping("{username}/coupons")
-    fun getCustomerCoupons(
+    @GetMapping("{username}/coupons/checkout")
+    fun getCustomerCouponsForCheckout(
         @PathVariable username: String
     ) = ok(customerActions.getCouponsForCustomer(username))
+
+    @GetMapping("{id}/coupons")
+    fun getCustomerCouponsForUser(
+        @PathVariable id: Long
+    ) = ok(customerActions.getCouponsForUser(id))
+
+    @GetMapping("{userId}/coupons/{couponId}")
+    fun getCustomerCouponForUser(
+        @PathVariable userId: Long,
+        @PathVariable couponId: Long
+    ) = ok(customerActions.getCouponForUser(userId, couponId))
 }

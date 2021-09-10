@@ -199,6 +199,12 @@ class CouponServiceImpl(
         couponRepository.findCouponsWithEligibleProduct(product) +
                 couponRepository.findCouponsWithEligibleProductInEligibleProductGroups(product)
 
+    override fun getCouponsNotIn(coupons: Collection<Coupon>) = if (coupons.isEmpty()) {
+        couponRepository.findAll()
+    } else {
+        couponRepository.findByIdNotIn(coupons.map(Coupon::id))
+    }
+
     private fun getProductsByIds(ids: Collection<Long>): List<Product> {
         val products = productRepository.findAllById(ids)
         if (products.size != ids.size) {

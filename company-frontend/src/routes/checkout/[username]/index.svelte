@@ -1,6 +1,6 @@
 <script context="module">
     export async function preload(page, session) {
-        return page.params;
+        return { ...page.params, ...page.query };
     }
 </script>
 
@@ -18,8 +18,10 @@
     import Viewmodel from './_viewmodel';
 
     export let username;
+    export let coupons = '';
+    export let rewards = '';
 
-    const viewmodel = new Viewmodel();
+    const viewmodel = new Viewmodel(coupons, rewards);
     const {
         state,
         basket,

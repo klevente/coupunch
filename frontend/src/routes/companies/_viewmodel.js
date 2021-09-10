@@ -2,7 +2,8 @@ import BaseViewmodel from 'frontend-library/viewmodel/base-viewmodel';
 import { dataStore, action, stateStore } from 'frontend-library/viewmodel';
 import { sortByStore } from 'frontend-library/viewmodel/transformations/stores'
 import { sorted } from 'frontend-library/viewmodel/transformations';
-import CompanyService from '../../services/mock/company-service';
+/*import CompanyService from '../../services/mock/company-service';*/
+import CompanyService from '../../services/company-service';
 
 export default class Viewmodel extends BaseViewmodel {
     #companies = dataStore();

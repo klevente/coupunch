@@ -1,20 +1,23 @@
 diff --git a/node_modules/@beyonk/sapper-httpclient/lib/api/index.js b/node_modules/@beyonk/sapper-httpclient/lib/api/index.js
-index a64a0e7..f719aeb 100644
+index a64a0e7..d76d088 100644
 --- a/node_modules/@beyonk/sapper-httpclient/lib/api/index.js
 +++ b/node_modules/@beyonk/sapper-httpclient/lib/api/index.js
-@@ -47,6 +47,7 @@ class Api extends Behaviours {
+@@ -47,6 +47,8 @@ class Api extends Behaviours {
      this.config = {
        endpoint: null,
        method: 'get',
 +      contentType: 'application/json',
++      accept: 'application/json',
        payload: null,
        query: null,
        headers: {},
-@@ -81,11 +82,11 @@ class Api extends Behaviours {
+@@ -80,12 +82,12 @@ class Api extends Behaviours {
+         cors: true,
          credentials: 'include',
          headers: Object.assign(
-           { Accept: 'application/json' },
+-          { Accept: 'application/json' },
 -          hasPayload ? { 'Content-Type': 'application/json' } : {},
++          { Accept: this.config.accept },
 +          hasPayload ? { 'Content-Type': this.config.contentType } : {},
            this.config.headers
          )
@@ -24,7 +27,39 @@ index a64a0e7..f719aeb 100644
        this.config.overrides
      )
  
-@@ -152,6 +153,17 @@ class Api extends Behaviours {
+@@ -93,8 +95,8 @@ class Api extends Behaviours {
+     const ep = this.config.query ? `${endpoint}?${this.config.query}` : `${endpoint}`
+ 
+     try {
+-      const { httpStatus, json } = await this._doQuery(1, client, ep, options)
+-      return fn ? fn(json, httpStatus) : json
++      const { httpStatus, res } = await this._doQuery(1, client, ep, options)
++      return fn ? fn(res, httpStatus) : res
+     } catch (e) {
+       return this.handle(e, this.ctx)
+     } finally {
+@@ -120,17 +122,13 @@ class Api extends Behaviours {
+       const r = await client(endpoint, options)
+ 
+       if (r.status >= 200 && r.status < 400) {
+-        let json
++        let res
+ 
+         if (this._hasContent(r)) {
+-          try {
+-            json = await r.json()
+-          } catch (e) {
+-            console.error('Unable to parse response json', e.message)
+-          }
++          res = await this._parseResponse(r)
+         }
+ 
+-        return { httpStatus: r.status, json }
++        return { httpStatus: r.status, res }
+       }
+ 
+       let content = ''
+@@ -152,6 +150,40 @@ class Api extends Behaviours {
      }
    }
  
@@ -39,10 +74,33 @@ index a64a0e7..f719aeb 100644
 +    }
 +  }
 +
++  async _parseResponse (response) {
++    switch (this.config.accept) {
++      case 'application/json':
++        try {
++          return await response.json()
++        } catch (e) {
++          console.error('Unable to parse response json', e.message)
++        }
++      break;
++      case 'image/*':
++        try {
++          const blob = await response.blob()
++          return URL.createObjectURL(blob)
++        } catch (e) {
++          console.error('Unable to parse response image', e.message)
++        }
++      break;
++      default:
++        console.error('Supplied response type not recognized!', this.config.accept)
++    }
++
++  }
++
    context (ctx) {
      if (ctx.fetch) {
        this.client = ctx.fetch
-@@ -160,6 +172,16 @@ class Api extends Behaviours {
+@@ -160,6 +192,26 @@ class Api extends Behaviours {
      return this
    }
  
@@ -53,6 +111,16 @@ index a64a0e7..f719aeb 100644
 +
 +  formEncoded () {
 +    this.config.contentType = 'application/x-www-form-urlencoded'
++    return this
++  }
++
++  accept (accept) {
++    this.config.accept = accept
++    return this
++  }
++
++  acceptImage () {
++    this.config.accept = 'image/*'
 +    return this
 +  }
 +

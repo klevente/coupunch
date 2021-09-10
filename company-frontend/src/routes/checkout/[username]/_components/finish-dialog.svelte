@@ -22,11 +22,15 @@
 
 <Modal bind:open={modalOpen} noClickaway>
     <Dialog title="Discounted Items">
-        {#each discountedProducts as product}
-            <div>
-                {product.name} {product.amount} <s>${product.originalPrice}</s> ${product.discountedPrice}
-            </div>
-        {/each}
+        {#if discountedProducts.length === 0}
+            <div>No discounted items.</div>
+        {:else}
+            {#each discountedProducts as product}
+                <div>
+                    {product.name} {product.amount} <s>${product.originalPrice}</s> ${product.discountedPrice}
+                </div>
+            {/each}
+        {/if}
         <div class="button-bar">
             <Button on:click={onFinishClick}>Finish</Button>
         </div>

@@ -2,7 +2,7 @@ import { get } from 'svelte/store';
 import { goto } from '@sapper/app';
 import UserService from './user-service';
 
-export function userId({ session }) {
+export function userId(session) {
     const { user: { id } } = get(session);
     return id;
 }

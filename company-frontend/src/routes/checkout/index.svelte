@@ -30,19 +30,27 @@
     let qrDialog;
     let foundCustomerDialog;
 
-    const navigateToRedeemPage = ({ username }) => goto(`checkout/${username}`);
+    const navigateToCheckoutPage = ({ user: { username }, couponsToRedeem }) => {
+        let path = `checkout/${username}`;
+        if (!!couponsToRedeem) {
+            path += couponsToRedeem;
+        }
+        goto(path);
+    };
 
-    const onCustomerClick = (detail) => navigateToRedeemPage(detail);
+    const onCustomerClick = (detail) => navigateToCheckoutPage(detail);
     const onNewCustomerClick = () => customerAddDialog.open();
     const onCustomerSearchTermChange = ({ detail }) => viewmodel.searchCustomers(detail);
-    const onAddNewCustomer = ({ detail }) => viewmodel.addToCompany(detail, navigateToRedeemPage);
+    const onAddNewCustomer = ({ detail }) => viewmodel.addToCompany(detail, navigateToCheckoutPage);
     const onQrClick = () => qrDialog.open();
     const onQrSuccess = (result) => {
         qrDialog.close();
         foundCustomerDialog.open(result);
     };
     const onScan = ({ detail }) => viewmodel.validateQrCode(detail, onQrSuccess);
-    const onQrUserAccept = ({ detail }) => detail.newlyAdded ? viewmodel.addToCompany(detail, navigateToRedeemPage) : navigateToRedeemPage(detail);
+    const onQrUserAccept = ({ detail }) => detail.newlyAdded
+        ? viewmodel.addToCompany(detail, navigateToCheckoutPage)
+        : navigateToCheckoutPage(detail);
 </script>
 
 <svelte:head>

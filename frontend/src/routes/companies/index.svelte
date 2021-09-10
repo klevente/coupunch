@@ -24,6 +24,10 @@
     { name: 'Name', property: 'name' }
 ]}>
     <CompanyRow slot="row" let:row company={row} on:click={() => onCompanyClick(row)} />
+
+    <svelte:fragment slot="empty">
+        You have not interacted with any companies yet. Once you acquire some points at a place, it will show up here.
+    </svelte:fragment>
 </DynamicTable>
 
 <State {state}/>

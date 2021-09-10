@@ -67,11 +67,18 @@ export default class Viewmodel extends CompanyViewmodel {
     }
 
     async _validateQrCode(qrContent, successCallback) {
+        let couponsToRedeem = null;
+        const index = qrContent.indexOf('?');
+        if (index !== -1) {
+            couponsToRedeem = qrContent.slice(index);
+            qrContent = qrContent.slice(0, index);
+        }
+        console.log(qrContent, couponsToRedeem);
         await this.executeCustom({
             stateStore: this.state,
             action: this.#actions.validateQrCode,
             serviceParams: qrContent,
-            successCallback
+            successCallback: user => successCallback({ user, couponsToRedeem })
         });
     }
 

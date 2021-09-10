@@ -58,7 +58,7 @@
 <H1>Products</H1>
 <section>
     <ProductGroupList
-            {displayedProductGroups}
+            productGroups={displayedProductGroups}
             {selectedProductGroup}
             on:add={openProductGroupEditDialog}
             on:edit={openProductGroupEditDialog}

@@ -35,27 +35,48 @@
   - [x] Add a selector for choosing a Product Group for a Product
   - [ ] Redesign Product and Product Group rows as per wireframe
 - [ ] Create Reports Page
-  - [ ] Find library for managing charts
-  - [ ] Find a solution for aggregating data in a separate service
+  - [x] Find library for managing charts
+  - [x] Find a solution for aggregating data in a separate service
+  - [ ] Try InfluxDB
+  - [ ] Try Metabase
+  - [ ] Try Redash
+  - [ ] Create sample reports
+    - [ ] What is the distribution of redeemed coupons
+    - [ ] What is the frequency of coupon redeeming
+    - [ ] What products are bought frequently
+    - [ ] How much money do the users spend
 - [ ] Create Customer UI
   - [x] Add Company list page
-  - [ ] Add Company detail page
-  - [ ] Add Company Coupons page
-  - [ ] Add Coupon detail page
-  - [ ] Design Progress Indicator
+  - [x] Add Company Coupons page
+  - [x] Add Coupon detail page
+  - [x] Design Progress Indicator
   - [x] Add Profile page (QR-generation)
   - [x] Add QR-export page
+  - [ ] Implement coupon redeeming on coupon list page - coupons store does not update when choosing reward
+  - [ ] Implement reward choose dialog fro redeeming
+  - [ ] Implement QR-generation for redeeming coupons
+  - [ ] Redesign Coupon details
+    - [ ] Product Groups can be toggled open, showing their products instead of a Dialog
+    - [ ] Come up with a better way of showing which reward level is open at the moment
+    - [ ] Remove Table headers as they are unnecessary
+    - [ ] Try out Tables without borders - does not really work
 - [ ] Create Customer backend functionality
-  - [ ] Implement fetching of company list
-  - [ ] Implement fetching of company coupons
-  - [ ] Implement fetching of a company coupon
+  - [x] Implement fetching of company list
+  - [x] Implement fetching of company coupons
+  - [x] Implement fetching of a company coupon
 - [ ] Implement inter-service communication
+  - [ ] Research RabbitMQ best practices, message formats and architecture
   - [ ] Notify the User's Companies when their data (username, qr-code) is updated
   - [ ] Notify the User's Company list if the User is added to that company
+  - [ ] Notify the User's Company list if a company's information (name, url) has been changed
   - [ ] Notify the Reports service of each new transaction, so it can add data to the data lake
   - [ ] Create update forcer buttons and logic for each action so that they can be manually retried in case of a failure
+- [ ] Implement Better error handling
+  - [ ] Send back the problematic fields on updating events so that the form can show it to the user
+  - [ ] Send back status messages which can be translated into human-readable error messages on the frontend
 - [ ] Handle deployment
   - [ ] Come up with creating Docker images easily
   - [ ] Implement startup logic for new instances
   - [ ] Orchestrate containers to work together
+  - [ ] Implement Gateway logic for handling the startup and shutdown of company instances
 - [ ] Create Documentation

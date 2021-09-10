@@ -2,6 +2,7 @@ package dev.klevente.coupunch.usermanager.user.dto
 
 import dev.klevente.coupunch.library.util.mapToArray
 import dev.klevente.coupunch.usermanager.security.authorization.Role
+import dev.klevente.coupunch.usermanager.user.company.Company
 import dev.klevente.coupunch.usermanager.user.User
 
 fun User.toResponse() = UserResponse(

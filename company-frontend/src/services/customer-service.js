@@ -44,7 +44,7 @@ export default class CustomerService extends CompanyService {
 
     static async getCustomerCoupons(username) {
         return await CustomerService.api
-            .endpoint(company(`customers/${username}/coupons`))
+            .endpoint(company(`customers/${username}/coupons/checkout`))
             .get(({ coupons }) => coupons);
     }
 

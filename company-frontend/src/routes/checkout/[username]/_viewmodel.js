@@ -11,6 +11,14 @@ import CheckoutService from '../../../services/checkout-service';
 
 export default class Viewmodel extends CompanyViewmodel {
 
+    constructor(initialCoupons, initialRewards) {
+        super();
+        const couponsArray = initialCoupons.split(',');
+        const rewardsArray = initialRewards.split(',');
+        console.log(couponsArray);
+        // TODO: populate basket with chosen rewards
+    }
+
     state = stateStore();
 
     #products = dataStore();

@@ -4,6 +4,7 @@ import dev.klevente.coupunch.library.exception.BadRequestException
 import dev.klevente.coupunch.library.exception.EntityNotFoundException
 import dev.klevente.coupunch.library.security.AuthenticationFacade
 import dev.klevente.coupunch.usermanager.security.authorization.Role
+import dev.klevente.coupunch.usermanager.user.company.dto.toResponse
 import dev.klevente.coupunch.usermanager.user.dto.*
 import dev.klevente.coupunch.usermanager.util.uuid
 import org.slf4j.Logger
@@ -92,6 +93,11 @@ class UserServiceImpl(
         val user = userRepository.findFirstByCode(code)
             ?: throw EntityNotFoundException(User::class, "code", code)
         return user.toCompanyResponse()
+    }
+
+    override fun getCurrentUserCompanies(): UserCompaniesResponse {
+        val user = getCurrentUser()
+        return user.companies.toResponse()
     }
 
     private fun checkUserExistsAndThrow(email: String, username: String, user: User? = null) {

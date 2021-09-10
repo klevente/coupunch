@@ -5,6 +5,8 @@ import com.google.zxing.client.j2se.MatrixToImageWriter
 import com.google.zxing.qrcode.QRCodeWriter
 import dev.klevente.coupunch.usermanager.user.User
 import dev.klevente.coupunch.usermanager.user.UserService
+import dev.klevente.coupunch.usermanager.user.qr.dto.QrRedeemRequest
+import dev.klevente.coupunch.usermanager.user.qr.dto.RedeemedCouponRequest
 import dev.klevente.coupunch.usermanager.util.toBufferedImage
 import dev.klevente.coupunch.usermanager.util.toByteArray
 import dev.klevente.coupunch.usermanager.util.uuid
@@ -53,6 +55,22 @@ class QrCodeServiceImpl(
             .copyTo(response.outputStream)
     }
 
+    override fun getQrCodeWithRedeemedCouponsForCurrentUser(request: QrRedeemRequest): BufferedImage {
+        val user = userService.getCurrentUser()
+        /*val contents = request.redeemedCoupons.fold(StringBuilder(user.code)) { acc, next ->
+            acc.append('|').append(next.id).append(';').append(next.productId)
+        }.toString()*/
+
+        val coupons = request.redeemedCoupons.map(RedeemedCouponRequest::id)
+        val rewards = request.redeemedCoupons.map(RedeemedCouponRequest::productId)
+
+        val couponsParam = coupons.joinToString(separator = ",", prefix = "coupons=", postfix = "&")
+        val rewardsParam = rewards.joinToString(separator = ",", prefix = "rewards=")
+
+        val contents = "${user.code}?$couponsParam$rewardsParam"
+        return encodeStringToQrBufferedImage(contents)
+    }
+
     private fun getQrImageAndGenerateIfNotExists(user: User) =
         user.qr?.toBufferedImage() ?: generateQrCodeFor(user)
 
@@ -67,9 +85,7 @@ class QrCodeServiceImpl(
     private fun generateQrCodeFor(user: User): BufferedImage {
         log.info("Generating QR code for User $user.userId")
 
-        val writer = QRCodeWriter()
-        val matrix = writer.encode(user.code, BarcodeFormat.QR_CODE, 300, 300)
-        val image =  MatrixToImageWriter.toBufferedImage(matrix)
+        val image = encodeStringToQrBufferedImage(user.code)
 
         user.qr = image.toByteArray()
 
@@ -77,4 +93,8 @@ class QrCodeServiceImpl(
 
         return image
     }
+
+    private fun encodeStringToQrBufferedImage(contents: String) = QRCodeWriter()
+        .run { encode(contents, BarcodeFormat.QR_CODE, 300, 300) }
+        .run { MatrixToImageWriter.toBufferedImage(this) }
 }

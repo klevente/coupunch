@@ -11,4 +11,6 @@ interface CouponService {
     fun removeDeletedProductGroupFromCoupons(productGroup: ProductGroup)
 
     fun getRelevantCouponsFor(product: Product): Set<Coupon>
+
+    fun getCouponsNotIn(coupons: Collection<Coupon>): List<Coupon>
 }

@@ -42,4 +42,12 @@ export default class UserService extends FrontendService {
             .endpoint(`users/current/qr`)
             .put();
     }
+
+    static async generateRedeemQr(request) {
+        return await UserService.api
+            .endpoint(`users/current/qr/redeem`)
+            .acceptImage()
+            .payload(request)
+            .post();
+    }
 }

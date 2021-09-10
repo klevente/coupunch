@@ -1,8 +1,8 @@
 import BaseViewmodel from 'frontend-library/viewmodel/base-viewmodel';
-import { dataStore, stateStore, action } from 'frontend-library/viewmodel';
+import { dataStore, action} from 'frontend-library/viewmodel';
 import { mapped, sorted } from 'frontend-library/viewmodel/transformations';
-import { sortByStore } from 'frontend-library/viewmodel/transformations/stores';
-import CouponService from '../../../../services/mock/coupon-service';
+/*import CouponService from '../../../../services/mock/coupon-service';*/
+import CouponService from '../../../../services/coupon-service';
 
 export default class Viewmodel extends BaseViewmodel {
 

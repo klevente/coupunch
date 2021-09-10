@@ -3,6 +3,8 @@ package dev.klevente.coupunch.usermanager.config
 import dev.klevente.coupunch.usermanager.security.authorization.Role
 import dev.klevente.coupunch.usermanager.user.User
 import dev.klevente.coupunch.usermanager.user.UserRepository
+import dev.klevente.coupunch.usermanager.user.company.Company
+import dev.klevente.coupunch.usermanager.user.company.CompanyRepository
 import dev.klevente.coupunch.usermanager.util.uuid
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
@@ -14,9 +16,17 @@ import org.springframework.transaction.annotation.Transactional
 class InMemoryDatabaseInitializer(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
+    private val companyRepository: CompanyRepository
 ) : ApplicationRunner {
     @Transactional
     override fun run(args: ApplicationArguments) {
+        val couponManager = companyRepository.save(
+            Company(
+                name = "Coupon Manager",
+                url = "couponmanager"
+            )
+        )
+
         val user1 = userRepository.save(
             User(
                 username = "johndoe12",
@@ -24,7 +34,8 @@ class InMemoryDatabaseInitializer(
                 email = "johndoe12@abc.com",
                 password = passwordEncoder.encode("password"),
                 code = "aa-aa", // uuid(),
-                roles = mutableSetOf(Role.USER)
+                roles = mutableSetOf(Role.USER),
+                companies = mutableSetOf(couponManager)
             )
         )
         val user2 = userRepository.save(

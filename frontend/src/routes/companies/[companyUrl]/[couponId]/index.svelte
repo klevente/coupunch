@@ -21,7 +21,7 @@
 
     const { session } = stores();
 
-    const viewmodel = new Viewmodel(companyUrl, couponId, session);
+    const viewmodel = new Viewmodel(session, companyUrl, couponId);
     const { displayedCoupon } = viewmodel;
 
     onMount(async () => {

@@ -4,3 +4,4 @@ export { default as Header } from './header.svelte';
 export { default as Row } from './row.svelte';
 export { default as Table } from './table.svelte';
 export { default as EasyTable } from './easy-table.svelte';
+export { default as EasyTableNoHeader } from './easy-table-no-header.svelte';

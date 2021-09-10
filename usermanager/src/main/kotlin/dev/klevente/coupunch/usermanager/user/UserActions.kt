@@ -20,4 +20,6 @@ interface UserActions {
     fun searchUserByUsername(keyword: String): UsersForCompanyResponse
 
     fun getUserByCode(code: String): UserForCompanyResponse
+
+    fun getCurrentUserCompanies(): UserCompaniesResponse
 }

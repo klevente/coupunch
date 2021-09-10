@@ -17,3 +17,13 @@ class UserForCompanyResponse(
     val name: String,
     val code: String
 )
+
+class UserCompaniesResponse(
+    val companies: Array<UserCompanyResponse>
+)
+
+class UserCompanyResponse(
+    val id: Long,
+    val name: String,
+    val url: String
+)

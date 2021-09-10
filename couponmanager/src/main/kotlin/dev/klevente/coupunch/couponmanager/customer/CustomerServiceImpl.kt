@@ -1,25 +1,32 @@
 package dev.klevente.coupunch.couponmanager.customer
 
+import dev.klevente.coupunch.couponmanager.coupon.CouponService
 import dev.klevente.coupunch.couponmanager.customer.dto.*
 import dev.klevente.coupunch.library.exception.EntityNotFoundException
 import org.slf4j.Logger
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.AbstractMap.SimpleEntry
 
 @Service
 @Transactional(readOnly = true)
 class CustomerServiceImpl(
     private val log: Logger,
-    private val customerRepository: CustomerRepository
+    private val customerRepository: CustomerRepository,
+    private val couponService: CouponService
 ) : CustomerActions, CustomerService {
     override fun getCustomer(id: Long) =
         customerRepository.findByIdOrNull(id) ?: throw EntityNotFoundException.byId(Customer::class, id)
 
     override fun getCustomerByUsername(username: String) =
-        customerRepository.findByUsername(username) ?: throw EntityNotFoundException(Customer::class, "username", username)
+        customerRepository.findByUsername(username) ?: throw EntityNotFoundException(
+            Customer::class,
+            "username",
+            username
+        )
 
-    override fun getCompanyCustomers() = customerRepository.findAll().toResponse()
+    override fun getCompanyCustomers() = customerRepository.findAll().toUserResponse()
 
     @Transactional
     override fun addCustomer(request: CustomerCreateRequest): CustomerResponse {
@@ -32,7 +39,7 @@ class CustomerServiceImpl(
             )
         )
 
-        return customer.toResponse()
+        return customer.toUserResponse()
     }
 
     @Transactional
@@ -45,13 +52,40 @@ class CustomerServiceImpl(
             code = request.code
         }
 
-        return customer.toResponse()
+        return customer.toUserResponse()
     }
 
     override fun getCouponsForCustomer(username: String) = getCustomerByUsername(username).coupons.toResponse()
 
     override fun getCustomerByCode(code: String): CustomerResponse {
-        val customer = customerRepository.findByCode(code) ?: throw EntityNotFoundException(Customer::class, "code", code)
-        return customer.toResponse()
+        val customer =
+            customerRepository.findByCode(code) ?: throw EntityNotFoundException(Customer::class, "code", code)
+        return customer.toUserResponse()
+    }
+
+    override fun getCouponsForUser(userId: Long): UserCouponsResponse {
+        val customer = getCustomer(userId)
+        val coupons = HashMap(customer.coupons) // create copy so that JPA does not persist
+        val otherCoupons = couponService.getCouponsNotIn(coupons.keys)
+        otherCoupons.forEach {
+            coupons.putIfAbsent(it, 0.0)
+        }
+
+        return coupons.toUserResponse()
+    }
+
+    override fun getCouponForUser(userId: Long, couponId: Long): UserCouponResponse {
+        val customer = getCustomer(userId)
+        val coupon = customer.coupons
+            .filterKeys { it.id == couponId }
+            .entries
+            .firstOrNull()
+            ?: couponService
+                .getCoupon(couponId)
+                .let {
+                    SimpleEntry(it, 0.0)
+                }
+
+        return coupon.toUserResponse()
     }
 }

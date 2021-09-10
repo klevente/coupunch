@@ -4,6 +4,7 @@ import dev.klevente.coupunch.usermanager.user.dto.UserAddRequest
 import dev.klevente.coupunch.usermanager.user.dto.UserPasswordUpdateRequest
 import dev.klevente.coupunch.usermanager.user.dto.UserUpdateRequest
 import dev.klevente.coupunch.usermanager.user.qr.QrActions
+import dev.klevente.coupunch.usermanager.user.qr.dto.QrRedeemRequest
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.ok
@@ -78,4 +79,12 @@ class UserController(
         qrActions.exportQrForCurrentUser(response)
         return ok().build()
     }
+
+    @PostMapping("current/qr/redeem", produces = [MediaType.IMAGE_PNG_VALUE])
+    fun generateQrWithRedeemedCouponsForCurrentUser(
+        @RequestBody @Valid request: QrRedeemRequest
+    ) = ok(qrActions.getQrCodeWithRedeemedCouponsForCurrentUser(request))
+
+    @GetMapping("current/companies")
+    fun getCurrentUserCompanies() = ok(userActions.getCurrentUserCompanies())
 }

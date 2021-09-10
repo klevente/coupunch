@@ -1,6 +1,6 @@
 <script>
     import { createEventDispatcher } from 'svelte';
-    import { EasyTable, Row, Column } from 'frontend-library/components/table';
+    import { EasyTable, EasyTableNoHeader, Row, Column } from 'frontend-library/components/table';
     import { sortedReactive } from 'frontend-library/viewmodel/transformations';
     import { sortByStore } from 'frontend-library/viewmodel/transformations/stores';
 
@@ -23,8 +23,7 @@
         columns={[
             { name: 'Name', property: 'name' },
             { name: 'Amount', property: 'amount' },
-            { name: 'Price' },
-            { name: 'New Price' }
+            { name: 'Price' }
         ]}
         items={sortedItems}
 >
@@ -35,14 +34,7 @@
             {#if row.type === 'group'}
                 Tap
             {:else}
-                ${row.originalPrice}
-            {/if}
-        </Column>
-        <Column>
-            {#if row.type === 'group'}
-                Tap
-            {:else}
-                <s>${row.discountedPrice}</s>
+                <s>${row.originalPrice}</s> ${row.discountedPrice}
             {/if}
         </Column>
     </Row>
