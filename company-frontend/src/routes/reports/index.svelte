@@ -1,19 +1,5 @@
 <script>
     import { H1 } from 'attractions';
-    import Chart from '../../components/chart.svelte';
-
-    const options = {
-        chart: {
-            type: 'line'
-        },
-        series: [{
-            name: 'sales',
-            data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
-        }],
-        xaxis: {
-            categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
-        }
-    };
 </script>
 
 <svelte:head>
@@ -22,9 +8,19 @@
 
 <H1>Reports</H1>
 <section>
-    <Chart {options} />
+    <iframe
+            src="http://localhost:8086/orgs/4aa4774be8571abf/dashboards/0826b41b3f271000?present=true"
+            width="100%"
+            height="500px"
+    ></iframe>
 </section>
 
 <style lang="scss">
+  iframe:focus {
+    outline: none;
+  }
 
+  iframe[seamless] {
+    display: block;
+  }
 </style>
