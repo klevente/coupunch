@@ -30,7 +30,7 @@
     let qrDialog;
     let foundCustomerDialog;
 
-    const navigateToCheckoutPage = ({ user: { username }, couponsToRedeem }) => {
+    const navigateToCheckoutPage = ({ username, couponsToRedeem }) => {
         let path = `checkout/${username}`;
         if (!!couponsToRedeem) {
             path += couponsToRedeem;
@@ -39,6 +39,7 @@
     };
 
     const onCustomerClick = (detail) => navigateToCheckoutPage(detail);
+    const onResendClick = (detail) => viewmodel.manuallyAddCompanyToUsersList(detail);
     const onNewCustomerClick = () => customerAddDialog.open();
     const onCustomerSearchTermChange = ({ detail }) => viewmodel.searchCustomers(detail);
     const onAddNewCustomer = ({ detail }) => viewmodel.addToCompany(detail, navigateToCheckoutPage);
@@ -69,12 +70,14 @@
 
     <DynamicTable data={displayedCustomers} {sortBy} columns={[
         { name: 'Name', property: 'name' },
-        { name: 'Username', property: 'username' }
+        { name: 'Username', property: 'username' },
+        { name: 'Actions' }
     ]}>
         <CustomerRow
                 slot="row" let:row
                 customer={row}
                 on:click={() => onCustomerClick(row)}
+                on:resend={() => onResendClick(row)}
         />
         <svelte:fragment slot="empty">
             No users match the selected search query.

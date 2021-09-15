@@ -18,7 +18,7 @@ class EntityNotFoundException(message: String) : RestException(message) {
     )
 
     companion object {
-        fun byId(clazz: KClass<*>, id: Long) = EntityNotFoundException(clazz, "id", id)
+        fun <T: Any> byId(clazz: KClass<*>, id: T) = EntityNotFoundException(clazz, "id", id)
     }
 }
 

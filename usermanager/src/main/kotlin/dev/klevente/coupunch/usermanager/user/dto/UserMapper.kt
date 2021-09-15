@@ -9,6 +9,7 @@ fun User.toResponse() = UserResponse(
     id = id,
     username = username,
     email = email,
+    name = name,
     scope = roles.mapToArray(Role::name)
 )
 
@@ -21,4 +22,11 @@ fun User.toCompanyResponse() = UserForCompanyResponse(
 
 fun Collection<User>.toCompanyResponse() = UsersForCompanyResponse(
     results = mapToArray(User::toCompanyResponse)
+)
+
+fun User.toUpdateEvent() = UserUpdateEvent(
+    id = id,
+    username = username,
+    name = name,
+    code = code
 )

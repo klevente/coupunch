@@ -125,3 +125,8 @@ fun Reward.toUserResponse() = UserCouponReward(
         )
     }
 )
+
+fun Customer.toAddedEvent(companyId: String) = UserAddEvent(
+    companyId = companyId,
+    userId = id
+)

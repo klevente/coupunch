@@ -5,7 +5,6 @@
     const dispatch = createEventDispatcher();
 
     export function open(qrResultToStore) {
-        console.log(qrResultToStore);
         qrResult = qrResultToStore;
         modalOpen = true;
     }
@@ -23,9 +22,9 @@
 
 <Modal bind:open={modalOpen} noClickaway>
     {#if !!qrResult}
-        <Dialog title="Found user: {qrResult.user.username}">
-            <p>Found {qrResult.user.username}.</p>
-            {#if qrResult.user.newlyAdded}
+        <Dialog title="Found user: {qrResult.username}">
+            <p>Found {qrResult.username}.</p>
+            {#if qrResult.newlyAdded}
                 <p>This customer will be added to the company's customer list.</p>
             {/if}
             <div class="button-bar">

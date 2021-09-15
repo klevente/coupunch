@@ -40,7 +40,8 @@ export default class Viewmodel extends CompanyViewmodel {
         get: action(CustomerService.get),
         searchCustomers: action(CustomerService.searchCustomers),
         addToCompany: action(CustomerService.addToCompany, 'Successfully added customer to the company'),
-        validateQrCode: action(CustomerService.getCustomerByQrCode, 'Successfully parsed QR code')
+        validateQrCode: action(CustomerService.getCustomerByQrCode, 'Successfully parsed QR code'),
+        manuallyAddToUsersCompanies: action(CustomerService.manuallyAddToUsersCompanies, 'Successfully requested adding the company to the users list')
     };
 
     async get() {
@@ -73,18 +74,21 @@ export default class Viewmodel extends CompanyViewmodel {
             couponsToRedeem = qrContent.slice(index);
             qrContent = qrContent.slice(0, index);
         }
-        console.log(qrContent, couponsToRedeem);
         await this.executeCustom({
             stateStore: this.state,
             action: this.#actions.validateQrCode,
             serviceParams: qrContent,
-            successCallback: user => successCallback({ user, couponsToRedeem })
+            successCallback: user => successCallback({ ...user, couponsToRedeem })
         });
     }
 
     _throttledValidateQrCode = throttlePromise(this._validateQrCode.bind(this), 3000);
 
     async _searchCustomers(keyword) {
+        if (keyword.trim().length === 0) {
+            this.#foundCustomers.setSuccess([]);
+            return;
+        }
         await this.load({
             dataStore: this.#foundCustomers,
             action: this.#actions.searchCustomers,
@@ -93,6 +97,15 @@ export default class Viewmodel extends CompanyViewmodel {
     }
 
     _debouncedSearchCustomers = debouncePromise(this._searchCustomers.bind(this));
+
+    async manuallyAddCompanyToUsersList(customer) {
+        await this.execute({
+            action: this.#actions.manuallyAddToUsersCompanies,
+            serviceParams: customer,
+            serviceCallback: this._defaultServiceCallback(),
+            localCallback: this._defaultOperations().nop()
+        });
+    }
 
     get _resource() {
         return this.#customers;

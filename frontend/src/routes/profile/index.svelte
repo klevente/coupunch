@@ -34,6 +34,7 @@
         viewmodel.updatePassword(detail.password, passwordForm.resetForm);
     };
     const onUpdateQrClick = () => viewmodel.updateQr();
+    const onResendUpdateClick = () => viewmodel.resendInfo();
 
 </script>
 
@@ -65,6 +66,12 @@
             <Button filled on:click={onUpdateQrClick}>Update QR</Button>
             <Button filled href="api/users/current/qr/export">Export QR</Button>
         </div>
+
+        <Divider text="Advanced"/>
+
+        <div class="other-buttons">
+            <Button filled on:click={onResendUpdateClick}>Resend Info to Companies</Button>
+        </div>
     </svelte:fragment>
 </Dynamic>
 
@@ -74,6 +81,11 @@
   .qr-buttons {
     display: flex;
     justify-content: space-around;
+  }
+
+  .other-buttons {
+    display: flex;
+    justify-content: center;
   }
 
 </style>

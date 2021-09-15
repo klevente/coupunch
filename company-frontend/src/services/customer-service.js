@@ -48,5 +48,13 @@ export default class CustomerService extends CompanyService {
             .get(({ coupons }) => coupons);
     }
 
+    static async manuallyAddToUsersCompanies({ id }, fetchCallback) {
+        await CustomerService.api
+            .endpoint(company(`customers/${id}/add-company`))
+            .post();
+
+        CustomerService._cb(fetchCallback);
+    }
+
     static _cb = CustomerService._createCallback(CustomerService.get);
 }

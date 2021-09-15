@@ -18,10 +18,9 @@
     import Viewmodel from './_viewmodel';
 
     export let username;
-    export let coupons = '';
-    export let rewards = '';
+    export let rewards = null;
 
-    const viewmodel = new Viewmodel(coupons, rewards);
+    const viewmodel = new Viewmodel();
     const {
         state,
         basket,
@@ -39,6 +38,7 @@
 
     onMount(async () => {
         await viewmodel.getAll(username);
+        viewmodel.initBasket(rewards);
     });
 
     const onProductClick = ({ detail }) => viewmodel.addProductToBasket(detail);

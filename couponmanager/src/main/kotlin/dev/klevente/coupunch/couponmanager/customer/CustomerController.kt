@@ -45,4 +45,9 @@ class CustomerController(
         @PathVariable userId: Long,
         @PathVariable couponId: Long
     ) = ok(customerActions.getCouponForUser(userId, couponId))
+
+    @PostMapping("{userId}/add-company")
+    fun resendUserAddedToCompanyEvent(
+        @PathVariable userId: Long
+    ) = ok(customerActions.resendUserAddedToCompanyEvent(userId))
 }

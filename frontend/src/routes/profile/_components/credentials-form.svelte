@@ -5,7 +5,7 @@
     import * as yup from 'yup';
 
     export let data;
-    const { username, email } = data;
+    const { username, email, name } = data;
 
     const dispatch = createEventDispatcher();
 
@@ -24,7 +24,7 @@
 
     const { form, errors, setFields } = createForm({
         schema, onSubmit, onError,
-        initialValues: { username, email }
+        initialValues: { username, email, name }
     });
 
     export function updateFields(credentials) {
@@ -48,6 +48,14 @@
             errors={[$errors.username]}
     >
         <TextField name="username"/>
+    </FormField>
+    <FormField
+            name="Name"
+            help="Your display name"
+            required
+            errors={[$errors.name]}
+    >
+        <TextField name="name"/>
     </FormField>
     <Button type="submit" filled>Update</Button>
 </form>

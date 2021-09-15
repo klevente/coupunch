@@ -9,10 +9,12 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 class CompanyConfigServiceImpl(
     private val log: Logger,
+    @Value("\${spring.application.name}") private val companyId: String,
     @Value("\${company.name}") private val companyName: String,
-    @Value("\${spring.application.name}") private val companyUrl: String,
+    @Value("\${company.url}") private val companyUrl: String,
     @Value("\${company.currency}") private val companyCurrency: String,
 ) : CompanyConfigService {
+    override fun getCompanyId() = companyId
 
     override fun getCompanyName() = companyName
 

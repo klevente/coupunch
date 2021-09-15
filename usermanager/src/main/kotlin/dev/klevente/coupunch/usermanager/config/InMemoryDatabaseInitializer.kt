@@ -20,12 +20,13 @@ class InMemoryDatabaseInitializer(
 ) : ApplicationRunner {
     @Transactional
     override fun run(args: ApplicationArguments) {
-        val couponManager = companyRepository.save(
+        /*val couponManager = companyRepository.save(
             Company(
+                id = "couponmanager",
                 name = "Coupon Manager",
                 url = "couponmanager"
             )
-        )
+        )*/
 
         val user1 = userRepository.save(
             User(
@@ -35,7 +36,7 @@ class InMemoryDatabaseInitializer(
                 password = passwordEncoder.encode("password"),
                 code = "aa-aa", // uuid(),
                 roles = mutableSetOf(Role.USER),
-                companies = mutableSetOf(couponManager)
+                companies = mutableSetOf()
             )
         )
         val user2 = userRepository.save(

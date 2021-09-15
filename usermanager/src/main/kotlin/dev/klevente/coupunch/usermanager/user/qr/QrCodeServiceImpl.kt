@@ -4,6 +4,7 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.j2se.MatrixToImageWriter
 import com.google.zxing.qrcode.QRCodeWriter
 import dev.klevente.coupunch.usermanager.user.User
+import dev.klevente.coupunch.usermanager.user.UserEventPublisher
 import dev.klevente.coupunch.usermanager.user.UserService
 import dev.klevente.coupunch.usermanager.user.qr.dto.QrRedeemRequest
 import dev.klevente.coupunch.usermanager.user.qr.dto.RedeemedCouponRequest
@@ -21,7 +22,8 @@ import javax.servlet.http.HttpServletResponse
 @Transactional(readOnly = true)
 class QrCodeServiceImpl(
     private val log: Logger,
-    private val userService: UserService
+    private val userService: UserService,
+    private val userEventPublisher: UserEventPublisher
 ) : QrActions {
 
     @Transactional
@@ -57,19 +59,15 @@ class QrCodeServiceImpl(
 
     override fun getQrCodeWithRedeemedCouponsForCurrentUser(request: QrRedeemRequest): BufferedImage {
         val user = userService.getCurrentUser()
-        /*val contents = request.redeemedCoupons.fold(StringBuilder(user.code)) { acc, next ->
-            acc.append('|').append(next.id).append(';').append(next.productId)
-        }.toString()*/
 
         val coupons = request.redeemedCoupons.map(RedeemedCouponRequest::id)
         val rewards = request.redeemedCoupons.map(RedeemedCouponRequest::productId)
 
-        // TODO: instead of this, do it like this: rewards=1,2&rewards=2,2
-        // where the first is the redeemed coupon, the second is the product's id
-        val couponsParam = coupons.joinToString(separator = ",", prefix = "coupons=", postfix = "&")
-        val rewardsParam = rewards.joinToString(separator = ",", prefix = "rewards=")
+        val rewardsParam = coupons
+            .zip(rewards)
+            .joinToString(separator = "&") { (first, second) -> "rewards=$first,$second" }
 
-        val contents = "${user.code}?$couponsParam$rewardsParam"
+        val contents = "${user.code}?$rewardsParam"
         return encodeStringToQrBufferedImage(contents)
     }
 
@@ -80,6 +78,8 @@ class QrCodeServiceImpl(
         log.info("Updating unique code for User ${user.id}")
 
         user.code = uuid()
+
+        userEventPublisher.updateUserInCompanies(user)
 
         generateQrCodeFor(user)
     }

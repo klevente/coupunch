@@ -52,9 +52,9 @@
   - [x] Design Progress Indicator
   - [x] Add Profile page (QR-generation)
   - [x] Add QR-export page
-  - [ ] Implement coupon redeeming on coupon list page - coupons store does not update when choosing reward
-  - [ ] Implement reward choose dialog fro redeeming
-  - [ ] Implement QR-generation for redeeming coupons
+  - [x] Implement coupon redeeming on coupon list page
+  - [x] Implement reward choose dialog for redeeming
+  - [x] Implement QR-generation for redeeming coupons
   - [ ] Redesign Coupon details
     - [ ] Product Groups can be toggled open, showing their products instead of a Dialog
     - [ ] Come up with a better way of showing which reward level is open at the moment
@@ -65,12 +65,12 @@
   - [x] Implement fetching of company coupons
   - [x] Implement fetching of a company coupon
 - [ ] Implement inter-service communication
-  - [ ] Research RabbitMQ best practices, message formats and architecture
-  - [ ] Notify the User's Companies when their data (username, qr-code) is updated
-  - [ ] Notify the User's Company list if the User is added to that company
-  - [ ] Notify the User's Company list if a company's information (name, url) has been changed
+  - [x] Research RabbitMQ best practices, message formats and architecture
+  - [x] Notify the User's Companies when their data (username, qr-code) is updated
+  - [x] Notify the User's Company list if the User is added to that company
+  - [x] Notify the User's Company list if a company's information (name, url) has been changed
   - [ ] Notify the Reports service of each new transaction, so it can add data to the data lake
-  - [ ] Create update forcer buttons and logic for each action so that they can be manually retried in case of a failure
+  - [x] Create update forcer buttons and logic for each action so that they can be manually retried in case of a failure
 - [ ] Implement Better error handling
   - [ ] Send back the problematic fields on updating events so that the form can show it to the user
   - [ ] Send back status messages which can be translated into human-readable error messages on the frontend

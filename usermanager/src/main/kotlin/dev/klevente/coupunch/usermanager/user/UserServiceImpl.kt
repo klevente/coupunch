@@ -4,6 +4,7 @@ import dev.klevente.coupunch.library.exception.BadRequestException
 import dev.klevente.coupunch.library.exception.EntityNotFoundException
 import dev.klevente.coupunch.library.security.AuthenticationFacade
 import dev.klevente.coupunch.usermanager.security.authorization.Role
+import dev.klevente.coupunch.usermanager.user.company.CompanyService
 import dev.klevente.coupunch.usermanager.user.company.dto.toResponse
 import dev.klevente.coupunch.usermanager.user.dto.*
 import dev.klevente.coupunch.usermanager.util.uuid
@@ -19,8 +20,10 @@ class UserServiceImpl(
     private val log: Logger,
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
-    private val authenticationFacade: AuthenticationFacade
-) : UserActions, UserService {
+    private val authenticationFacade: AuthenticationFacade,
+    private val userEventPublisher: UserEventPublisher,
+    private val companyService: CompanyService
+) : UserActions, UserEvents, UserService {
 
     override fun getUser(id: Long) =
         userRepository.findByIdOrNull(id) ?: throw EntityNotFoundException.byId(User::class, id)
@@ -95,9 +98,22 @@ class UserServiceImpl(
         return user.toCompanyResponse()
     }
 
+    @Transactional
+    override fun addCompanyToUsersList(event: UserAddEvent) {
+        val user = getUser(event.userId)
+        val company = companyService.getCompany(event.companyId)
+
+        user.companies.add(company)
+    }
+
     override fun getCurrentUserCompanies(): UserCompaniesResponse {
         val user = getCurrentUser()
         return user.companies.toResponse()
+    }
+
+    override fun resendInfoToCurrentUsersCompanies() {
+        val user = getCurrentUser()
+        userEventPublisher.updateUserInCompanies(user)
     }
 
     private fun checkUserExistsAndThrow(email: String, username: String, user: User? = null) {
@@ -122,7 +138,10 @@ class UserServiceImpl(
         user.apply {
             email = emailLowercase
             username = usernameLowercase
+            name = request.name
         }
+
+        userEventPublisher.updateUserInCompanies(user)
 
         return user.toResponse()
     }

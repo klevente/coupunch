@@ -4,6 +4,7 @@ class UserResponse(
     val id: Long,
     val username: String,
     val email: String,
+    val name: String,
     val scope: Array<String>,
 )
 
@@ -23,7 +24,7 @@ class UserCompaniesResponse(
 )
 
 class UserCompanyResponse(
-    val id: Long,
+    val id: String,
     val name: String,
     val url: String
 )

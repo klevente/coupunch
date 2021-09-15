@@ -16,4 +16,6 @@ interface CustomerActions {
     fun getCouponsForUser(userId: Long): UserCouponsResponse
 
     fun getCouponForUser(userId: Long, couponId: Long): UserCouponResponse
+
+    fun resendUserAddedToCompanyEvent(userId: Long)
 }

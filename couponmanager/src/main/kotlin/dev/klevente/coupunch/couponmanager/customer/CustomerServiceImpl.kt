@@ -14,8 +14,9 @@ import java.util.AbstractMap.SimpleEntry
 class CustomerServiceImpl(
     private val log: Logger,
     private val customerRepository: CustomerRepository,
-    private val couponService: CouponService
-) : CustomerActions, CustomerService {
+    private val couponService: CouponService,
+    private val customerEventPublisher: CustomerEventPublisher
+) : CustomerActions, CustomerEvents, CustomerService {
     override fun getCustomer(id: Long) =
         customerRepository.findByIdOrNull(id) ?: throw EntityNotFoundException.byId(Customer::class, id)
 
@@ -39,6 +40,8 @@ class CustomerServiceImpl(
             )
         )
 
+        customerEventPublisher.customerAddedToCompany(customer)
+
         return customer.toUserResponse()
     }
 
@@ -53,6 +56,17 @@ class CustomerServiceImpl(
         }
 
         return customer.toUserResponse()
+    }
+
+    @Transactional
+    override fun update(event: UserUpdateEvent) {
+        val customer = getCustomer(event.id)
+
+        customer.apply {
+            name = event.name
+            username = event.username
+            code = event.code
+        }
     }
 
     override fun getCouponsForCustomer(username: String) = getCustomerByUsername(username).coupons.toResponse()
@@ -87,5 +101,10 @@ class CustomerServiceImpl(
                 }
 
         return coupon.toUserResponse()
+    }
+
+    override fun resendUserAddedToCompanyEvent(userId: Long) {
+        val customer = getCustomer(userId)
+        customerEventPublisher.customerAddedToCompany(customer)
     }
 }

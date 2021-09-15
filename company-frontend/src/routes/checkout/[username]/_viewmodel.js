@@ -3,6 +3,7 @@ import CompanyViewmodel from '../../../viewmodel/company-viewmodel';
 import { action, dataStore, stateStore } from 'frontend-library/viewmodel';
 import { searchStore, sortByStore } from 'frontend-library/viewmodel/transformations/stores';
 import { filteredAndSorted } from 'frontend-library/viewmodel/transformations';
+import { asArray, isArray } from 'frontend-library/util/array';
 /*import ProductService from '../../../services/mock/product-service';
 import CouponService from '../../../services/mock/coupon-service';*/
 import ProductService from '../../../services/product-service';
@@ -10,14 +11,6 @@ import CustomerService from '../../../services/customer-service';
 import CheckoutService from '../../../services/checkout-service';
 
 export default class Viewmodel extends CompanyViewmodel {
-
-    constructor(initialCoupons, initialRewards) {
-        super();
-        const couponsArray = initialCoupons.split(',');
-        const rewardsArray = initialRewards.split(',');
-        console.log(couponsArray);
-        // TODO: populate basket with chosen rewards
-    }
 
     state = stateStore();
 
@@ -50,6 +43,38 @@ export default class Viewmodel extends CompanyViewmodel {
 
     async getAll(username) {
         await Promise.all([this.getProducts(), this.getCoupons(username)]);
+    }
+
+    initBasket(rewards) {
+        if (!rewards) {
+            return;
+        }
+        const couponsStore = get(this.#userCoupons);
+        if (couponsStore.success) {
+            const coupons = couponsStore.data;
+            asArray(rewards)
+                .map(elem => elem
+                    .split(',')
+                    .map(id => parseInt(id))
+                )
+                .forEach(([couponId, productId]) => {
+                    const coupon = coupons.find(({ id }) => id === couponId);
+                    if (!coupon) {
+                        this.state.emitFailure("One of the requested coupons is not found.");
+                        return;
+                    }
+                    if (!coupon.redeemable) {
+                        this.state.emitFailure("One of the requested coupons is not redeemable.");
+                    }
+                    const reward = coupon.rewards[coupon.redeemLevel].products
+                        .find(({ id }) => id === productId);
+                    if (!reward) {
+                        this.state.emitFailure("One of the requested rewards is not found.");
+                        return;
+                    }
+                    this.redeemCoupon(coupon, reward);
+                });
+        }
     }
 
     async getProducts() {

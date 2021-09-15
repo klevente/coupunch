@@ -6,6 +6,7 @@ import dev.klevente.coupunch.library.security.AuthenticationFacade
 import dev.klevente.coupunch.testlibrary.*
 import dev.klevente.coupunch.testlibrary.any
 import dev.klevente.coupunch.usermanager.security.authorization.Role
+import dev.klevente.coupunch.usermanager.user.company.CompanyService
 import dev.klevente.coupunch.usermanager.user.dto.UserAddRequest
 import dev.klevente.coupunch.usermanager.user.dto.UserUpdateRequest
 import io.github.serpro69.kfaker.Faker
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
+import org.mockito.Spy
 import org.mockito.junit.jupiter.MockitoExtension
 import org.slf4j.Logger
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -37,11 +39,24 @@ class UserServiceTest {
     @Mock
     private lateinit var authenticationFacade: AuthenticationFacade
 
+    @Spy
+    private lateinit var userEventPublisher: UserEventPublisher
+
+    @Mock
+    private lateinit var companyService: CompanyService
+
     private val faker = Faker()
 
     @BeforeEach
     fun setup() {
-        userService = UserServiceImpl(log, userRepository, passwordEncoder, authenticationFacade)
+        userService = UserServiceImpl(
+            log,
+            userRepository,
+            passwordEncoder,
+            authenticationFacade,
+            userEventPublisher,
+            companyService
+        )
     }
 
     @Test
@@ -113,17 +128,19 @@ class UserServiceTest {
         val id = faker.randomLong()
         val newEmail = faker.email()
         val username = faker.username()
+        val newName = faker.name.name()
         val userInDb = User(
             id = id,
             username = username.lowercase(),
             email = faker.email().lowercase(),
+            name = faker.name.name(),
             password = faker.password()
         )
         given { userRepository.findById(any()) } willReturn { Optional.of(userInDb) }
         given { userRepository.existsByEmail(any()) } willReturn { false }
 
         // when
-        val request = UserUpdateRequest(newEmail, username)
+        val request = UserUpdateRequest(newEmail, username, newName)
         val updatedUser = userService.updateUser(id, request)
 
         // then

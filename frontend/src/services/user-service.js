@@ -43,6 +43,12 @@ export default class UserService extends FrontendService {
             .put();
     }
 
+    static async resendInfoToCompanies() {
+        await UserService.api
+            .endpoint(`users/current/resend`)
+            .post();
+    }
+
     static async generateRedeemQr(request) {
         return await UserService.api
             .endpoint(`users/current/qr/redeem`)

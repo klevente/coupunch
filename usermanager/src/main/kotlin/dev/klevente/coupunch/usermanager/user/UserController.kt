@@ -87,4 +87,7 @@ class UserController(
 
     @GetMapping("current/companies")
     fun getCurrentUserCompanies() = ok(userActions.getCurrentUserCompanies())
+
+    @PostMapping("current/resend")
+    fun resendInfoToCurrentUsersCompanies() = ok(userActions.resendInfoToCurrentUsersCompanies())
 }

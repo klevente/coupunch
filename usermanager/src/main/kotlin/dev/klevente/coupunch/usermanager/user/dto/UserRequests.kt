@@ -35,6 +35,9 @@ class UserAddRequest(
     val username: String = "",
 
     @field:NotBlank
+    val name: String = "",
+
+    @field:NotBlank
     val password: String = "",
 )
 
@@ -47,9 +50,14 @@ class UserUpdateRequest(
     @field:NotBlank
     @JsonProperty("username")
     private val _username: String?,
+
+    @field:NotBlank
+    @JsonProperty("name")
+    private val _name: String?,
 ) {
     val email     get() = _email!!
     val username  get() = _username!!
+    val name      get() = _name!!
 }
 
 class UserPasswordUpdateRequest(

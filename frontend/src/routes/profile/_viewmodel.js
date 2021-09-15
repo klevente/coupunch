@@ -11,6 +11,7 @@ export default class Viewmodel extends BaseViewmodel {
         update: action(UserService.update, 'Successfully updated user'),
         updatePassword: action(UserService.updatePassword, 'Successfully updated password'),
         updateQr: action(UserService.updateQr, 'Successfully updated QR-code'),
+        resend: action(UserService.resendInfoToCompanies, 'Successfully requested update at companies')
     }
 
     async get() {
@@ -44,6 +45,11 @@ export default class Viewmodel extends BaseViewmodel {
         });
     }
 
+    async resendInfo() {
+        await this.executeCustom({
+            action: this.#actions.resend
+        });
+    }
 
     get _resource() {
         return this.user;

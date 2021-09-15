@@ -22,4 +22,6 @@ interface UserActions {
     fun getUserByCode(code: String): UserForCompanyResponse
 
     fun getCurrentUserCompanies(): UserCompaniesResponse
+
+    fun resendInfoToCurrentUsersCompanies()
 }
