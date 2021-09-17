@@ -1,31 +1,38 @@
 package dev.klevente.coupunch.analytics.checkout
 
-import com.influxdb.client.domain.WritePrecision
 import dev.klevente.coupunch.analytics.checkout.dto.CheckoutEvent
-import dev.klevente.coupunch.analytics.checkout.dto.toMeasurements
-import dev.klevente.coupunch.analytics.config.InfluxCreator
-import kotlinx.coroutines.runBlocking
+import dev.klevente.coupunch.analytics.checkout.dto.toDomain
 import org.slf4j.Logger
 import org.springframework.amqp.AmqpRejectAndDontRequeueException
 import org.springframework.amqp.rabbit.annotation.RabbitListener
 import org.springframework.stereotype.Service
-import java.time.Instant
+import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Service
+@Transactional(readOnly = false)
 class CheckoutEventHandler(
     private val log: Logger,
-    private val influxCreator: InfluxCreator
+    private val purchaseRepository: PurchaseRepository,
+    private val redeemRepository: RedeemRepository
 ) {
     @RabbitListener(queues = ["\${amqp.queue.checkout}"])
+    @Transactional
     fun checkout(event: CheckoutEvent) {
         try {
-            insertToInflux(event)
+            insertIntoDb(event)
         } catch (e: Exception) {
             throw AmqpRejectAndDontRequeueException(e)
         }
     }
 
-    private fun insertToInflux(event: CheckoutEvent) = runBlocking {
+    private fun insertIntoDb(event: CheckoutEvent) {
+        val now = LocalDateTime.now()
+        val pair = event.toDomain(now)
+        purchaseRepository.saveAll(pair.first)
+        redeemRepository.saveAll(pair.second)
+    }
+    /*private fun insertToInflux(event: CheckoutEvent) = runBlocking {
         val now = Instant.now()
         val (first, second) = event.toMeasurements(now)
 
@@ -34,7 +41,8 @@ class CheckoutEventHandler(
             write.writeMeasurements(first, precision = WritePrecision.MS)
             write.writeMeasurements(second, precision = WritePrecision.MS)
         }
-    }
+    }*/
+
 }
 
 

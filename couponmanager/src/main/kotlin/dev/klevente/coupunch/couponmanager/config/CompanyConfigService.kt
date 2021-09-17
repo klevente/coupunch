@@ -8,4 +8,6 @@ interface CompanyConfigService {
     fun getCompanyUrl(): String
 
     fun getCompanyCurrency(): String
+
+    fun getMetabaseKey(): String
 }

@@ -37,18 +37,18 @@
 - [ ] Create Reports Page
   - [x] Find library for managing charts
   - [x] Find a solution for aggregating data in a separate service
-  - [ ] Try InfluxDB
+  - [x] Try InfluxDB
     - [x] Create couponmanager organization
     - [x] Add some test data
     - [x] Try out dashboard
     - [x] Come up with data schema: coupon redeeming, product purchased
     - [x] Add iframe
-    - [ ] Add customizable iframe link for different companies
+    - [x] Add customizable iframe link for different companies
     - [x] Add data collection
-  - [ ] Try Metabase
+  - [x] Try Metabase
   - [ ] Try Redash
   - [ ] Create sample reports
-    - [ ] What is the distribution of redeemed coupons
+    - [x] What is the distribution of redeemed coupons
     - [ ] What is the frequency of coupon redeeming
     - [ ] What products are bought frequently
     - [ ] How much money do the users spend
@@ -67,16 +67,16 @@
     - [ ] Come up with a better way of showing which reward level is open at the moment
     - [ ] Remove Table headers as they are unnecessary
     - [ ] Try out Tables without borders - does not really work
-- [ ] Create Customer backend functionality
+- [x] Create Customer backend functionality
   - [x] Implement fetching of company list
   - [x] Implement fetching of company coupons
   - [x] Implement fetching of a company coupon
-- [ ] Implement inter-service communication
+- [x] Implement inter-service communication
   - [x] Research RabbitMQ best practices, message formats and architecture
   - [x] Notify the User's Companies when their data (username, qr-code) is updated
   - [x] Notify the User's Company list if the User is added to that company
   - [x] Notify the User's Company list if a company's information (name, url) has been changed
-  - [ ] Notify the Reports service of each new transaction, so it can add data to the data lake
+  - [x] Notify the Reports service of each new transaction, so it can add data to the data lake
   - [x] Create update forcer buttons and logic for each action so that they can be manually retried in case of a failure
 - [ ] Implement Better error handling
   - [ ] Send back the problematic fields on updating events so that the form can show it to the user

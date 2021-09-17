@@ -1,6 +1,7 @@
 <script>
     import { stores } from '@sapper/app';
     import { H1 } from 'attractions';
+    import ProfileDropdown from './profile-dropdown.svelte';
 
     export let segment;
 
@@ -12,7 +13,14 @@
         <H1>{$session.user.companyName}</H1>
         <ul>
             <li><a aria-current="{segment === 'home' ? 'page' : undefined}" href="home">home</a></li>
-            <li><a aria-current="{segment === 'logout' ? 'page' : undefined}" href="logout">logout</a></li>
+            <li><a aria-current="{segment === 'checkout' ? 'page' : undefined}" href="checkout">checkout</a></li>
+            <li><a aria-current="{segment === 'products' ? 'page' : undefined}" href="products">products</a></li>
+            <li><a aria-current="{segment === 'coupons' ? 'page' : undefined}" href="coupons">coupons</a></li>
+            <li><a aria-current="{segment === 'reports' ? 'page' : undefined}" href="reports">reports</a></li>
+            <li class="flex-spacer"></li>
+            <li class="right">
+                <ProfileDropdown {segment}/>
+            </li>
         </ul>
     {:else}
         <ul>
@@ -39,6 +47,8 @@
   }
 
   ul {
+    flex-grow: 1;
+    display: flex;
     margin: 0;
     padding: 0;
   }

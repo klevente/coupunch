@@ -1,10 +1,25 @@
 version: '3.8'
 services:
+  db:
+    image: postgres:13.4
+    container_name: analytics_db
+    restart: always
+    environment:
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: couponmanager
+    ports:
+      - '5432:5432'
+    networks:
+      - coupunch-network
   metabase:
     image: metabase/metabase:latest
     container_name: metabase
     ports:
       - '8087:3000'
+    networks:
+      - coupunch-network
   influxdb:
     image: influxdb:2.0.8
     container_name: influx
