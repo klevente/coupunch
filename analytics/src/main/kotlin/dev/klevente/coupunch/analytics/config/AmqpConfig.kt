@@ -24,7 +24,7 @@ class AmqpConfig {
 
     @Bean
     fun redeemQueue(
-        @Value("\${amqp.queue.redeem}") name: String
+        @Value("\${amqp.queue.checkout}") name: String
     ): Queue = QueueBuilder
         .durable(name)
         .build()
@@ -36,7 +36,7 @@ class AmqpConfig {
     ): Binding = BindingBuilder
         .bind(redeemQueue)
         .to(analyticsExchange)
-        .with("analytics.redeem")
+        .with("analytics.checkout")
 
     @Bean
     fun producerJackson2MessageConverter(): Jackson2JsonMessageConverter = Jackson2JsonMessageConverter()

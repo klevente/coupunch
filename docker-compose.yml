@@ -1,5 +1,10 @@
 version: '3.8'
 services:
+  metabase:
+    image: metabase/metabase:latest
+    container_name: metabase
+    ports:
+      - '8087:3000'
   influxdb:
     image: influxdb:2.0.8
     container_name: influx

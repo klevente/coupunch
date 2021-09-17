@@ -18,9 +18,9 @@ class CheckoutServiceImpl(
     private val log: Logger,
     private val customerService: CustomerService,
     private val productService: ProductService,
-    private val couponService: CouponService
+    private val couponService: CouponService,
+    private val checkoutEventPublisher: CheckoutEventPublisher
 ) : CheckoutActions {
-
     @Transactional
     override fun checkout(username: String, request: CheckoutRequest): CheckoutResponse {
         val customer = customerService.getCustomerByUsername(username)
@@ -31,16 +31,34 @@ class CheckoutServiceImpl(
             requestCoupons = request.coupons
         )
 
+        val couponsRedeemedAtLevel = couponEntriesToUpdate.map { it.getRedeemLevel() }
+
         // process coupons by subtracting the required amount of progress
-       processRedeemedCoupons(
-           customerCoupons = customer.coupons,
-           redeemedCoupons = couponEntriesToUpdate
-       )
+        processRedeemedCoupons(
+            customerCoupons = customer.coupons,
+            redeemedCoupons = couponEntriesToUpdate
+        )
 
         // process products by adding the required progress to each coupon they affect
         processPurchasedProducts(
             products = request.products,
             customerCoupons = customer.coupons
+        )
+
+
+        checkoutEventPublisher.checkout(
+            userId = customer.id,
+            productIds = request.products.map {
+                ProductIdWithAmount(it.id, it.amount)
+            },
+            rewardIds = request.coupons.mapIndexed { index, it ->
+                RewardIdWithAmountAndCouponData(
+                    id = it.productId,
+                    amount = it.amount,
+                    couponId = it.id,
+                    redeemLevel = couponsRedeemedAtLevel[index]
+                )
+            }
         )
 
         return CheckoutResponse(status = "OK")
@@ -50,9 +68,11 @@ class CheckoutServiceImpl(
         customerCoupons: Map<Coupon, Double>,
         requestCoupons: Array<RedeemedCoupon>
     ): Map<Coupon, Double> {
-        val couponIds = requestCoupons.map { it.id }
+        val couponIds = requestCoupons.map(RedeemedCoupon::id)
 
-        val couponEntriesToUpdate = customerCoupons.filter { couponIds.contains(it.key.id) }
+        val couponEntriesToUpdate = customerCoupons.filter {
+            couponIds.contains(it.key.id)
+        }
 
         if (couponEntriesToUpdate.size != couponIds.size) {
             throw IllegalArgumentException("Some coupons are not the customer's coupon map")

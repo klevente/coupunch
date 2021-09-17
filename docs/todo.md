@@ -39,12 +39,12 @@
   - [x] Find a solution for aggregating data in a separate service
   - [ ] Try InfluxDB
     - [x] Create couponmanager organization
-    - [ ] Add some test data
+    - [x] Add some test data
     - [x] Try out dashboard
-    - [ ] Come up with data schema: coupon redeeming, product purchased
+    - [x] Come up with data schema: coupon redeeming, product purchased
     - [x] Add iframe
     - [ ] Add customizable iframe link for different companies
-    - [ ] Add data collection
+    - [x] Add data collection
   - [ ] Try Metabase
   - [ ] Try Redash
   - [ ] Create sample reports

@@ -56,6 +56,14 @@ class AmqpConfig {
         .build()
 
     @Bean
+    fun analyticsTopicExchange(
+        @Value("\${amqp.exchange.analytics}") name: String
+    ): TopicExchange = ExchangeBuilder
+        .topicExchange(name)
+        .durable(true)
+        .build()
+
+    @Bean
     fun producerJackson2MessageConverter(): Jackson2JsonMessageConverter = Jackson2JsonMessageConverter()
 
     @Bean
