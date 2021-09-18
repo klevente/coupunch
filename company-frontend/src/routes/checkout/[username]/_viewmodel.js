@@ -38,6 +38,7 @@ export default class Viewmodel extends CompanyViewmodel {
     #actions = {
         getProducts: action(ProductService.get),
         getCoupons: action(CustomerService.getCustomerCoupons),
+        manuallyAddToUsersCompanies: action(CustomerService.manuallyAddToUsersCompanies, 'Successfully requested adding the company to the user\'s list'),
         checkout: action(CheckoutService.checkout, 'Successfully checked out items'),
     }
 
@@ -169,6 +170,13 @@ export default class Viewmodel extends CompanyViewmodel {
             redeemLevelToDisplay: coupon.redeemLevel + 1,
             redeemed: false
         })));
+    }
+    async manuallyAddCompanyToUsersList(username) {
+        await this.executeCustom({
+            action: this.#actions.manuallyAddToUsersCompanies,
+            serviceParams: username,
+            successCallback: () => {}
+        });
     }
 
     get _state() {

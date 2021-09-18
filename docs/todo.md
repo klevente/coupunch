@@ -62,11 +62,11 @@
   - [x] Implement coupon redeeming on coupon list page
   - [x] Implement reward choose dialog for redeeming
   - [x] Implement QR-generation for redeeming coupons
-  - [ ] Redesign Coupon details
-    - [ ] Product Groups can be toggled open, showing their products instead of a Dialog
-    - [ ] Come up with a better way of showing which reward level is open at the moment
-    - [ ] Remove Table headers as they are unnecessary
-    - [ ] Try out Tables without borders - does not really work
+  - [x] Redesign Coupon details
+    - [x] Product Groups can be toggled open, showing their products instead of a Dialog
+    - [x] Come up with a better way of showing which reward level is open at the moment
+    - [x] Remove Table headers as they are unnecessary
+    - [x] Try out Tables without borders - does not really work
 - [x] Create Customer backend functionality
   - [x] Implement fetching of company list
   - [x] Implement fetching of company coupons

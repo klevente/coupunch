@@ -17,5 +17,5 @@ interface CustomerActions {
 
     fun getCouponForUser(userId: Long, couponId: Long): UserCouponResponse
 
-    fun resendUserAddedToCompanyEvent(userId: Long)
+    fun resendUserAddedToCompanyEvent(username: String)
 }

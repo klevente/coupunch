@@ -1,6 +1,7 @@
 <script>
     import { createEventDispatcher } from 'svelte';
-    import { Dialog, Modal, Button } from 'attractions';
+    import { Dialog, Modal, Button, Divider } from 'attractions';
+    import RewardRow from './reward-row.svelte';
 
     const dispatch = createEventDispatcher();
 
@@ -28,7 +29,8 @@
         <Dialog title={`Choose Reward for '${coupon.name}' - Level ${coupon.redeemLevelToDisplay}`}>
             {#each coupon.rewards[coupon.redeemLevel].mergedProducts as reward}
                 <div on:click={() => onRewardClick(reward)}>
-                    {reward.name} {reward.amount} <s>${reward.originalPrice}</s> ${reward.discountedPrice}
+                    <RewardRow {reward}/>
+                    <Divider/>
                 </div>
             {/each}
             <div class="button-bar">

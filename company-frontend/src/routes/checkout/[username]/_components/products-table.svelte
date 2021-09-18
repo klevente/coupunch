@@ -14,7 +14,7 @@
 </script>
 
 <div class="products-table">
-    <SearchField {searchTerm}/>
+    <SearchField {searchTerm} placeholder="Search products..."/>
     <DynamicTable data={products} {sortBy} columns={[
         { name: 'Name', property: 'name' },
         { name: 'Price', property: 'price' }

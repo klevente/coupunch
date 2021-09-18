@@ -6,4 +6,10 @@ export default class CompanyService extends FrontendService {
             .endpoint(`users/current/companies`)
             .get(({ companies }) => companies);
     }
+
+    static async getCompanyName(companyUrl) {
+        return await CompanyService.api
+            .endpoint(`${companyUrl}/config/name`)
+            .get(({ name }) => name);
+    }
 }

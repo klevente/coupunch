@@ -103,8 +103,8 @@ class CustomerServiceImpl(
         return coupon.toUserResponse()
     }
 
-    override fun resendUserAddedToCompanyEvent(userId: Long) {
-        val customer = getCustomer(userId)
+    override fun resendUserAddedToCompanyEvent(username: String) {
+        val customer = getCustomerByUsername(username)
         customerEventPublisher.customerAddedToCompany(customer)
     }
 }

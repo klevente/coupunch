@@ -1,45 +1,99 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
-    import { EasyTable, EasyTableNoHeader, Row, Column } from 'frontend-library/components/table';
-    import { sortedReactive } from 'frontend-library/viewmodel/transformations';
-    import { sortByStore } from 'frontend-library/viewmodel/transformations/stores';
+    import { Accordion, AccordionSection} from 'attractions';
+    import { ChevronDownIcon } from 'svelte-feather-icons';
+    import PriceDisplay from '../../../../../components/price-display.svelte';
+    import AmountDisplay from '../../../../../components/amount-display.svelte';
+    import RewardProductGroupItems from './reward-product-group-items.svelte';
+    import { sortedReactiveSimple } from 'frontend-library/viewmodel/transformations';
 
-    const dispatch = createEventDispatcher();
+    export let items;
 
-    export let reward;
-
-    const onRowClick = productGroup => dispatch('group-click', productGroup);
-
-    const sortBy = sortByStore('name');
-    $: sortedItems = sortedReactive({
-        array: reward.items,
-        sortBy: $sortBy
+    $: sortedItems = sortedReactiveSimple({
+        array: items,
+        sortProperty: 'name'
     });
-
 </script>
 
-<EasyTable
-        {sortBy}
-        columns={[
-            { name: 'Name', property: 'name' },
-            { name: 'Amount', property: 'amount' },
-            { name: 'Price' }
-        ]}
-        items={sortedItems}
->
-    <Row slot="row" let:row clickable={row.type === 'group'} on:click={() => onRowClick(row)}>
-        <Column>{row.name}</Column>
-        <Column>{row.amount}</Column>
-        <Column>
-            {#if row.type === 'group'}
-                Tap
-            {:else}
-                <s>${row.originalPrice}</s> ${row.discountedPrice}
-            {/if}
-        </Column>
-    </Row>
-</EasyTable>
+<Accordion let:closeOtherPanels>
+    {#each sortedItems as reward}
+        {#if reward.type === 'product'}
+            <div class="row">
+                <div class="left">{reward.name}</div>
+                <div class="center">
+                    <AmountDisplay amount={reward.amount}/>
+                </div>
+                <div class="right">
+                    <PriceDisplay price={reward.originalPrice} discountedPrice={reward.discountedPrice}/>
+                </div>
+            </div>
+        {:else if reward.type === 'group'}
+            <AccordionSection on:panel-open={closeOtherPanels} let:toggle>
+                <div slot="handle" class="row" on:click={toggle}>
+                    <div class="left">{reward.name}</div>
+                    <div class="center">
+                        <AmountDisplay amount={reward.amount}/>
+                    </div>
+                    <div class="right">
+                        <ChevronDownIcon size="20" class="accordion-chevron"/>
+                    </div>
+                </div>
+                <RewardProductGroupItems products={reward.products}/>
+            </AccordionSection>
+        {:else}
+            <div>Invalid type {reward.type}</div>
+        {/if}
+    {/each}
+</Accordion>
 
 <style lang="scss">
+  @use 'theme' as vars;
 
+  .left {
+    float: left;
+    width: 50%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .center {
+    float: left;
+    width: 25%;
+  }
+
+  .right {
+    float: left;
+    width: 25%;
+    text-align: right;
+  }
+
+  .row {
+    width: 100%;
+  }
+
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  :global .accordion {
+    section {
+      margin: 0.5em 0 0.5em 0;
+      padding-left: 0.5em;
+      border-left: 1px solid vars.$light-contrast;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      .left {
+        /*width: calc(50% - 0.5em);*/
+        width: 50%
+      }
+
+      .right {
+        width: 50%
+      }
+    }
+  }
 </style>

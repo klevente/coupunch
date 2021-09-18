@@ -17,10 +17,10 @@ class ConfigEntry(
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    val type: ConfigType = ConfigType.STRING,
+    var type: ConfigType = ConfigType.STRING,
 
     @Column(nullable = false)
-    val value: String = ""
+    var value: String = ""
 ) : BaseEntity(id) {
     override fun toString() = "ConfigEntry($formattedId, type=$type, value=$value"
 

@@ -39,7 +39,6 @@
     };
 
     const onCustomerClick = (detail) => navigateToCheckoutPage(detail);
-    const onResendClick = (detail) => viewmodel.manuallyAddCompanyToUsersList(detail);
     const onNewCustomerClick = () => customerAddDialog.open();
     const onCustomerSearchTermChange = ({ detail }) => viewmodel.searchCustomers(detail);
     const onAddNewCustomer = ({ detail }) => viewmodel.addToCompany(detail, navigateToCheckoutPage);
@@ -58,7 +57,7 @@
     <title>Checkout</title>
 </svelte:head>
 
-<H1>Select User</H1>
+<H1>Checkout</H1>
 <section>
     <div class="user-header">
         <H2>Choose Customer</H2>
@@ -70,14 +69,12 @@
 
     <DynamicTable data={displayedCustomers} {sortBy} columns={[
         { name: 'Name', property: 'name' },
-        { name: 'Username', property: 'username' },
-        { name: 'Actions' }
+        { name: 'Username', property: 'username' }
     ]}>
         <CustomerRow
                 slot="row" let:row
                 customer={row}
                 on:click={() => onCustomerClick(row)}
-                on:resend={() => onResendClick(row)}
         />
         <svelte:fragment slot="empty">
             No users match the selected search query.
@@ -109,5 +106,11 @@
 <style lang="scss">
   .user-header {
     display: flex;
+    align-items: center;
+
+    :global h2 {
+      margin-bottom: 0 !important;
+      margin-right: 0.4em;
+    }
   }
 </style>

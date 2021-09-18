@@ -13,4 +13,22 @@ export default class ConfigService extends CompanyService {
             .endpoint(company(`config/metabase/iframe-url`))
             .get(({ url }) => url);
     }
+
+    static async getSettings() {
+        return await ConfigService.api
+            .endpoint(company(`config/settings`))
+            .get();
+    }
+
+    static async updateSettings() {
+        return await ConfigService.api
+            .endpoint(company(`config/settings`))
+            .put();
+    }
+
+    static async resend() {
+        return await ConfigService.api
+            .endpoint(company(`config/settings/resned`))
+            .post();
+    }
 }

@@ -41,7 +41,6 @@ export default class Viewmodel extends CompanyViewmodel {
         searchCustomers: action(CustomerService.searchCustomers),
         addToCompany: action(CustomerService.addToCompany, 'Successfully added customer to the company'),
         validateQrCode: action(CustomerService.getCustomerByQrCode, 'Successfully parsed QR code'),
-        manuallyAddToUsersCompanies: action(CustomerService.manuallyAddToUsersCompanies, 'Successfully requested adding the company to the users list')
     };
 
     async get() {
@@ -97,15 +96,6 @@ export default class Viewmodel extends CompanyViewmodel {
     }
 
     _debouncedSearchCustomers = debouncePromise(this._searchCustomers.bind(this));
-
-    async manuallyAddCompanyToUsersList(customer) {
-        await this.execute({
-            action: this.#actions.manuallyAddToUsersCompanies,
-            serviceParams: customer,
-            serviceCallback: this._defaultServiceCallback(),
-            localCallback: this._defaultOperations().nop()
-        });
-    }
 
     get _resource() {
         return this.#customers;

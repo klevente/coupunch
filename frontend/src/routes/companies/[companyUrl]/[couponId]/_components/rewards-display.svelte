@@ -1,46 +1,43 @@
 <script>
-    import { H3, Accordion, AccordionSection, Button, Dot } from 'attractions';
-    import { ChevronDownIcon } from 'svelte-feather-icons';
+    import { H3, Label, Divider } from 'attractions';
     import CouponProgress from '../../../../../components/coupon-progress.svelte';
     import DiscountDisplay from '../../../../../components/discount-display.svelte';
     import RewardTable from './reward-table.svelte';
-    import RewardProductGroupProductsDialog from './reward-product-group-products-dialog.svelte';
     import { toIndexArray } from 'frontend-library/util/form';
 
     export let rewards;
     export let type;
     export let redeemLevel;
     const indices = toIndexArray(rewards);
-
-    let productsDialog;
-
-    const onGroupClick = ({ detail }) => productsDialog.open(detail);
 </script>
 
 <H3>Rewards</H3>
-<Accordion let:closeOtherPanels>
-    {#each indices as index}
-        <AccordionSection on:panel-open={closeOtherPanels} let:toggle>
-            <div slot="handle">
-                <Button on:click={toggle} outline={redeemLevel === index}>
-                    <ChevronDownIcon size="20" class="mr accordion-chevron"/>
-                    Level {index + 1} at
-                    <CouponProgress {type} progress={rewards[index].threshold}/>,
-                    <DiscountDisplay
-                            discountType={rewards[index].discountType}
-                            discount={rewards[index].discount}/>
-                </Button>
-            </div>
-            <RewardTable
-                    reward={rewards[index]}
-                    on:group-click={onGroupClick}
-            />
-        </AccordionSection>
-    {/each}
-</Accordion>
-
-<RewardProductGroupProductsDialog bind:this={productsDialog}/>
+{#each indices as index}
+    <div class="reward padded" class:current={redeemLevel === index}>
+        <div class="reward-title">
+            <Label>Level {index + 1} at
+                <CouponProgress {type} progress={rewards[index].threshold}/>
+                ,
+                <DiscountDisplay
+                        discountType={rewards[index].discountType}
+                        discount={rewards[index].discount}/>
+            </Label>
+        </div>
+        <RewardTable items={rewards[index].items}/>
+        <Divider/>
+    </div>
+{/each}
 
 <style lang="scss">
+  @use 'theme' as vars;
 
+  .current {
+    background-color: vars.$success;
+  }
+
+  .reward {
+    border-radius: vars.$snackbar-radius;
+    margin-bottom: 0.5em;
+    padding-top: 0.5em;
+  }
 </style>

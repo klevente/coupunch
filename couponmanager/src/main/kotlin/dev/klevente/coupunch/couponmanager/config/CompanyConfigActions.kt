@@ -1,9 +1,20 @@
 package dev.klevente.coupunch.couponmanager.config
 
+import dev.klevente.coupunch.couponmanager.config.dto.NameResponse
+import dev.klevente.coupunch.couponmanager.config.dto.SettingsResponse
+import dev.klevente.coupunch.couponmanager.config.dto.SettingsUpdateRequest
 import dev.klevente.coupunch.couponmanager.config.dto.UrlResponse
 
 interface CompanyConfigActions {
-    fun getMetabaseUrl(): UrlResponse
+    fun getCompanyNameResponse(): NameResponse
 
-    fun generateMetabaseIframeUrl(): UrlResponse
+    fun getMetabaseUrlResponse(): UrlResponse
+
+    fun generateMetabaseIframeUrlResponse(): UrlResponse
+
+    fun getSettings(): SettingsResponse
+
+    fun updateSettings(request: SettingsUpdateRequest): SettingsResponse
+
+    fun resendUpdateSettings()
 }

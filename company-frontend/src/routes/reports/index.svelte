@@ -16,13 +16,13 @@
     <title>Reports</title>
 </svelte:head>
 
-<H1>Reports</H1>
-<section>
+<header>
+    <H1>Reports</H1>
     <Dynamic data={url}>
-        <div class="metabase-header" slot="data" let:data>
-            <Button href={data} target="_blank" filled>Go to Metabase</Button>
-        </div>
+        <Button slot="data" let:data href={data} target="_blank" filled>Go to Metabase</Button>
     </Dynamic>
+</header>
+<section>
     <Dynamic data={iframeUrl}>
         <div slot="data" let:data>
             <iframe
@@ -36,9 +36,10 @@
 </section>
 
 <style lang="scss">
-  .metabase-header {
+  header {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 10px;
   }
 
   iframe {

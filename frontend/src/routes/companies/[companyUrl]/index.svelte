@@ -20,10 +20,10 @@
     const { session } = stores();
 
     const viewmodel = new Viewmodel(session, companyUrl);
-    const { displayedCoupons, state } = viewmodel;
+    const { companyName, displayedCoupons, state } = viewmodel;
 
     onMount(async () => {
-        await viewmodel.get();
+        await viewmodel.getAll();
     });
 
     let rewardDialog;
@@ -40,7 +40,9 @@
 </script>
 
 <header>
-    <H2>TODO {companyUrl}'s coupons</H2>
+    <Dynamic data={companyName}>
+        <H2 slot="data" let:data>{data}'s coupons</H2>
+    </Dynamic>
     <Button
             filled
             on:click={onGenerateClick}

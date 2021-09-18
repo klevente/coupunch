@@ -1,6 +1,6 @@
 <script>
     import { createEventDispatcher } from 'svelte';
-    import { Dot } from 'attractions';
+    import { Badge } from 'attractions';
     import { Row, Column } from 'frontend-library/components/table';
 
     const dispatch = createEventDispatcher();
@@ -18,9 +18,10 @@
     <Column>{coupon.name}</Column>
     <Column>{coupon.type}</Column>
     <Column>
-        Redeem level: {coupon.redeemLevelToDisplay}
         {#if coupon.redeemable}
-            <Dot success />
+            <Badge>Level: {coupon.redeemLevelToDisplay}</Badge>
+        {:else}
+            Level: {coupon.redeemLevelToDisplay}
         {/if}
     </Column>
 </Row>

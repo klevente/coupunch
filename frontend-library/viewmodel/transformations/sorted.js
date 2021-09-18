@@ -90,3 +90,18 @@ export function sortedReactive({
     sortedArray.sort(sortingStrategies[type][order](property));
     return sortedArray;
 }
+
+export function sortedReactiveSimple({
+                                         array,
+                                         sortProperty,
+                                         order = 'asc'
+                                     }) {
+    if (array.length === 0) {
+        return [];
+    }
+    const sortedArray = [...array];
+    const type = typeof resolve(sortProperty, sortedArray[0]);
+    throwIfNotSupportedSortingStrategy(type, order);
+    sortedArray.sort(sortingStrategies[type][order](sortProperty));
+    return sortedArray;
+}

@@ -21,10 +21,9 @@ class StartupRunner(
     }
 
     private fun initConfigData() {
-        val url = ConfigEntry.create("url", companyId)
         val name = ConfigEntry.create("name", "Coupon Manager")
         val currency = ConfigEntry.create("currency", "USD")
 
-        configRepository.saveAll(listOf(url, name, currency))
+        configRepository.saveAll(listOf(name, currency))
     }
 }

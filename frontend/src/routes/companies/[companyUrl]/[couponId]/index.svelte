@@ -6,8 +6,10 @@
 
 <script>
     import { onMount } from 'svelte';
-    import { stores } from '@sapper/app';
-    import { H2, Label } from 'attractions';
+    import { stores, goto } from '@sapper/app';
+    import { H2, Label, Button } from 'attractions';
+    import IconButton from 'frontend-library/components/icon-button.svelte';
+    import { ChevronLeftIcon } from 'svelte-feather-icons';
     import Dynamic from 'frontend-library/components/dynamic.svelte';
     import ProgressIndicator from '../../../../components/progress-indicator.svelte';
     import CouponProgress from '../../../../components/coupon-progress.svelte';
@@ -28,6 +30,7 @@
         await viewmodel.get(couponId);
     });
 
+    const onBackClick = () => goto(`companies/${companyUrl}`);
 </script>
 
 <section>
@@ -35,7 +38,10 @@
         <svelte:fragment slot="data" let:data>
             <div class="header">
                 <div>
-                    <H2>{data.name}</H2>
+                    <div class="title">
+                        <IconButton icon={ChevronLeftIcon} on:click={onBackClick}/>
+                        <H2>{data.name}</H2>
+                    </div>
                     <Label>Your progress:
                         <CouponProgress type={data.type} progress={data.progress}/>
                     </Label>
@@ -46,23 +52,38 @@
                     value={data.progress}
                     levels={data.rewards.map(({ threshold }) => threshold)}
             />
-            <EligibleItemsDisplay
-                    type={data.type}
-                    eligibleItems={data.eligibleItems}
-            />
-            <RewardsDisplay
-                    redeemLevel={data.redeemLevel}
-                    type={data.type}
-                    rewards={data.rewards}
-            />
+            <div class="detail">
+                <EligibleItemsDisplay
+                        type={data.type}
+                        eligibleItems={data.eligibleItems}
+                />
+                <RewardsDisplay
+                        redeemLevel={data.redeemLevel}
+                        type={data.type}
+                        rewards={data.rewards}
+                />
+            </div>
         </svelte:fragment>
     </Dynamic>
 </section>
 
 <style lang="scss">
+  .title {
+    display: flex;
+    align-items: center;
+
+    :global .btn {
+      padding-left: 0 !important;
+    }
+  }
+
   .header {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
+  }
+
+  .detail {
+    margin-top: 10px;
   }
 </style>

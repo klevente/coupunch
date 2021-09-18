@@ -1,7 +1,6 @@
 package dev.klevente.coupunch.couponmanager.config
 
-import dev.klevente.coupunch.couponmanager.config.dto.UrlResponse
-import dev.klevente.coupunch.couponmanager.config.dto.toUrlResponse
+import dev.klevente.coupunch.couponmanager.config.dto.*
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
@@ -18,7 +17,9 @@ import java.util.*
 class CompanyConfigServiceImpl(
     private val log: Logger,
     private val configRepository: ConfigRepository,
+    private val configEventPublisher: ConfigEventPublisher,
     @Value("\${spring.application.name}") private val companyId: String,
+    @Value("\${company.url}") private val companyUrl: String,
     @Value("\${company.metabase.url}") private val metabaseUrl: String,
     @Value("\${company.metabase.key}") private val metabaseKey: String
 ) : CompanyConfigActions, CompanyConfigService {
@@ -26,15 +27,17 @@ class CompanyConfigServiceImpl(
 
     override fun getCompanyName() = getConfigValueAsString("name")
 
-    override fun getCompanyUrl() = getConfigValueAsString("url")
+    override fun getCompanyUrl() = companyUrl
 
     override fun getCompanyCurrency() = getConfigValueAsString("currency")
 
     override fun getMetabaseKey() = metabaseKey
 
-    override fun getMetabaseUrl(): UrlResponse = metabaseUrl.toUrlResponse()
+    override fun getCompanyNameResponse() = getCompanyName().toNameResponse()
 
-    override fun generateMetabaseIframeUrl(): UrlResponse {
+    override fun getMetabaseUrlResponse(): UrlResponse = metabaseUrl.toUrlResponse()
+
+    override fun generateMetabaseIframeUrlResponse(): UrlResponse {
         val key = Keys.hmacShaKeyFor(metabaseKey.toByteArray())
 
         val jws = Jwts.builder()
@@ -55,6 +58,23 @@ class CompanyConfigServiceImpl(
     class DashboardClaim(
         val dashboard: Int
     )
+
+    override fun getSettings() = getCompanyName().toSettingsResponse()
+
+    @Transactional
+    override fun updateSettings(request: SettingsUpdateRequest): SettingsResponse {
+        val nameEntry = configRepository.findFirstByKey("name")!!
+        nameEntry.value = request.name
+
+        configEventPublisher.companyInformationUpdated()
+
+        return nameEntry.value.toSettingsResponse()
+    }
+
+    override fun resendUpdateSettings() {
+        // TODO remove this circular dependency somehow
+        configEventPublisher.companyInformationUpdated()
+    }
 
     private fun getConfigValueAsString(key: String) = configRepository
         .findFirstByKey(key)!!.string()

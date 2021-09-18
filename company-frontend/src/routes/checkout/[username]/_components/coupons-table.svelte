@@ -14,12 +14,15 @@
 </script>
 
 <div class="coupons-table">
-    <SearchField {searchTerm}/>
+    <SearchField {searchTerm} placeholder="Search coupons..."/>
     <DynamicTable data={coupons} {sortBy} columns={[
         { name: 'Name', property: 'name' },
         { name: 'Type', property: 'type' },
         { name: 'Progress' }
     ]}>
+        <div slot="empty">
+            The customer currently has no progress in any coupon.
+        </div>
         <CouponRow
                 slot="row" let:row
                 coupon={row}

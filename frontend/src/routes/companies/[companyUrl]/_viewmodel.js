@@ -5,6 +5,7 @@ import { get } from 'svelte/store';
 /*import CouponService from '../../../services/mock/coupon-service';*/
 import CouponService from '../../../services/coupon-service';
 import UserService from '../../../services/user-service';
+import CompanyService from '../../../services/company-service';
 
 export default class Viewmodel extends BaseViewmodel {
 
@@ -18,10 +19,12 @@ export default class Viewmodel extends BaseViewmodel {
     }
 
     #actions = {
-        get: action(CouponService.getCompanyCouponsForUser),
+        getName: action(CompanyService.getCompanyName),
+        getCoupons: action(CouponService.getCompanyCouponsForUser),
         generateQr: action(UserService.generateRedeemQr, 'Successfully generated QR code')
     }
 
+    companyName = dataStore();
     #coupons = dataStore();
     state = stateStore();
 
@@ -36,9 +39,21 @@ export default class Viewmodel extends BaseViewmodel {
         sortProperty: 'name'
     });
 
-    async get() {
+    async getAll() {
+        await Promise.all([this.getName(), this.getCoupons()]);
+    }
+
+    async getName() {
         await this.load({
-            action: this.#actions.get,
+            dataStore: this.companyName,
+            action: this.#actions.getName,
+            serviceParams: this.#companyUrl
+        });
+    }
+
+    async getCoupons() {
+        await this.load({
+            action: this.#actions.getCoupons,
             serviceParams: [this.#session, this.#companyUrl]
         });
     }
