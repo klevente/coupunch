@@ -7,10 +7,10 @@ export function userId(session) {
     return id;
 }
 
-export async function fetchAndUpdateCurrentUser(session) {
+export async function fetchAndUpdateCurrentUser(companyUrl, session) {
     console.log('called update');
     try {
-        const currentUser = await UserService.getCurrent();
+        const currentUser = await UserService.getCurrent(companyUrl);
         updateCurrentUser(session, currentUser);
     } catch (e) {
         console.error('error while updating current user', e);

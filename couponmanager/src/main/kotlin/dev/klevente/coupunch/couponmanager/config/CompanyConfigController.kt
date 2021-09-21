@@ -3,6 +3,7 @@ package dev.klevente.coupunch.couponmanager.config
 import dev.klevente.coupunch.couponmanager.config.dto.SettingsUpdateRequest
 import org.springframework.http.ResponseEntity.ok
 import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/config")
@@ -23,7 +24,7 @@ class CompanyConfigController(
 
     @PutMapping("settings")
     fun updateSettings(
-        @RequestBody request: SettingsUpdateRequest
+        @RequestBody @Valid request: SettingsUpdateRequest
     ) = ok(companyConfigActions.updateSettings(request))
 
     @PostMapping("settings/resend")

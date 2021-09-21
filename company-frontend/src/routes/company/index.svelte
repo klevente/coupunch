@@ -1,6 +1,7 @@
 <script>
     import { Button, Divider, H1 } from 'attractions';
     import { stores } from '@sapper/app';
+    import { onMount } from 'svelte';
     import State from 'frontend-library/components/state.svelte';
     import Dynamic from 'frontend-library/components/dynamic.svelte';
     import SettingsForm from './_components/settings-form.svelte';
@@ -12,12 +13,16 @@
     const viewmodel = new Viewmodel();
     const { settings, state } = viewmodel;
 
+    onMount(async () => {
+        await viewmodel.get();
+    });
+
     let settingsForm;
 
     const onSettingsSubmit = ({ detail }) => {
         viewmodel.update(
             detail,
-            () => fetchAndUpdateCurrentUser(session),
+            () => fetchAndUpdateCurrentUser($session.user.companyUrl, session),
             () => settingsForm.updateFields($settings.data)
         );
     }

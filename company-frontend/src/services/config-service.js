@@ -20,9 +20,10 @@ export default class ConfigService extends CompanyService {
             .get();
     }
 
-    static async updateSettings() {
+    static async updateSettings(settings) {
         return await ConfigService.api
             .endpoint(company(`config/settings`))
+            .payload(settings)
             .put();
     }
 

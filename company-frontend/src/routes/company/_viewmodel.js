@@ -1,8 +1,8 @@
-import BaseViewmodel from 'frontend-library/viewmodel/base-viewmodel';
 import { dataStore, stateStore, action } from 'frontend-library/viewmodel';
 import ConfigService from '../../services/config-service';
+import CompanyViewmodel from '../../viewmodel/company-viewmodel';
 
-export default class Viewmodel extends BaseViewmodel {
+export default class Viewmodel extends CompanyViewmodel {
     settings = dataStore();
     state = stateStore();
 
@@ -19,6 +19,7 @@ export default class Viewmodel extends BaseViewmodel {
     }
 
     async update(settings, successCallback, errorCallback) {
+        console.log(settings);
         await this.execute({
             action: this.#actions.update,
             serviceParams: settings,

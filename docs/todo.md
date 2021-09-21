@@ -33,7 +33,7 @@
 - [ ] Finish Products Page
   - [ ] Add an optional Product Icon
   - [x] Add a selector for choosing a Product Group for a Product
-  - [ ] Redesign Product and Product Group rows as per wireframe
+  - [x] Redesign Product and Product Group rows as per wireframe
 - [ ] Create Reports Page
   - [x] Find library for managing charts
   - [x] Find a solution for aggregating data in a separate service
@@ -46,7 +46,7 @@
     - [x] Add customizable iframe link for different companies
     - [x] Add data collection
   - [x] Try Metabase
-  - [ ] Try Redash
+  - [ ] ~~Try Redash~~
   - [ ] Create sample reports
     - [x] What is the distribution of redeemed coupons
     - [ ] What is the frequency of coupon redeeming

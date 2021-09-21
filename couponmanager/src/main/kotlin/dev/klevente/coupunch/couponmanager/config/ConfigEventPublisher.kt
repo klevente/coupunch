@@ -14,7 +14,8 @@ class CompanyUpdateEvent(
 class ConfigEventPublisher(
     private val amqpTemplate: AmqpTemplate,
     @Value("\${amqp.exchange.company}") private val companyTopicExchangeName: String,
-    private val companyConfigService: CompanyConfigService,
+    private val configValuesService: ConfigValuesService,
+    private val configRepository: ConfigRepository
 ) {
     fun companyInformationUpdated() {
         val event = buildEvent()
@@ -22,8 +23,8 @@ class ConfigEventPublisher(
     }
 
     private fun buildEvent() = CompanyUpdateEvent(
-        id = companyConfigService.getCompanyId(),
-        name = companyConfigService.getCompanyName(),
-        url = companyConfigService.getCompanyUrl()
+        id = configValuesService.companyId,
+        name = configRepository.getName(),
+        url = configValuesService.companyUrl
     )
 }

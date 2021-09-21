@@ -18,27 +18,24 @@ class CompanyConfigServiceImpl(
     private val log: Logger,
     private val configRepository: ConfigRepository,
     private val configEventPublisher: ConfigEventPublisher,
-    @Value("\${spring.application.name}") private val companyId: String,
-    @Value("\${company.url}") private val companyUrl: String,
-    @Value("\${company.metabase.url}") private val metabaseUrl: String,
-    @Value("\${company.metabase.key}") private val metabaseKey: String
+    private val configValuesService: ConfigValuesService
 ) : CompanyConfigActions, CompanyConfigService {
-    override fun getCompanyId() = companyId
+    override fun getCompanyId() = configValuesService.companyId
 
     override fun getCompanyName() = getConfigValueAsString("name")
 
-    override fun getCompanyUrl() = companyUrl
+    override fun getCompanyUrl() = configValuesService.companyUrl
 
     override fun getCompanyCurrency() = getConfigValueAsString("currency")
 
-    override fun getMetabaseKey() = metabaseKey
+    override fun getMetabaseKey() = configValuesService.metabaseKey
 
     override fun getCompanyNameResponse() = getCompanyName().toNameResponse()
 
-    override fun getMetabaseUrlResponse(): UrlResponse = metabaseUrl.toUrlResponse()
+    override fun getMetabaseUrlResponse(): UrlResponse = configValuesService.metabaseUrl.toUrlResponse()
 
     override fun generateMetabaseIframeUrlResponse(): UrlResponse {
-        val key = Keys.hmacShaKeyFor(metabaseKey.toByteArray())
+        val key = Keys.hmacShaKeyFor(configValuesService.metabaseKey.toByteArray())
 
         val jws = Jwts.builder()
             .claim("resource", DashboardClaim(1))
@@ -51,7 +48,7 @@ class CompanyConfigServiceImpl(
             .signWith(key, SignatureAlgorithm.HS256)
             .compact()
 
-        val url = "$metabaseUrl/embed/dashboard/$jws#bordered=true&titled=false"
+        val url = "${configValuesService.metabaseUrl}/embed/dashboard/$jws#bordered=true&titled=false"
         return url.toUrlResponse()
     }
 
@@ -63,7 +60,7 @@ class CompanyConfigServiceImpl(
 
     @Transactional
     override fun updateSettings(request: SettingsUpdateRequest): SettingsResponse {
-        val nameEntry = configRepository.findFirstByKey("name")!!
+        val nameEntry = configRepository.getNameEntry()
         nameEntry.value = request.name
 
         configEventPublisher.companyInformationUpdated()
