@@ -82,8 +82,15 @@
   - [ ] Send back the problematic fields on updating events so that the form can show it to the user
   - [ ] Send back status messages which can be translated into human-readable error messages on the frontend
 - [ ] Handle deployment
+  - [x] Implement startup logic for new instances
+  - [ ] Implement Consul configuration
+    - [ ] Add `bootstrap.yml/properties` to each service
+    - [ ] Create initial Consul config data for each service
+    - [ ] Transform initial data to base64
+    - [ ] Create Consul kv.json file
+    - [ ] Write consul importer container for importing the kv ([importer](https://github.com/Book-Microservices-v2/chapter08d/tree/master/docker/consul))
+    - [ ] Test Gateway with multiple instances
   - [ ] Come up with creating Docker images easily
-  - [ ] Implement startup logic for new instances
   - [ ] Orchestrate containers to work together
-  - [ ] Implement Gateway logic for handling the startup and shutdown of company instances
+  - [ ] Create script for starting up a new company instance
 - [ ] Create Documentation
