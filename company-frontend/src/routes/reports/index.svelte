@@ -36,6 +36,8 @@
 </section>
 
 <style lang="scss">
+  @use 'theme' as vars;
+
   header {
     display: flex;
     justify-content: space-between;

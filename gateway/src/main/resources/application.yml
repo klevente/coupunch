@@ -27,12 +27,6 @@ spring:
             - RewritePath=/api/couponmanager(?<segment>/?.*), $\{segment}
           # filters:
           #   - SaveSession
-        - id: couponmanager-analytics
-          uri: lb://couponmanager-analytics/
-          predicates:
-            - Path=/api/couponmanager-analytics/**
-          filters:
-            - RewritePath=/api/couponmanager-analytics(?<segment>/?.*), $\{segment}
       #globalcors:
       #  cors-configurations:
       #    '[/**]':
