@@ -1,0 +1,16 @@
+spring:
+  redis:
+    host: localhost
+    port: 6379
+    password: 'redis_pass'
+  jpa:
+    open-in-view: false
+
+amqp:
+  exchange:
+    user: 'user.topic'
+    company: 'company.topic'
+    customer: 'customer.topic'
+  queue:
+    customer: 'customer.queue'
+    company: 'company.queue'

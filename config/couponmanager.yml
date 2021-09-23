@@ -1,0 +1,23 @@
+server:
+  port: 8081
+
+spring:
+  jackson:
+    default-property-inclusion: non_null
+
+db:
+  host: 'localhost'
+  port: 5000
+  name: 'couponmanager'
+
+company:
+  url: couponmanager
+  metabase:
+    url: 'http://localhost:8087'
+    key: 'a2e730100f99b2e33f9a6f629818d0788ceef9f1e818dcd7ccb7e3ddf413946e'
+
+amqp:
+  exchange:
+    analytics: 'analytics.${couponmanager.instance}.topic'
+  queue:
+    couponmanager: 'couponmanager.${couponmanager.instance}.queue'

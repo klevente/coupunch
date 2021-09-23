@@ -1,0 +1,25 @@
+db:
+  host: localhost
+  port: 5432
+  name: couponmanager
+
+server:
+  port: 8082
+
+spring:
+  datasource:
+    url: 'jdbc:postgresql://${db.host}:${db.port}/${db.name}'
+    username: 'admin'
+    password: 'password'
+  jpa:
+    properties:
+      hibernate:
+        dialect: 'org.hibernate.dialect.PostgreSQLDialect'
+    hibernate:
+      ddl-auto: 'update'
+
+amqp:
+  exchange:
+    analytics: 'analytics.${couponmanager.instance}.topic'
+  queue:
+    checkout: 'checkout.${couponmanager.instance}.queue'

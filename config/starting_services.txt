@@ -1,0 +1,3 @@
+COUPONMANAGER_INSTANCE=companyname
+SPRING_PROFILES_ACTIVE=docker,...
+SPRING_CLOUD_CONSUL_HOST=consul # or the dns name of the consul container

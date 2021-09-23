@@ -1,5 +1,3 @@
-spring.application.name=usermanager
-
 server.port=8080
 
 spring.redis.host=localhost
@@ -18,9 +16,9 @@ amqp.queue.customer=customer.queue
 amqp.queue.company=company.queue
 
 # configure consul
-spring.cloud.consul.config.format=yaml
-spring.cloud.consul.config.default-context=defaults
-spring.config.import=optional:consul:
+# spring.cloud.consul.config.format=yaml
+# spring.cloud.consul.config.default-context=defaults
+# spring.config.import=optional:consul:
 
 # from old bootstrap.properties
 # spring.cloud.consul.config.prefix=config

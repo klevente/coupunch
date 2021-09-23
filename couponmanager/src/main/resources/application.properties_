@@ -1,5 +1,3 @@
-couponmanager.instance=couponmanager
-spring.application.name=${couponmanager.instance}
 company.url=couponmanager
 company.metabase.url=http://localhost:8087
 company.metabase.key=a2e730100f99b2e33f9a6f629818d0788ceef9f1e818dcd7ccb7e3ddf413946e
@@ -19,7 +17,7 @@ amqp.exchange.customer=customer.topic
 amqp.exchange.analytics=analytics.${couponmanager.instance}.topic
 amqp.queue.couponmanager=couponmanager.${couponmanager.instance}.queue
 
-spring.config.import=consul:
+# spring.config.import=consul:
 
 # do not include null properties in json
 spring.jackson.default-property-inclusion=non_null

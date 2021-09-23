@@ -45,6 +45,12 @@ services:
       - '15672:15672'
     networks:
       - coupunch-network
+  consul-importer:
+    image: consul-importer:1.0
+    depends_on:
+      - consul-dev
+    networks:
+      - coupunch-network
   consul-dev:
     image: consul
     container_name: consul

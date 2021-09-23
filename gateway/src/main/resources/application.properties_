@@ -5,4 +5,4 @@ spring.redis.password=redis_pass
 logging.level.org.springframework.web.filter.CommonsRequestLoggingFilter=DEBUG
 logging.level.org.springframework.security=DEBUG
 
-spring.config.import=consul:
+# spring.config.import=consul:

@@ -2,8 +2,6 @@ server:
   port: 8000
 
 spring:
-  application:
-    name: gateway
   cloud:
     consul:
       discovery:
@@ -25,24 +23,11 @@ spring:
             - Path=/api/couponmanager/**
           filters:
             - RewritePath=/api/couponmanager(?<segment>/?.*), $\{segment}
-          # filters:
-          #   - SaveSession
-      #globalcors:
-      #  cors-configurations:
-      #    '[/**]':
-      #      allowedOrigins: "http://localhost:3000"
-      #      allowedHeaders:
-      #        - "*"
-      #      allowedMethods:
-      #        - "GET"
-      #        - "POST"
-      #       - "OPTIONS"
       default-filters:
-        # built-in Retry design pattern!
         - name: Retry
           args:
             retries: 3
-            methods: GET,POST
+            methods: GET,POST,PUT,DELETE
 
 # Uncomment the configuration below if you want to enable route matching logs
 #logging:
