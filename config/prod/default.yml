@@ -1,0 +1,17 @@
+spring:
+  redis:
+    host: redis_prod
+    port: 6379
+  rabbitmq:
+    host: rabbitmq_prod
+  jpa:
+    open-in-view: false
+
+amqp:
+  exchange:
+    user: 'user.topic'
+    company: 'company.topic'
+    customer: 'customer.topic'
+  queue:
+    customer: 'customer.queue'
+    company: 'company.queue'

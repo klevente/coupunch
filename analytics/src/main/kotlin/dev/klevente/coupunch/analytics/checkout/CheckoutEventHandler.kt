@@ -27,22 +27,10 @@ class CheckoutEventHandler(
     }
 
     private fun insertIntoDb(event: CheckoutEvent) {
-        val now = LocalDateTime.now()
-        val pair = event.toDomain(now)
+        val pair = event.toDomain()
         purchaseRepository.saveAll(pair.first)
         redeemRepository.saveAll(pair.second)
     }
-    /*private fun insertToInflux(event: CheckoutEvent) = runBlocking {
-        val now = Instant.now()
-        val (first, second) = event.toMeasurements(now)
-
-        influxCreator.influx().use {
-            val write = it.getWriteKotlinApi()
-            write.writeMeasurements(first, precision = WritePrecision.MS)
-            write.writeMeasurements(second, precision = WritePrecision.MS)
-        }
-    }*/
-
 }
 
 

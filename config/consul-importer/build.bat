@@ -1,0 +1,1 @@
+docker build -t consul-importer:1.0 .

@@ -1,6 +1,8 @@
 package dev.klevente.coupunch.couponmanager.config
 
 import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule
 import org.springframework.amqp.core.*
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer
@@ -64,14 +66,19 @@ class AmqpConfig {
         .build()
 
     @Bean
-    fun producerJackson2MessageConverter(): Jackson2JsonMessageConverter = Jackson2JsonMessageConverter()
+    fun producerJackson2MessageConverter(): Jackson2JsonMessageConverter = Jackson2JsonMessageConverter(
+        jacksonObjectMapper().registerModule(JavaTimeModule())
+    )
 
     @Bean
     fun messageHandlerMethodFactory() = DefaultMessageHandlerMethodFactory()
         .apply {
             setMessageConverter(
                 MappingJackson2MessageConverter().apply {
-                    objectMapper.registerModule(ParameterNamesModule(JsonCreator.Mode.PROPERTIES))
+                    objectMapper.registerModules(
+                        ParameterNamesModule(JsonCreator.Mode.PROPERTIES),
+                        JavaTimeModule()
+                    )
                 }
             )
         }

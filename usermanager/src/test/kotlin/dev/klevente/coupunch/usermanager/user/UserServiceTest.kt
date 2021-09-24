@@ -1,5 +1,6 @@
 package dev.klevente.coupunch.usermanager.user
 
+/*
 import com.nhaarman.mockitokotlin2.*
 import dev.klevente.coupunch.library.exception.BadRequestException
 import dev.klevente.coupunch.library.security.AuthenticationFacade
@@ -155,4 +156,4 @@ fun User.withId(id: Long) = User(
     password = password,
     roles = roles,
     qr = qr
-)
+)*/

@@ -2,6 +2,16 @@ server:
   port: 8081
 
 spring:
+  datasource:
+    url: 'jdbc:postgresql://couponmanager_db:5432/couponmanager'
+    username: 'admin'
+    password: 'password'
+    jpa:
+      properties:
+        dialect: 'org.hibernate.dialect.PostgreSQLDialect'
+      hibernate:
+        ddl-auto: 'update'
+
   jackson:
     default-property-inclusion: non_null
 

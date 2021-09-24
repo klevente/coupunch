@@ -1,6 +1,7 @@
 package dev.klevente.coupunch.usermanager.config
 
 import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule
 import org.springframework.amqp.core.*
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer
@@ -79,7 +80,10 @@ class AmqpConfig {
         .apply {
             setMessageConverter(
                 MappingJackson2MessageConverter().apply {
-                    objectMapper.registerModule(ParameterNamesModule(JsonCreator.Mode.PROPERTIES))
+                    objectMapper.registerModules(
+                        ParameterNamesModule(JsonCreator.Mode.PROPERTIES),
+                        JavaTimeModule()
+                    )
                 }
             )
         }

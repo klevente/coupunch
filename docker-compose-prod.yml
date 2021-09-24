@@ -1,0 +1,93 @@
+version: '3.8'
+services:
+  gateway:
+    image: gateway:0.0.1-SNAPSHOT
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONSUL_HOST=consul_prod
+    depends_on:
+      - rabbitmq
+      - consul-importer-prod
+    networks:
+      - coupunch-prod-network
+  usermanager:
+    image: usermanager:0.0.1-SNAPSHOT
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONSUL_HOST=consul_prod
+    depends_on:
+      - rabbitmq
+      - consul-importer-prod
+      - usermanager_db
+    networks:
+      - coupunch-prod-network
+  usermanager_db:
+      image: postgres:13.4
+      container_name: usermanager_db_prod
+      restart: always
+      environment:
+        PGDATA: /var/lib/postgresql/data
+        POSTGRES_USER: admin
+        POSTGRES_PASSWORD: password
+        POSTGRES_DB: usermanager
+      networks:
+        - coupunch-prod-network
+  analytics_db:
+    image: postgres:13.4
+    container_name: analytics_db_prod
+    restart: always
+    environment:
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: metabase
+    networks:
+      - coupunch-prod-network
+  metabase:
+    image: metabase/metabase:latest
+    container_name: metabase_prod
+    ports:
+      - '8087:3000'
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: metabase
+      MB_DB_PORT: 5432
+      MB_DB_USER: admin
+      MB_DB_PASS: password
+      MB_DB_HOST: analytics_db_prod
+    networks:
+      - coupunch-prod-network
+    depends_on:
+      - analytics_db
+  redis:
+    image: redis:alpine
+    container_name: redis_prod
+    volumes:
+      - './.docker/redis/:/bitnami'
+    networks:
+      - coupunch-prod-network
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq_prod
+    networks:
+      - coupunch-prod-network
+  consul-importer-prod:
+    image: consul-importer-prod:1.0
+    container_name: consul_importer_prod
+    depends_on:
+      - consul
+    networks:
+      - coupunch-prod-network
+  consul:
+    image: consul
+    container_name: consul_prod
+    ports:
+      - '8500:8500'
+      - '8500:8600/udp'
+    command: 'agent -node=coupunch -dev -client 0.0.0.0'
+    networks:
+      - coupunch-prod-network
+
+networks:
+  coupunch-prod-network:
+    driver: bridge

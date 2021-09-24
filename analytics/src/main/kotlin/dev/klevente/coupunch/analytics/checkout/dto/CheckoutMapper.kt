@@ -4,9 +4,9 @@ import dev.klevente.coupunch.analytics.checkout.Purchase
 import dev.klevente.coupunch.analytics.checkout.Redeem
 import java.time.LocalDateTime
 
-fun CheckoutEvent.toDomain(time: LocalDateTime): Pair<List<Purchase>, List<Redeem>> {
-    val purchases = products.map { it.toDomain(time, userId) }
-    val redeems = rewards.map { it.toDomain(time, userId) }
+fun CheckoutEvent.toDomain(): Pair<List<Purchase>, List<Redeem>> {
+    val purchases = products.map { it.toDomain(timestamp, userId) }
+    val redeems = rewards.map { it.toDomain(timestamp, userId) }
     return purchases to redeems
 }
 

@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: 'jdbc:postgresql://localhost:5432/couponmanager'
+    url: 'jdbc:postgresql://analytics_db_prod:5432/couponmanager'
     username: 'admin'
     password: 'password'
   jpa:

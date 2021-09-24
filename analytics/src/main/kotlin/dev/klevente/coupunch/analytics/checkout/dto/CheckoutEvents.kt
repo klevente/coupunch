@@ -1,6 +1,9 @@
 package dev.klevente.coupunch.analytics.checkout.dto
 
+import java.time.LocalDateTime
+
 class CheckoutEvent(
+    val timestamp: LocalDateTime = LocalDateTime.MIN,
     val userId: Long = -1,
     val products: Array<PurchasedProductEvent> = emptyArray(),
     val rewards: Array<RedeemedRewardEvent> = emptyArray()

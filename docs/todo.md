@@ -84,13 +84,17 @@
 - [ ] Handle deployment
   - [x] Implement startup logic for new instances
   - [ ] Implement Consul configuration
-    - [ ] Add `bootstrap.yml/properties` to each service
-    - [ ] Create initial Consul config data for each service
-    - [ ] Transform initial data to base64
-    - [ ] Create Consul kv.json file
-    - [ ] Write consul importer container for importing the kv ([importer](https://github.com/Book-Microservices-v2/chapter08d/tree/master/docker/consul))
+    - [x] Add `bootstrap.yml/properties` to each service
+    - [x] Create initial Consul config data for each service
+    - [x] Transform initial data to base64
+    - [x] Create Consul kv.json file
+    - [x] Write consul importer container for importing the kv ([importer](https://github.com/Book-Microservices-v2/chapter08d/tree/master/docker/consul))
     - [ ] Test Gateway with multiple instances
   - [ ] Come up with creating Docker images easily
+    - [x] Create production compose file
+    - [x] Create Docker images of services
+    - [ ] Write script for easy spin-up
+    - [ ] Write docs on how to spin up a new company instance
   - [ ] Orchestrate containers to work together
   - [ ] Create script for starting up a new company instance
 - [ ] Create Documentation

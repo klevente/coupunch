@@ -10,6 +10,7 @@ import dev.klevente.coupunch.library.util.mapToArray
 import org.springframework.amqp.core.AmqpTemplate
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class CheckoutEventPublisher(
@@ -57,7 +58,12 @@ class CheckoutEventPublisher(
             )
         }
 
-        return CheckoutEvent(userId, purchasedProductEvents, redeemedRewardEvents)
+        return CheckoutEvent(
+            timestamp = LocalDateTime.now(),
+            userId = userId,
+            products = purchasedProductEvents,
+            rewards = redeemedRewardEvents
+        )
     }
 }
 
