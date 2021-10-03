@@ -8,9 +8,9 @@ import { guard } from '@beyonk/sapper-rbac';
 import { initApi } from './services/api';
 import routes from './routes';
 
-const { PORT, NODE_ENV } = process.env;
+const { PORT, NODE_ENV, PROXY_URL } = process.env;
 const dev = NODE_ENV === 'development';
-const backend = 'http://localhost:8000/';
+const backend = PROXY_URL || 'http://localhost:8000/';
 
 initApi();
 

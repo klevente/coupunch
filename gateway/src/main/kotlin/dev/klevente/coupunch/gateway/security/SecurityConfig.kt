@@ -46,6 +46,6 @@ class SecurityConfig(
 // @EnableRedisWebSession(redisFlushMode = RedisFlushMode.IMMEDIATE)
 @EnableRedisWebSession
 class SessionConfig {
-    @Bean
-    fun redisConnectionFactory() = LettuceConnectionFactory()
+    /*@Bean
+    fun redisConnectionFactory() = LettuceConnectionFactory()*/
 }

@@ -1,3 +1,9 @@
 COUPONMANAGER_INSTANCE=companyname
-SPRING_PROFILES_ACTIVE=docker,...
+SPRING_PROFILES_ACTIVE=prod,...
 SPRING_CLOUD_CONSUL_HOST=consul # or the dns name of the consul container
+
+-e BPL_JAVA_NMT_ENABLED=false as the current version crashes with jre8
+
+1. create analytics database (database=companyname)
+2. add config to consul (companyname; companyname,prod)
+3. run script to start containers

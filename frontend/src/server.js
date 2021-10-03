@@ -9,13 +9,15 @@ import { guard } from "@beyonk/sapper-rbac";
 import { initApi } from './services/api';
 
 
-const { PORT, NODE_ENV } = process.env;
+const { PORT, NODE_ENV, PROXY_URL } = process.env;
 const dev = NODE_ENV === 'development';
 
-initApi()
+const backend = PROXY_URL || 'http://localhost:8000/';
+
+initApi();
 
 polka() // You can also use Express
-    .use('/api', createProxyMiddleware({ target: 'http://localhost:8000/' }))
+    .use('/api', createProxyMiddleware({ target: backend }))
     .use(
         compression({ threshold: 0 }),
         sirv('static', { dev }),

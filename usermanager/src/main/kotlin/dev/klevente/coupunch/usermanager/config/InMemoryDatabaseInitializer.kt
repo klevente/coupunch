@@ -20,6 +20,11 @@ class InMemoryDatabaseInitializer(
 ) : ApplicationRunner {
     @Transactional
     override fun run(args: ApplicationArguments) {
+
+        if (userRepository.count() > 0L) {
+            return
+        }
+
         /*val couponManager = companyRepository.save(
             Company(
                 id = "couponmanager",
@@ -27,7 +32,6 @@ class InMemoryDatabaseInitializer(
                 url = "couponmanager"
             )
         )*/
-
         val user1 = userRepository.save(
             User(
                 username = "johndoe12",

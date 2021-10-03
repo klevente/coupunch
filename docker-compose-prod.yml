@@ -1,18 +1,42 @@
 version: '3.8'
 services:
+  frontend:
+    image: coupunch-frontend:latest
+    container_name: coupunch-frontend
+    environment:
+      - PROXY_URL=http://coupunch-gateway:8000
+    ports:
+      - '3000:3000'
+    networks:
+      - coupunch-prod-network
+  company-frontend:
+    image: coupunch-company-frontend:latest
+    container_name: coupunch-company-frontend
+    environment:
+      - PROXY_URL=http://coupunch-gateway:8000
+    ports:
+      - '3001:3000'
+    networks:
+      - coupunch-prod-network
   gateway:
     image: gateway:0.0.1-SNAPSHOT
+    container_name: coupunch-gateway
     environment:
+      - BPL_JAVA_NMT_ENABLED=false
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_CLOUD_CONSUL_HOST=consul_prod
     depends_on:
       - rabbitmq
       - consul-importer-prod
+    ports:
+      - '8000:8000'
     networks:
       - coupunch-prod-network
   usermanager:
     image: usermanager:0.0.1-SNAPSHOT
+    container_name: coupunch-usermanager
     environment:
+      - BPL_JAVA_NMT_ENABLED=false
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_CLOUD_CONSUL_HOST=consul_prod
     depends_on:
@@ -24,7 +48,6 @@ services:
   usermanager_db:
       image: postgres:13.4
       container_name: usermanager_db_prod
-      restart: always
       environment:
         PGDATA: /var/lib/postgresql/data
         POSTGRES_USER: admin
@@ -35,7 +58,6 @@ services:
   analytics_db:
     image: postgres:13.4
     container_name: analytics_db_prod
-    restart: always
     environment:
       PGDATA: /var/lib/postgresql/data
       POSTGRES_USER: admin
