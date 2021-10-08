@@ -38,7 +38,9 @@ class CompanyConfigServiceImpl(
         val key = Keys.hmacShaKeyFor(configValuesService.metabaseKey.toByteArray())
 
         val jws = Jwts.builder()
-            .claim("resource", DashboardClaim(1))
+            .claim("resource", DashboardClaim(
+                configValuesService.dashboard
+            ))
             .claim("params", Unit)
             .setExpiration(Date.from(LocalDateTime
                 .now()

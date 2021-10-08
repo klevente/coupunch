@@ -9,6 +9,7 @@ company:
   url: couponmanager
   metabase:
     url: 'http://localhost:8087'
+    dashboard: 1
     key: 'a2e730100f99b2e33f9a6f629818d0788ceef9f1e818dcd7ccb7e3ddf413946e'
 
 amqp:

@@ -1,8 +1,7 @@
 echo off
 echo Starting up new instance named '%1'
-echo Database port is: '%2'
 echo Make sure you created the analytics db with the name '%1%'
-echo Make sure you created the following Consul KV files: '%1', '%1,prod'
+echo Make sure you created the following Consul KV files: '%1', '%1,prod', '%1-analytics', '%1-analytics,prod'
 pause
 
 docker run -d -t -i ^

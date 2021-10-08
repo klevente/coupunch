@@ -8,5 +8,6 @@ class ConfigValuesService(
     @Value("\${spring.application.name}") val companyId: String,
     @Value("\${company.url}") val companyUrl: String,
     @Value("\${company.metabase.url}") val metabaseUrl: String,
+    @Value("\${company.metabase.dashboard}") val dashboard: Int,
     @Value("\${company.metabase.key}") val metabaseKey: String
 )
