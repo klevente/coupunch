@@ -40,7 +40,7 @@
     .empty {
       display: flex;
       text-align: center;
-      align-items: center;
+      /*align-items: center;*/
     }
 
     .basket {

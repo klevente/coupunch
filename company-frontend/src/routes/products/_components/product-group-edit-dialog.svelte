@@ -12,7 +12,7 @@
         editing = isEditing(productGroup);
     }
 
-    function close() {
+    export function close() {
         modalOpen = false;
     }
 

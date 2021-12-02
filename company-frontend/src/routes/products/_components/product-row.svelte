@@ -13,9 +13,9 @@
 </script>
 
 <Row>
-    <Column>
+    <!--<Column>
         <BoxIcon size="24"/>
-    </Column>
+    </Column>-->
     <Column>{product.name}</Column>
     <Column>${product.price}</Column>
     <Column>

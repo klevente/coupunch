@@ -72,7 +72,6 @@
         </div>
 
         <DynamicTable data={displayedProducts} {sortBy} columns={[
-            { name: 'Icon' },
             { name: 'Name', property: 'name' },
             { name: 'Price', property: 'price' },
             { name: 'Actions' }
