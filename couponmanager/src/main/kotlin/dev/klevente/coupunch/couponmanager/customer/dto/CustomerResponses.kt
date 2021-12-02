@@ -1,5 +1,7 @@
 package dev.klevente.coupunch.couponmanager.customer.dto
 
+import java.math.BigDecimal
+
 class CustomersResponse(
     val customers: Array<CustomerResponse>
 )
@@ -18,16 +20,16 @@ class CustomerCouponResponse(
     val id: Long,
     val name: String,
     val type: String,
-    val progress: Double,
+    val progress: BigDecimal,
     val redeemable: Boolean,
     val redeemLevel: Int,
     val rewards: Array<CustomerCouponReward>
 )
 
 class CustomerCouponReward(
-    val threshold: Double,
+    val threshold: BigDecimal,
     val discountType: String,
-    val discount: Double,
+    val discount: BigDecimal,
     val products: Array<CustomerCouponRewardProduct>
 )
 
@@ -35,8 +37,8 @@ class CustomerCouponRewardProduct(
     val id: Long,
     val name: String,
     val amount: Int,
-    val originalPrice: Double,
-    val discountedPrice: Double
+    val originalPrice: BigDecimal,
+    val discountedPrice: BigDecimal
 )
 
 class UserCouponsResponse(
@@ -47,7 +49,7 @@ class UserCouponResponse(
     val id: Long,
     val name: String,
     val type: String,
-    val progress: Double,
+    val progress: BigDecimal,
     val redeemable: Boolean,
     val redeemLevel: Int,
     val eligibleItems: UserEligibleItems,
@@ -62,7 +64,7 @@ class UserEligibleItems(
 class UserEligibleProduct(
     val id: Long,
     val name: String,
-    val price: Double,
+    val price: BigDecimal,
     val points: Int?
 )
 
@@ -76,13 +78,13 @@ class UserEligibleProductGroup(
 class UserEligibleProductGroupProduct(
     val id: Long,
     val name: String,
-    val price: Double
+    val price: BigDecimal
 )
 
 class UserCouponReward(
-    val threshold: Double,
+    val threshold: BigDecimal,
     val discountType: String,
-    val discount: Double,
+    val discount: BigDecimal,
     val products: Array<UserRewardProduct>,
     val productGroups: Array<UserRewardProductGroup>,
     val mergedProducts: Array<UserRewardProduct>
@@ -92,8 +94,8 @@ class UserRewardProduct(
     val id: Long,
     val name: String,
     val amount: Int,
-    val originalPrice: Double,
-    val discountedPrice: Double
+    val originalPrice: BigDecimal,
+    val discountedPrice: BigDecimal
 )
 
 class UserRewardProductGroup(
@@ -106,6 +108,6 @@ class UserRewardProductGroup(
 class UserRewardProductGroupProduct(
     val id: Long,
     val name: String,
-    val originalPrice: Double,
-    val discountedPrice: Double
+    val originalPrice: BigDecimal,
+    val discountedPrice: BigDecimal
 )

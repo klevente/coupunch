@@ -38,7 +38,7 @@ class CheckoutEventPublisher(
             PurchasedProductEvent(
                 name = product.name,
                 amount = it.amount,
-                price = product.price
+                price = product.price.toDouble()
             )
         }
 
@@ -52,7 +52,7 @@ class CheckoutEventPublisher(
                 price = product.calculateDiscountedPrice(
                     discountType = rewardLevelRedeemed.discountType,
                     discount = rewardLevelRedeemed.discount
-                ),
+                ).toDouble(),
                 couponName = coupon.name,
                 redeemLevel = it.redeemLevel
             )

@@ -1,6 +1,7 @@
 package dev.klevente.coupunch.couponmanager.product
 
 import dev.klevente.coupunch.library.entity.BaseEntity
+import java.math.BigDecimal
 import javax.persistence.*
 
 @Entity
@@ -13,7 +14,7 @@ class Product(
     var name: String = "",
 
     @Column(nullable = false)
-    var price: Double = 0.0,
+    var price: BigDecimal = 0.0.toBigDecimal(),
 
     @ManyToOne
     var group: ProductGroup? = null,

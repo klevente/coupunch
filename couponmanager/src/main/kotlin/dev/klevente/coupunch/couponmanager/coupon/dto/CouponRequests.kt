@@ -1,6 +1,7 @@
 package dev.klevente.coupunch.couponmanager.coupon.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.math.BigDecimal
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotEmpty
@@ -76,7 +77,7 @@ class RewardRequest(
 
     @field:Positive
     @JsonProperty("threshold")
-    private val _threshold: Double?,
+    private val _threshold: BigDecimal?,
 
     @field:NotBlank
     @JsonProperty("discountType")
@@ -84,7 +85,7 @@ class RewardRequest(
 
     @field:Positive
     @JsonProperty("discount")
-    private val _discount: Double?,
+    private val _discount: BigDecimal?,
 
     @field:Valid
     @field:NotEmpty

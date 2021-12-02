@@ -1,6 +1,7 @@
 package dev.klevente.coupunch.couponmanager.product.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.math.BigDecimal
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Positive
 
@@ -12,7 +13,7 @@ class ProductCreateRequest(
 
     @field:Positive
     @JsonProperty("price")
-    private val _price: Double?,
+    private val _price: BigDecimal?,
 
     @JsonProperty("group")
     private val _group: Long?,

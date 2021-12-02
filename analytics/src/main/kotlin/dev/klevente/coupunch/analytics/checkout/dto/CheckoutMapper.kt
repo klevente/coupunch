@@ -15,7 +15,7 @@ fun PurchasedProductEvent.toDomain(time: LocalDateTime, userId: Long) = Purchase
     userId = userId,
     product = name,
     amount = amount,
-    price = price
+    price = price.toBigDecimal()
 )
 
 fun RedeemedRewardEvent.toDomain(time: LocalDateTime, userId: Long) = Redeem(
@@ -25,5 +25,5 @@ fun RedeemedRewardEvent.toDomain(time: LocalDateTime, userId: Long) = Redeem(
     redeemLevel = redeemLevel,
     product = name,
     amount = amount,
-    price = price
+    price = price.toBigDecimal()
 )

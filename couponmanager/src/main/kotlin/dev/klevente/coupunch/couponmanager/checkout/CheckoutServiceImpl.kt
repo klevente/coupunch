@@ -11,6 +11,7 @@ import dev.klevente.coupunch.couponmanager.product.ProductService
 import org.slf4j.Logger
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.math.BigDecimal
 
 @Service
 @Transactional(readOnly = true)
@@ -65,9 +66,9 @@ class CheckoutServiceImpl(
     }
 
     private fun filterRequiredCoupons(
-        customerCoupons: Map<Coupon, Double>,
+        customerCoupons: Map<Coupon, BigDecimal>,
         requestCoupons: Array<RedeemedCoupon>
-    ): Map<Coupon, Double> {
+    ): Map<Coupon, BigDecimal> {
         val couponIds = requestCoupons.map(RedeemedCoupon::id)
 
         val couponEntriesToUpdate = customerCoupons.filter {
@@ -87,7 +88,7 @@ class CheckoutServiceImpl(
 
     private fun processRedeemedCoupons(
         customerCoupons: CustomerCoupons,
-        redeemedCoupons: Map<Coupon, Double>
+        redeemedCoupons: Map<Coupon, BigDecimal>
     ) {
         // subtract required amount of progress
         val updatedEntries = redeemedCoupons.mapValues {
@@ -101,7 +102,7 @@ class CheckoutServiceImpl(
         customerCoupons.putAll(updatedEntries)
 
         // when the gathered progress is 0 -> remove coupon from map
-        customerCoupons.values.removeIf { it == .0 } // maybe it <= .0
+        customerCoupons.values.removeIf { it == .0.toBigDecimal() } // maybe it <= .0
     }
 
     private fun processPurchasedProducts(
@@ -121,8 +122,8 @@ class CheckoutServiceImpl(
                 val productProgress = coupon.getProgressFor(product)
 
                 // then add it to the already existing item or add it as a new entry
-                val oldProgress = customerCoupons.getOrPut(coupon) { .0 }
-                val newProgress = oldProgress + productProgress * amount
+                val oldProgress = customerCoupons.getOrPut(coupon) { .0.toBigDecimal() }
+                val newProgress = oldProgress + productProgress * amount.toBigDecimal()
                 customerCoupons[coupon] = newProgress
             }
         }

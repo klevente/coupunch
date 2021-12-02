@@ -1,5 +1,7 @@
 package dev.klevente.coupunch.couponmanager.product.dto
 
+import java.math.BigDecimal
+
 class ProductsResponse(
     val products: Array<ProductResponse>
 )
@@ -7,6 +9,6 @@ class ProductsResponse(
 class ProductResponse(
     val id: Long,
     val name: String,
-    val price: Double,
+    val price: BigDecimal,
     val group: ProductGroupResponse?
 )

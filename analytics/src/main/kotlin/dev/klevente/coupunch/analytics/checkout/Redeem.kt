@@ -1,6 +1,7 @@
 package dev.klevente.coupunch.analytics.checkout
 
 import dev.klevente.coupunch.library.entity.BaseEntity
+import java.math.BigDecimal
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -28,6 +29,6 @@ class Redeem(
     val amount: Int = -1,
 
     @Column(nullable = false)
-    val price: Double = -1.0
+    val price: BigDecimal = (-1.0).toBigDecimal()
 
 ) : BaseEntity(id)

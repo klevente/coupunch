@@ -2,9 +2,10 @@ package dev.klevente.coupunch.couponmanager.customer
 
 import dev.klevente.coupunch.couponmanager.coupon.Coupon
 import dev.klevente.coupunch.library.entity.BaseEntityWithSuppliedId
+import java.math.BigDecimal
 import javax.persistence.*
 
-typealias CustomerCoupons = MutableMap<Coupon, Double>
+typealias CustomerCoupons = MutableMap<Coupon, BigDecimal>
 
 @Entity
 @Table(name = "app_customer")

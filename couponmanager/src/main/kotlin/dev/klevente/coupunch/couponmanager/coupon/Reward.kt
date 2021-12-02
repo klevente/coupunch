@@ -3,6 +3,7 @@ package dev.klevente.coupunch.couponmanager.coupon
 import dev.klevente.coupunch.couponmanager.product.Product
 import dev.klevente.coupunch.couponmanager.product.ProductGroup
 import dev.klevente.coupunch.library.entity.BaseEntity
+import java.math.BigDecimal
 import javax.persistence.*
 
 typealias ProductRewards = MutableMap<Product, Int>
@@ -15,14 +16,14 @@ class Reward(
     id: Long = -1L,
 
     @Column(nullable = false)
-    var threshold: Double = 0.0,
+    var threshold: BigDecimal = 0.0.toBigDecimal(),
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     var discountType: DiscountType = DiscountType.FIXED,
 
     @Column(nullable = false)
-    var discount: Double = 0.0,
+    var discount: BigDecimal = 0.0.toBigDecimal(),
 
     @ElementCollection
     @CollectionTable(name = "app_product_reward")

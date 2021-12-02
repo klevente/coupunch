@@ -44,14 +44,14 @@ class InMemoryDatabaseInitializer(
         val espresso = productRepository.save(
             Product(
                 name = "espresso",
-                price = 3.0,
+                price = 3.0.toBigDecimal(),
                 group = coffeeGroup
             )
         )
         val cappuccino = productRepository.save(
             Product(
                 name = "cappucino",
-                price = 5.0,
+                price = 5.0.toBigDecimal(),
                 group = coffeeGroup
             )
         )
@@ -65,14 +65,14 @@ class InMemoryDatabaseInitializer(
         val croissant = productRepository.save(
             Product(
                 name = "croissant",
-                price = 6.0,
+                price = 6.0.toBigDecimal(),
                 group = croissantGroup
             )
         )
         val chocolateCroissant = productRepository.save(
             Product(
                 name = "chocolate croissant",
-                price = 8.0,
+                price = 8.0.toBigDecimal(),
                 group = croissantGroup
             )
         )
@@ -86,28 +86,28 @@ class InMemoryDatabaseInitializer(
         val plainSandwich = productRepository.save(
             Product(
                 name = "sandwich",
-                price = 7.0,
+                price = 7.0.toBigDecimal(),
                 group = sandwichGroup
             )
         )
         val hamSandwich = productRepository.save(
             Product(
                 name = "ham sandwich",
-                price = 9.0,
+                price = 9.0.toBigDecimal(),
                 group = sandwichGroup
             )
         )
         val salamiSandwich = productRepository.save(
             Product(
                 name = "salami sandwich",
-                price = 9.0,
+                price = 9.0.toBigDecimal(),
                 group = sandwichGroup
             )
         )
         val premiumSandwich = productRepository.save(
             Product(
                 name = "premium sandwich",
-                price = 11.0,
+                price = 11.0.toBigDecimal(),
                 group = sandwichGroup
             )
         )
@@ -123,9 +123,9 @@ class InMemoryDatabaseInitializer(
         )
         val freeCoffeeRewardLevel1 = rewardRepository.save(
             Reward(
-                threshold = 10.0,
+                threshold = 10.0.toBigDecimal(),
                 discountType = DiscountType.PERCENTAGE,
-                discount = 100.0,
+                discount = 100.0.toBigDecimal(),
                 products = mutableMapOf(),
                 productGroups = mutableMapOf(coffeeGroup to 1),
                 coupon = freeCoffeeAfterCoffeeOrHamSandwich
@@ -133,9 +133,9 @@ class InMemoryDatabaseInitializer(
         )
         val freeCoffeeRewardLevel2 = rewardRepository.save(
             Reward(
-                threshold = 20.0,
+                threshold = 20.0.toBigDecimal(),
                 discountType = DiscountType.PERCENTAGE,
-                discount = 100.0,
+                discount = 100.0.toBigDecimal(),
                 products = mutableMapOf(),
                 productGroups = mutableMapOf(coffeeGroup to 2),
                 coupon = freeCoffeeAfterCoffeeOrHamSandwich
@@ -153,9 +153,9 @@ class InMemoryDatabaseInitializer(
         )
         val discountSandwichRewardLevel1 = rewardRepository.save(
             Reward(
-                threshold = 40.0,
+                threshold = 40.0.toBigDecimal(),
                 discountType = DiscountType.FIXED,
-                discount = 3.0,
+                discount = 3.0.toBigDecimal(),
                 products = mutableMapOf(),
                 productGroups = mutableMapOf(sandwichGroup to 1),
                 coupon = discountSandwichForChocolateCroissant
@@ -163,9 +163,9 @@ class InMemoryDatabaseInitializer(
         )
         val discountSandwichRewardLevel2 = rewardRepository.save(
             Reward(
-                threshold = 80.0,
+                threshold = 80.0.toBigDecimal(),
                 discountType = DiscountType.PERCENTAGE,
-                discount = 75.0,
+                discount = 75.0.toBigDecimal(),
                 products = mutableMapOf(premiumSandwich to 2),
                 productGroups = mutableMapOf(),
                 coupon = discountSandwichForChocolateCroissant

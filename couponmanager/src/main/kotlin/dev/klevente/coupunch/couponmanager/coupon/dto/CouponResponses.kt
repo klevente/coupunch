@@ -1,5 +1,7 @@
 package dev.klevente.coupunch.couponmanager.coupon.dto
 
+import java.math.BigDecimal
+
 class CouponsResponse(
     val coupons: Array<CouponResponse>
 )
@@ -20,7 +22,7 @@ class EligibleItemsResponse(
 class EligibleProductResponse(
     val id: Long,
     val name: String,
-    val price: Double,
+    val price: BigDecimal,
     val points: Int?
 )
 
@@ -31,9 +33,9 @@ class EligibleProductGroupResponse(
 )
 
 class RewardResponse(
-    val threshold: Double,
+    val threshold: BigDecimal,
     val discountType: String,
-    val discount: Double,
+    val discount: BigDecimal,
     val products: Array<ProductRewardResponse>,
     val productGroups: Array<ProductGroupRewardResponse>
 )
@@ -42,7 +44,7 @@ class ProductRewardResponse(
     val id: Long,
     val name: String,
     val amount: Int,
-    val originalPrice: Double
+    val originalPrice: BigDecimal
 )
 
 class ProductGroupRewardResponse(
@@ -55,15 +57,15 @@ class CouponRedeemResponse(
     val id: Long,
     val name: String,
     val type: String,
-    val progress: Double,
+    val progress: BigDecimal,
     val redeemable: Boolean,
     val redeemLevel: Int,
     val rewards: Array<RewardRedeemResponse>
 )
 
 class RewardRedeemResponse(
-    val threshold: Double,
-    val discount: Double,
+    val threshold: BigDecimal,
+    val discount: BigDecimal,
     val discountType: String,
     val products: Array<ProductRewardResponse>
 )

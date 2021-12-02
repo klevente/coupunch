@@ -5,6 +5,7 @@ import dev.klevente.coupunch.couponmanager.coupon.dto.toPointsResponse
 import dev.klevente.coupunch.couponmanager.customer.Customer
 import dev.klevente.coupunch.couponmanager.customer.CustomerCoupons
 import dev.klevente.coupunch.library.util.mapToArray
+import java.math.BigDecimal
 
 fun Collection<Customer>.toUserResponse() = CustomersResponse(
     customers = mapToArray(Customer::toUserResponse)
@@ -46,10 +47,10 @@ fun Reward.toResponse() = CustomerCouponReward(
 )
 
 fun CustomerCoupons.toUserResponse() = UserCouponsResponse(
-    coupons = mapToArray(Map.Entry<Coupon, Double>::toUserResponse)
+    coupons = mapToArray(Map.Entry<Coupon, BigDecimal>::toUserResponse)
 )
 
-fun Map.Entry<Coupon, Double>.toUserResponse() = UserCouponResponse(
+fun Map.Entry<Coupon, BigDecimal>.toUserResponse() = UserCouponResponse(
     id = key.id,
     name = key.name,
     type = key.type.toString(),

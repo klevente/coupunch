@@ -82,7 +82,7 @@ class CustomerServiceImpl(
         val coupons = HashMap(customer.coupons) // create copy so that JPA does not persist
         val otherCoupons = couponService.getCouponsNotIn(coupons.keys)
         otherCoupons.forEach {
-            coupons.putIfAbsent(it, 0.0)
+            coupons.putIfAbsent(it, 0.0.toBigDecimal())
         }
 
         return coupons.toUserResponse()
@@ -97,7 +97,7 @@ class CustomerServiceImpl(
             ?: couponService
                 .getCoupon(couponId)
                 .let {
-                    SimpleEntry(it, 0.0)
+                    SimpleEntry(it, 0.0.toBigDecimal())
                 }
 
         return coupon.toUserResponse()
